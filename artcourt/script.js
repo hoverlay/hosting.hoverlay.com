@@ -1,5 +1,5 @@
 const hours = new Date().getHours()
-const isDayTime = hours > 7 && hours < 21
+const isDayTime = hours > 7 && hours < 19
 
 if (isDayTime) 
   window.location.href = "https://hoverlay.io/space/ic2"
