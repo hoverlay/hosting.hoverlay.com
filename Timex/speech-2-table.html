@@ -33,6 +33,18 @@
          .recording {
          animation: pulse 1s infinite;
          }
+         .typing::before {
+         /* Unicode for pencil icon in Font Awesome */
+         content: "\f11c";
+         font-family: "Font Awesome 5 Free"; /* Font family for Font Awesome */
+         font-weight: 900; /* Font weight for Font Awesome */
+         margin-right: 5px; /* Space between the icon and the text */
+         animation: pulse 1s infinite;
+         color: black;
+         }
+         .typing {
+         animation: pulse 1s infinite;
+         }
          #table_1 tr td:nth-last-child(n + 6) {
          background-color: rgb(227, 227, 227);
          color: rgb(67, 66, 66);
@@ -568,7 +580,7 @@
             }
             var final_transcript = "";
             var recognizing = false;
-            var edited_cell = null;
+            var selected_cell = null;
 
             if (!("webkitSpeechRecognition" in window)) {
                 upgrade();
@@ -596,14 +608,12 @@
                         if (event.results[i].isFinal) {
                             final_transcript += event.results[i][0].transcript;
                             final_transcript = capitalize(final_transcript);
-                            edited_cell.innerHTML = linebreak(final_transcript);
-                            setEditCell(null);
-                            validateInputRanges()
-                            console.log("validateInputRanges")
+                            selected_cell.innerHTML = linebreak(final_transcript);
+                            setCellState(selected_cell, "highlighted");
                         } else {
                             interim_transcript += event.results[i][0].transcript;
                             interim_transcript = capitalize(final_transcript);
-                            edited_cell.innerHTML = linebreak(interim_transcript);
+                            selected_cell.innerHTML = linebreak(interim_transcript);
                         }
                     }
                 };
@@ -631,28 +641,61 @@
             function startDictation() {
                 if (recognizing) return;
                 recognition.lang = select_dialect.value;
-                console.log(recognition.lang);
                 recognizing = true;
                 recognition.start();
             }
 
-            function setEditCell(cell) {
-                if (edited_cell) {
-                    edited_cell.classList.remove("recording");
-                    edited_cell.classList.add("highlighted");
-                    if (edited_cell.innerHTML == "...") edited_cell.innerHTML = "-";
+            function setCellState(cell, state)
+            {
+               if (selected_cell) console.log(selected_cell, state)
+               if (cell == null) return;
+               if (cell != selected_cell && selected_cell) setCellState(selected_cell, "idle");
 
-                }
-                if (cell) {
-                    if (edited_cell) edited_cell.classList.remove("highlighted");
+               validateInputRanges()
 
-                    cell.classList.add("recording");
+               switch(state)
+               {
+                  case "voice_editing":
+                     cell.classList.add("recording");
 
-                    final_transcript = "";
-                    interim_transcript = "";
-                    cell.innerHTML = "...";
-                    edited_cell = cell;
-                }
+                     final_transcript = "";
+                     interim_transcript = "";
+                     cell.innerHTML = "...";
+                     selected_cell = cell;
+
+                     startDictation();
+
+                     break;
+                  case "typing":
+                     cell.classList.add("typing");
+
+                     cell.innerHTML = "";
+                     selected_cell = cell;
+                     
+                     cell.contentEditable = true;
+
+                     break;
+                  case "highlighted":
+                     cell.classList.remove("recording");
+                     cell.classList.remove("typing");
+                     cell.classList.add("highlighted");
+                     if (cell.innerHTML == "..." || cell.innerHTML == "") cell.innerHTML = "-";
+
+                     selected_cell = cell;
+
+                     break;
+                  case "idle":
+                  default:
+                    cell.classList.remove("recording");
+                     cell.classList.remove("typing");
+                    cell.classList.remove("highlighted");
+                     if (cell.innerHTML == "..." || cell.innerHTML == "") cell.innerHTML = "-";
+
+                    selected_cell = null;
+
+                    break;
+               }
+
             }
 
             // Validate the input ranges based on the min and max values in the table
@@ -689,7 +732,7 @@
             window.onload = function() {
 
                 recognizing = false;
-                edited_cell = null;
+                selected_cell = null;
                 var cells = document.querySelectorAll("#table_1 td");
 
                 cells.forEach(function(cell) {
@@ -699,15 +742,24 @@
                         // Check if user wants to use voice input or typing
                         var useVoiceInput = document.getElementById('voiceInputToggle').checked;
 
-                        if (!useVoiceInput) {
-                            // Allow the user to type into the cell
-                            cell.contentEditable = true;
+                        if (useVoiceInput) {
+                           setCellState(cell, "voice_editing");
                         } else {
-                            setEditCell(this);
-                            startDictation();
+                           setCellState(cell, "typing");
                         }
                     });
                 });
+
+               // When users click the voiceInputToggle checkbox, update the cell state
+               document.getElementById('voiceInputToggle').addEventListener('change', function() {
+                  var useVoiceInput = document.getElementById('voiceInputToggle').checked;
+                  if (useVoiceInput) {
+                     setCellState(selected_cell, "voice_editing");
+                  } else {
+                     setCellState(selected_cell, "typing");
+                  }
+               });
+
             };
                       
                     
