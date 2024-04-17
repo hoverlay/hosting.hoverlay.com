@@ -587,7 +587,7 @@
             } else {
                 var recognition = new webkitSpeechRecognition();
 
-                recognition.continuous = false;
+                recognition.continuous = true;
                 recognition.interimResults = true;
 
                 recognition.onstart = function() {
@@ -610,6 +610,7 @@
                             final_transcript = capitalize(final_transcript);
                             selected_cell.innerHTML = linebreak(final_transcript);
                             setCellState(selected_cell, "highlighted");
+                            endDictation();
                         } else {
                             interim_transcript += event.results[i][0].transcript;
                             interim_transcript = capitalize(final_transcript);
@@ -636,6 +637,7 @@
                 if (recognizing) {
                     recognition.stop();
                 }
+                recognizing = false;
             }
 
             function startDictation() {
@@ -653,6 +655,9 @@
 
                validateInputRanges()
 
+               cell.classList.remove("recording");
+               cell.classList.remove("typing");
+
                switch(state)
                {
                   case "voice_editing":
@@ -669,15 +674,13 @@
                   case "typing":
                      cell.classList.add("typing");
 
-                     cell.innerHTML = "";
+                     if (cell.innerHTML == "..." || cell.innerHTML == "-") cell.innerHTML = "";
                      selected_cell = cell;
                      
                      cell.contentEditable = true;
 
                      break;
                   case "highlighted":
-                     cell.classList.remove("recording");
-                     cell.classList.remove("typing");
                      cell.classList.add("highlighted");
                      if (cell.innerHTML == "..." || cell.innerHTML == "") cell.innerHTML = "-";
 
@@ -686,8 +689,6 @@
                      break;
                   case "idle":
                   default:
-                    cell.classList.remove("recording");
-                     cell.classList.remove("typing");
                     cell.classList.remove("highlighted");
                      if (cell.innerHTML == "..." || cell.innerHTML == "") cell.innerHTML = "-";
 
@@ -755,7 +756,7 @@
                   var useVoiceInput = document.getElementById('voiceInputToggle').checked;
                   if (useVoiceInput) {
                      setCellState(selected_cell, "voice_editing");
-                  } else {
+                  } else {                     
                      setCellState(selected_cell, "typing");
                   }
                });
