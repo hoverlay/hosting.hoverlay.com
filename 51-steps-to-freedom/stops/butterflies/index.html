@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        html {
+        font-size: 18px;
+        line-height: 1.5;
+        font-weight: 300;
+        color: #333;
+        font-family: "Nunito Sans", sans-serif;
+        }
+
+        body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background-color: #ecf0f9;
+        background-attachment: fixed;
+        }
+        /* Center the title */
+        .title {
+            text-align: center;
+        }
+
+        /* Carousel container */
+        .carousel {
+            display: flex;
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+        }
+
+        /* Individual poster */
+        .poster {
+            flex: 0 0 auto;
+            width: 300px; /* Adjust the width as per your requirement */
+            height: 300px; /* Adjust the height as per your requirement */
+            scroll-snap-align: start;
+            background-color: #f2f2f2;
+            text-align: center;
+            margin: 1rem;
+            perspective: 1000px;
+        }
+
+        .front, .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+        }
+
+        .front {
+            z-index: 2;
+            display: flex;
+            background-color:white;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .front img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            z-index: 1;
+        }
+
+        .front h2 {
+            z-index: 2;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: .2rem;
+            background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0.6));
+            color: #31092f;
+            text-align: center;
+        }
+
+        .back {
+            transform: rotateY(180deg);
+            background-color: #ffd024;
+            color: #31092f
+        }
+
+        .poster:hover .front {
+            transform: rotateY(-180deg);
+        }
+
+        .poster:hover .back {
+            transform: rotateY(0deg);
+        }
+
+        .back .button {
+        background: #31092f;
+        cursor: pointer;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        font-weight: bold;
+        color: #ffd024;
+        margin-top:1rem;
+        padding: .5em 1em;
+        border-radius: 100px;
+        font: inherit;
+        border: none;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: 300ms ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">
+        <h1>Pick your Buttefly</h1>
+    </div>
+
+    <div class="carousel">
+        <div class="poster">
+            <div class="front">
+                <h2>Civil Right Leaders</h2>
+                <img src="./assets/img/civil-rights-1.png">
+            </div>
+             <div class="back">
+                <h4>MLK, Rosa Park, John Lewis, Muriel Bowser</h4>
+                These towering figures contributed through profound acts of courage, leadership, and a steadfast commitment to justice and equality
+                <br>
+                <button onclick="location.href='https://hoverlay.io/space/o14'" class="button">Go</button>
+            </div>
+        </div>
+        <div class="poster">
+            <div class="front">
+                <h2>Game Changers</h2>
+                <img src="./assets/img/game-changers-1.png">
+            </div>
+             <div class="back">
+                <h4>Peters Sisters</h4>
+                These athletes have transcended the boundaries of sports to inspire societal progress and advocate for equality.
+                <br>
+                <button onclick="location.href='https://stringsmusicfestival.secure.force.com/ticket/#/events/a0S3s00000FFkrsEAD'" class="button">Go</button>
+            </div>
+        </div>
+        <div class="poster">
+            <div class="front">
+                <h2>COMING SOON</h2>
+                <img src="./assets/img/civil-rights-1.png">
+            </div>
+             <div class="back">
+                <h4>coming soon</h4>
+                Bring your own butterfly to life
+                <br>
+                 <!-- <button onclick="location.href='https://hoverlay.io/space/o14'" class="button">Go</button> -->
+            </div>
+        </div>
+        <!-- Add more posters as needed -->
+    </div>
+
+    <script>
+        // JavaScript code for carousel functionality (e.g., swiping)
+        // Add your code here if needed
+    </script>
+</body>
+</html>
