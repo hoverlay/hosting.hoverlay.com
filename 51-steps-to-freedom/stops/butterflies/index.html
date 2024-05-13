@@ -2,25 +2,31 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <style>
-        html {
-        font-size: 18px;
-        line-height: 1.5;
-        font-weight: 300;
-        color: #333;
-        font-family: "Nunito Sans", sans-serif;
+        @font-face {
+            font-family:"Belinda-W00-Regular";
+            src:url("./assets/fonts/242487aa-209a-4dbd-aca2-64a3c73a8946.woff2") format("woff2"),url("./assets/fonts/4381b252-d9f8-4201-bbf3-9440e21259e7.woff") format("woff");
+            font-display: block;
         }
-
+        html {
+            font-size: 18px;
+            line-height: 1.5;
+            font-weight: 300;
+            color: #333;
+        }
         body {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        background-color: #ecf0f9;
-        background-attachment: fixed;
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #ecf0f9;
+            background-attachment: fixed;
         }
         /* Center the title */
         .title {
             text-align: center;
+            font-family: 'Belinda-W00-Regular', sans-serif;
         }
 
         /* Carousel container */
@@ -110,11 +116,21 @@
         transform-style: preserve-3d;
         transition: 300ms ease;
         }
+        
+        .tap-icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: #31092f;
+            z-index: 3;
+        }
     </style>
 </head>
 <body>
     <div class="title">
-        <h1>Pick your Butterfly</h1>
+        <h1>The Wings We Fly On</h1>
+        <h2>Whose wings do you fly on?</h2>
     </div>
 
     <div class="carousel">
@@ -122,6 +138,7 @@
             <div class="front">
                 <h2>Civil Right Leaders</h2>
                 <img src="./assets/img/civil-rights-1.png">
+                <i class="fas fa-hand-point-up tap-icon"></i> <!-- Add this line for the tap icon -->
             </div>
              <div class="back">
                 <h4>MLK, Rosa Park, John Lewis, Muriel Bowser</h4>
@@ -134,6 +151,7 @@
             <div class="front">
                 <h2>Game Changers</h2>
                 <img src="./assets/img/game-changers-1.png">
+                <i class="fas fa-hand-point-up tap-icon"></i> <!-- Add this line for the tap icon -->
             </div>
              <div class="back">
                 <h4>Peters Sisters</h4>
@@ -144,8 +162,22 @@
         </div>
         <div class="poster">
             <div class="front">
-                <h2>COMING SOON</h2>
+                <h2>Music Icons</h2>
+                <img src="./assets/img/game-changers-1.png">
+                <i class="fas fa-hand-point-up tap-icon"></i> <!-- Add this line for the tap icon -->
+            </div>
+             <div class="back">
+                <h4>Peters Sisters</h4>
+                These athletes have transcended the boundaries of sports to inspire societal progress and advocate for equality.
+                <br>
+                <button onclick="location.href='https://hoverlay.io/space/i1yp'" class="button">Go</button>
+            </div>
+        </div>
+        <div class="poster">
+            <div class="front">
+                <h2>Coming Soon - Your Heroes!</h2>
                 <img src="./assets/img/civil-rights-1.png">
+                <i class="fas fa-hand-point-up tap-icon"></i> <!-- Add this line for the tap icon -->
             </div>
              <div class="back">
                 <h4>coming soon</h4>
