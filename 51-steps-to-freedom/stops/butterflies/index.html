@@ -27,12 +27,12 @@
         /* Center the title */
         .title {
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 3rem;
             font-family: 'Belinda-W00-Regular', sans-serif;
         }
         .subtitle {
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 2.5rem;
             font-weight: 200;
             font-family: 'Georgia', serif;
         }
@@ -47,7 +47,7 @@
         /* Individual poster */
         .poster {
             flex: 0 0 auto;
-            width: 20rem;
+            width: 40rem;
             height: 80%;
             scroll-snap-align: start;
             background-color: #f2f2f2;
@@ -86,7 +86,7 @@
         .front h2 {
             z-index: 2;
             position: absolute;
-            font-size: 1.4rem;
+            font-size: 2rem;
             top: 0;
             width: 100%;
             padding: .2rem;
@@ -138,9 +138,9 @@
         
         .tap-icon {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 24px;
+            bottom:  2rem;
+            right:  2rem;
+            font-size:  4rem;
             color: #31092f;
             z-index: 3;
         }
@@ -242,7 +242,7 @@
         // Set the size of the font based on the width of the webview
         document.addEventListener("DOMContentLoaded", function() {
             var webviewHeight = window.innerHeight; // Gets the height of the webview
-            var baseFontSize = webviewHeight / 30; 
+            var baseFontSize = webviewHeight / 70; 
             document.documentElement.style.fontSize = baseFontSize + 'px';
         });
     </script>
