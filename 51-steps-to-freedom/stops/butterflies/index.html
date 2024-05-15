@@ -27,12 +27,12 @@
         /* Center the title */
         .title {
             text-align: center;
-            font-size: 1rem;
+            font-size: 10vh;
             font-family: 'Belinda-W00-Regular', sans-serif;
         }
         .subtitle {
             text-align: center;
-            font-size: 1rem;
+            font-size: 8vh;
             font-weight: 200;
             font-family: 'Georgia', serif;
         }
@@ -47,12 +47,12 @@
         /* Individual poster */
         .poster {
             flex: 0 0 auto;
-            width: 40%;
+            width: 80vh;
             height: 80%;
             scroll-snap-align: start;
             background-color: #f2f2f2;
             text-align: center;
-            margin: 1rem;
+            margin: 2vh;
             perspective: 1000px;
         }
 
@@ -87,6 +87,8 @@
             z-index: 2;
             position: absolute;
             top: 0;
+            font-size: 5vh;
+            top: 0;
             width: 100%;
             padding: .2rem;
             background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0.6));
@@ -97,7 +99,8 @@
         .back {
             transform: rotateY(180deg);
             background-color: #ffd024;
-            color: #31092f
+            color: #31092f;
+            font-size: 4vh;
         }
 
         .poster:hover .front {
@@ -115,9 +118,9 @@
         backface-visibility: hidden;
         font-weight: bold;
         color: #ffd024;
-        margin-top:1rem;
-        padding: .5em 1em;
-        border-radius: 100px;
+        margin-top:1vh;
+        padding: 1vh 2vh;
+        border-radius: 4vh;
         font: inherit;
         border: none;
         position: relative;
@@ -148,7 +151,7 @@
 </head>
 <body>
     <div class="title">
-        <h1>The Wings We Fly On</h1>
+        The Wings We Fly On
     </div>
     <div class="subtitle">
         Whose wings do you fly on?
