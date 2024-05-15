@@ -256,6 +256,8 @@
             const viewportHeight = window.innerHeight;
             document.documentElement.style.height = `${viewportHeight}px`;
             document.body.style.height = `${viewportHeight}px`;
+            // Write the viewport height at the top of the html page for debugging
+            document.querySelector('.subtitle').textContent = `Viewport height: ${viewportHeight}px`;
         }
 
         // Initial adjustment when the page loads
