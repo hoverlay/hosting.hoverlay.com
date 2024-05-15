@@ -2,6 +2,8 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Wings We Fly On</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <style>
         @font-face {
@@ -12,7 +14,7 @@
         html {
             font-size: 18px;
             line-height: 1.5;
-            font-weight: 300;
+            font-weight: 200;
             color: #333;
         }
         body {
@@ -26,12 +28,19 @@
         /* Center the title */
         .title {
             text-align: center;
+            font-size: 1rem;
             font-family: 'Belinda-W00-Regular', sans-serif;
         }
-
+        .subtitle {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 200;
+            font-family: 'Georgia', serif;
+        }
         /* Carousel container */
         .carousel {
             display: flex;
+            height: 80%;
             overflow-x: scroll;
             scroll-snap-type: x mandatory;
         }
@@ -39,8 +48,8 @@
         /* Individual poster */
         .poster {
             flex: 0 0 auto;
-            width: 300px; /* Adjust the width as per your requirement */
-            height: 300px; /* Adjust the height as per your requirement */
+            width: 40%;
+            height: 80%;
             scroll-snap-align: start;
             background-color: #f2f2f2;
             text-align: center;
@@ -125,12 +134,25 @@
             color: #31092f;
             z-index: 3;
         }
+        
+        .scroll-arrow {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: #31092f;
+            z-index: 3;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="title">
         <h1>The Wings We Fly On</h1>
-        <h2>Whose wings do you fly on?</h2>
+    </div>
+    <div class="subtitle">
+        Whose wings do you fly on?
     </div>
 
     <div class="carousel">
@@ -200,6 +222,10 @@
             </div>
         </div>
         <!-- Add more posters as needed -->
+        <div class="scroll-arrow">
+            <i class="fas fa-arrow-right"></i>
+        </div>
+    </div>
     </div>
 
     <script>
