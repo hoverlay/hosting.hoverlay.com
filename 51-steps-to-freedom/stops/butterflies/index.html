@@ -39,6 +39,21 @@
             font-weight: 200;
             font-family: 'Georgia', serif;
         }
+
+        .close-button {
+            position: absolute;
+            right: 10px;
+            top: 4px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #31092f;
+            cursor: pointer;
+        }
+
+        .close-button i {
+            pointer-events: none;
+        }
         /* Carousel container */
         .carousel {
             display: flex;
@@ -168,7 +183,9 @@
     <div class="subtitle">
         Whose wings do you fly on?
     </div>
-
+    <button onclick="location.href='space://do?when_done=hide'" class="close-button">
+        <i class="fas fa-times-circle"></i>
+    </button>
     <div class="carousel">
         <div class="poster">
             <div class="front">
@@ -178,8 +195,23 @@
             </div>
              <div class="back">
                 <h4>Frederick Douglass, Dr. Martin Luther King Jr., Rosa Park, John Lewis</h4>
-                <button onclick="location.href='https://hoverlay.io/space/o14'" class="button">Go</button>
+                <!-- <button onclick="location.href='https://hoverlay.io/space/o14'" class="button">Go</button> -->
+                <button onclick="location.href='channel://do?action=send_event&event_message=civil-rights'" class="button">Go</button>
                 <p>These towering figures contributed through profound acts of courage, leadership, and a steadfast commitment to justice and equality</p>
+                <br>
+            </div>
+        </div>
+        <div class="poster">
+            <div class="front">
+                <h2>DC Living Legends</h2>
+                <img src="./assets/img/dc-mount-rushmore-1.png">
+                <i class="fas fa-hand-point-up tap-icon"></i> 
+            </div>
+             <div class="back">
+                <h4>Muriel Bowser, Eleanor Holmes Norton, Virginia Ali, Cora Barry</h4>
+                <!-- <button onclick="location.href='https://hoverlay.io/space/ohgj'" class="button">Go</button> -->
+                <button onclick="location.href='space://do?action=send_event&event_message=dc-mount-rushmore'" class="button">Go</button>
+                <p>Introducing four trailblazing DC icons</p>
                 <br>
             </div>
         </div>
@@ -191,7 +223,8 @@
             </div>
              <div class="back">
                 <h4>Jackie Robinson, Mohammed Ali, Michael Jordan, Billy Jean King</h4>
-                <button onclick="location.href='https://hoverlay.io/space/i1yp'" class="button">Go</button>
+                <!-- <button onclick="location.href='https://hoverlay.io/space/i1yp'" class="button">Go</button> -->
+                <button onclick="location.href='space://do?action=send_event&event_message=game-changers'" class="button">Go</button>
                 <p>These athletes have transcended the boundaries of sports to inspire societal progress and advocate for equality.</p>
                 <br>
             </div>
@@ -204,8 +237,23 @@
             </div>
              <div class="back">
                 <h4>Bob Dylan, Sam Cooke, Aretha Franklin, Beyoncé</h4>
-                <button onclick="location.href='https://hoverlay.io/space/p3b69'" class="button">Go</button>
+                <!-- <button onclick="location.href='https://hoverlay.io/space/p3b69'" class="button">Go</button> -->
+                <button onclick="location.href='space://do?action=send_event&event_message=music-icons'" class="button">Go</button>
                 <p>These musicians orchestrate change, using their art to amplify voices and shape a more inclusive world.</p>
+                <br>
+            </div>
+        </div>
+        <div class="poster">
+            <div class="front">
+                <h2>LGBTQ+ Heroes</h2>
+                <img src="./assets/img/lgbtq-1.png">
+                <i class="fas fa-hand-point-up tap-icon"></i> 
+            </div>
+             <div class="back">
+                <h4>Christine Jorgenson, Sally Ride, Dave Kopay, Bayard Rustin</h4>
+                <!-- <button onclick="location.href='https://hoverlay.io/space/5n04'" class="button">Go</button> -->
+                <button onclick="location.href='space://do?action=send_event&event_message=lgbtq-heroes'" class="button">Go</button>
+                <p>These heroes forged a path ahead for the LGBTQ+ community.</p>
                 <br>
             </div>
         </div>
@@ -217,27 +265,15 @@
             </div>
              <div class="back">
                 <h4>George Washington Carver, Dr. Charles Richard Drew, Neil deGrasse Tyson, Katherine Johnson</h4>
-                <button onclick="location.href='https://hoverlay.io/space/5n04'" class="button">Go</button>
+                <!-- <button onclick="location.href='https://hoverlay.io/space/5n04'" class="button">Go</button> -->
+                <button onclick="location.href='space://do?action=send_event&event_message=visionary-scientists'" class="button">Go</button>
                 <p>These trailblazers have reshaped industries, improved lives, and opened new frontiers.</p>
                 <br>
             </div>
         </div>
         <div class="poster">
-            <div class="front">
-                <h2>DC's "Mount Rushmore"</h2>
-                <img src="./assets/img/dc-mount-rushmore.png">
-                <i class="fas fa-hand-point-up tap-icon"></i> 
-            </div>
-             <div class="back">
-                <h4>Muriel Bowser, Eleanor Holmes Norton, Virginia Ali, Cora Barry</h4>
-                <button onclick="location.href='https://hoverlay.io/space/ohgj'" class="button">Go</button>
-                <p>Introducing four trailblazing DC icons</p>
-                <br>
-            </div>
-        </div>
-        <div class="poster">
-            <div class="front">
-                <h2>Coming Soon - Your Heroes!</h2>
+            <div class="front"> 
+                <h2>Your Heroes! Coming Soon</h2>
                 <img src="./assets/img/civil-rights-1.png">
                 <i class="fas fa-hand-point-up tap-icon"></i> 
             </div>
