@@ -139,22 +139,38 @@
         }
 
         .back .button {
-        background: #31092f;
-        cursor: pointer;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        font-weight: bold;
-        color: #ffd024;
-        margin-top:.1rem;
-        padding: .5rem 2rem;
-        border-radius: 100px;
-        font: inherit;
-        border: none;
-        position: relative;
-        transform-style: preserve-3d;
-        transition: 300ms ease;
+            background: #31092f;
+            cursor: pointer;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            font-weight: bold;
+            color: #ffd024;
+            margin-top:.1rem;
+            padding: .5rem 2rem;
+            border-radius: 100px;
+            font: inherit;
+            border: none;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 200ms ease, box-shadow 200ms ease;
         }
-        
+
+        .back .button:active {
+            transform: scale(0.9);
+        }
+
+        .checkmark {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6rem;
+            color: #28a745;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
         .tap-icon {
             position: absolute;
             bottom:  2rem;
@@ -183,9 +199,6 @@
     <div class="subtitle">
         Whose wings do you fly on?
     </div>
-    <!-- <button onclick="location.href='system://do?when_done=hide'" class="close-button">
-        <i class="fas fa-times-circle"></i>
-    </button> -->
     <div class="carousel">
         <div class="poster">
             <div class="front">
@@ -195,9 +208,9 @@
             </div>
              <div class="back">
                 <h4>Frederick Douglass, Dr. Martin Luther King Jr., Rosa Park, John Lewis</h4>
-                <!-- <button onclick="location.href='https://hoverlay.io/space/o14'" class="button">Go</button> -->
-                <button onclick="location.href='space://do?action=send_event&event_message=civil-rights'" class="button">Go</button>
+                <button onclick="handleButtonClick(event, 'civil-rights')" class="button">Go</button>
                 <p>These towering figures contributed through profound acts of courage, leadership, and a steadfast commitment to justice and equality</p>
+                <i class="fas fa-check-circle checkmark"></i>
                 <br>
             </div>
         </div>
@@ -209,9 +222,9 @@
             </div>
              <div class="back">
                 <h4>Muriel Bowser, Eleanor Holmes Norton, Virginia Ali, Cora Barry</h4>
-                <!-- <button onclick="location.href='https://hoverlay.io/space/ohgj'" class="button">Go</button> -->
-                <button onclick="location.href='space://do?action=send_event&event_message=dc-mount-rushmore'" class="button">Go</button>
+                <button onclick="handleButtonClick(event, 'dc-mount-rushmore')" class="button">Go</button>
                 <p>Introducing four trailblazing DC icons</p>
+                <i class="fas fa-check-circle checkmark"></i>
                 <br>
             </div>
         </div>
@@ -223,9 +236,9 @@
             </div>
              <div class="back">
                 <h4>Jackie Robinson, Mohammed Ali, Michael Jordan, Billy Jean King</h4>
-                <!-- <button onclick="location.href='https://hoverlay.io/space/i1yp'" class="button">Go</button> -->
-                <button onclick="location.href='space://do?action=send_event&event_message=game-changers'" class="button">Go</button>
+                <button onclick="handleButtonClick(event, 'game-changers')" class="button">Go</button>
                 <p>These athletes have transcended the boundaries of sports to inspire societal progress and advocate for equality.</p>
+                <i class="fas fa-check-circle checkmark"></i>
                 <br>
             </div>
         </div>
@@ -237,9 +250,9 @@
             </div>
              <div class="back">
                 <h4>Bob Dylan, Sam Cooke, Aretha Franklin, Beyoncé</h4>
-                <!-- <button onclick="location.href='https://hoverlay.io/space/p3b69'" class="button">Go</button> -->
-                <button onclick="location.href='space://do?action=send_event&event_message=music-icons'" class="button">Go</button>
+                <button onclick="handleButtonClick(event, 'music-icons')" class="button">Go</button>
                 <p>These musicians orchestrate change, using their art to amplify voices and shape a more inclusive world.</p>
+                <i class="fas fa-check-circle checkmark"></i>
                 <br>
             </div>
         </div>
@@ -251,9 +264,9 @@
             </div>
              <div class="back">
                 <h4>Christine Jorgenson, Sally Ride, Dave Kopay, Bayard Rustin</h4>
-                <!-- <button onclick="location.href='https://hoverlay.io/space/5n04'" class="button">Go</button> -->
-                <button onclick="location.href='space://do?action=send_event&event_message=lgbtq-heroes'" class="button">Go</button>
+                <button onclick="handleButtonClick(event, 'lgbtq-heroes')" class="button">Go</button>
                 <p>These heroes forged a path ahead for the LGBTQ+ community.</p>
+                <i class="fas fa-check-circle checkmark"></i>
                 <br>
             </div>
         </div>
@@ -265,9 +278,9 @@
             </div>
              <div class="back">
                 <h4>George Washington Carver, Dr. Charles Richard Drew, Neil deGrasse Tyson, Katherine Johnson</h4>
-                <!-- <button onclick="location.href='https://hoverlay.io/space/5n04'" class="button">Go</button> -->
-                <button onclick="location.href='space://do?action=send_event&event_message=visionary-scientists'" class="button">Go</button>
+                <button onclick="handleButtonClick(event, 'visionary-scientists')" class="button">Go</button>
                 <p>These trailblazers have reshaped industries, improved lives, and opened new frontiers.</p>
+                <i class="fas fa-check-circle checkmark"></i>
                 <br>
             </div>
         </div>
@@ -280,18 +293,13 @@
              <div class="back">
                 <h4>coming soon</h4>
                 <p>Bring your own butterfly to life</p>
-            <!-- <button onclick="location.href='https://hoverlay.io/space/o14'" class="button">Go</button> -->
                 <br>
-                
             </div>
         </div>
-        <!-- Add more posters as needed -->
         <div class="scroll-arrow">
             <i class="fas fa-arrow-right"></i>
         </div>
     </div>
-    </div>
-
     <script>
         // Set the size of the font based on the width of the webview
         document.addEventListener("DOMContentLoaded", function() {
@@ -300,17 +308,26 @@
             document.documentElement.style.fontSize = baseFontSize + 'px';
         });
 
-        // window.addEventListener('load', adjustHeight);
-        // window.addEventListener('resize', adjustHeight);
-
         function adjustHeight() {
             const viewportHeight = window.innerHeight;
             document.documentElement.style.height = `${viewportHeight}px`;
             document.body.style.height = `${viewportHeight}px`;
-            // Write the viewport height at the top of the html page for debugging
             document.querySelector('.subtitle').textContent = `Viewport height: ${viewportHeight}px`;
         }
-        
+
+        function handleButtonClick(event, message) {
+            event.target.classList.add('active');
+            location.href = `space://do?action=send_event&event_message=${message}`;
+            const checkmark = event.target.parentElement.querySelector('.checkmark');
+            checkmark.style.display = 'block';
+            checkmark.style.opacity = '1';
+            setTimeout(() => {
+                checkmark.style.opacity = '0';
+                setTimeout(() => {
+                    checkmark.style.display = 'none';
+                }, 500);
+            }, 1000);
+        }
     </script>
 </body>
 </html>
