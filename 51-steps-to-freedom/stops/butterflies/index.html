@@ -139,6 +139,7 @@
         }
 
         .back .button {
+            position: relative;
             background: #31092f;
             cursor: pointer;
             -webkit-backface-visibility: hidden;
@@ -150,13 +151,26 @@
             border-radius: 100px;
             font: inherit;
             border: none;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 200ms ease, box-shadow 200ms ease;
+            overflow: hidden;
         }
 
-        .back .button:active {
-            transform: scale(0.9);
+        .back .button::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.4s ease-out;
+            pointer-events: none;
+        }
+
+        .back .button:active::after {
+            transform: translate(-50%, -50%) scale(4);
+            transition: transform 0.4s ease-out;
         }
 
         .checkmark {
@@ -167,6 +181,22 @@
             transform: translate(-50%, -50%);
             font-size: 6rem;
             color: #28a745;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .checkmark-message {
+            display: none;
+            position: absolute;
+            top: 75%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #ffffff;
+            background-color: #28a745;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
             opacity: 0;
             transition: opacity 0.5s ease;
         }
@@ -211,6 +241,7 @@
                 <button onclick="handleButtonClick(event, 'civil-rights')" class="button">Go</button>
                 <p>These towering figures contributed through profound acts of courage, leadership, and a steadfast commitment to justice and equality</p>
                 <i class="fas fa-check-circle checkmark"></i>
+                <div class="checkmark-message">Wings changed!</div>
                 <br>
             </div>
         </div>
@@ -225,6 +256,7 @@
                 <button onclick="handleButtonClick(event, 'dc-mount-rushmore')" class="button">Go</button>
                 <p>Introducing four trailblazing DC icons</p>
                 <i class="fas fa-check-circle checkmark"></i>
+                <div class="checkmark-message">Wings changed!</div>
                 <br>
             </div>
         </div>
@@ -239,6 +271,7 @@
                 <button onclick="handleButtonClick(event, 'game-changers')" class="button">Go</button>
                 <p>These athletes have transcended the boundaries of sports to inspire societal progress and advocate for equality.</p>
                 <i class="fas fa-check-circle checkmark"></i>
+                <div class="checkmark-message">Wings changed!</div>
                 <br>
             </div>
         </div>
@@ -253,6 +286,7 @@
                 <button onclick="handleButtonClick(event, 'music-icons')" class="button">Go</button>
                 <p>These musicians orchestrate change, using their art to amplify voices and shape a more inclusive world.</p>
                 <i class="fas fa-check-circle checkmark"></i>
+                <div class="checkmark-message">Wings changed!</div>
                 <br>
             </div>
         </div>
@@ -267,6 +301,7 @@
                 <button onclick="handleButtonClick(event, 'lgbtq-heroes')" class="button">Go</button>
                 <p>These heroes forged a path ahead for the LGBTQ+ community.</p>
                 <i class="fas fa-check-circle checkmark"></i>
+                <div class="checkmark-message">Wings changed!</div>
                 <br>
             </div>
         </div>
@@ -281,6 +316,7 @@
                 <button onclick="handleButtonClick(event, 'visionary-scientists')" class="button">Go</button>
                 <p>These trailblazers have reshaped industries, improved lives, and opened new frontiers.</p>
                 <i class="fas fa-check-circle checkmark"></i>
+                <div class="checkmark-message">Wings changed!</div>
                 <br>
             </div>
         </div>
@@ -316,15 +352,19 @@
         }
 
         function handleButtonClick(event, message) {
-            event.target.classList.add('active');
             location.href = `space://do?action=send_event&event_message=${message}`;
             const checkmark = event.target.parentElement.querySelector('.checkmark');
+            const checkmarkMessage = event.target.parentElement.querySelector('.checkmark-message');
             checkmark.style.display = 'block';
             checkmark.style.opacity = '1';
+            checkmarkMessage.style.display = 'block';
+            checkmarkMessage.style.opacity = '1';
             setTimeout(() => {
                 checkmark.style.opacity = '0';
+                checkmarkMessage.style.opacity = '0';
                 setTimeout(() => {
                     checkmark.style.display = 'none';
+                    checkmarkMessage.style.display = 'none';
                 }, 500);
             }, 1000);
         }
