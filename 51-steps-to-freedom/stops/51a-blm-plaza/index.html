@@ -61,17 +61,17 @@
         }
 
         .choices {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
 
         .choice {
-            margin: 5px 0;
+            border-radius: 20px;
             padding: 10px;
             background-color: #ffd024;
             color: #31092f;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
             text-align: left;
         }
@@ -104,19 +104,19 @@
         // Sample questions JSON structure
         const questions = [
             {
-                question: "What is the capital of France?",
-                choices: ["Paris", "Berlin", "Madrid", "Rome"],
-                correct: 0
-            },
-            {
-                question: "Which planet is known as the Red Planet?",
-                choices: ["Earth", "Mars", "Jupiter", "Saturn"],
+                question: "In which year was BLM Plaza officially named?",
+                choices: ["A. 2018", "B. 2020", "C. 2021", "D. 2019"],
                 correct: 1
             },
             {
-                question: "What is the largest ocean on Earth?",
-                choices: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
-                correct: 3
+                question: "Which street is BLM Plaza located on in Washington DC?",
+                choices: ["A. 16th Street NW", "B. Pennsylvania Avenue", "C. Constitution Avenue", "D. K Street"],
+                correct: 0
+            },
+            {
+                question: "BLM Plaza is near which famous landmark in Washington DC?",
+                choices: ["A. The White House", "B. Lincoln Memorial", "C. Washington Monument", "D. Capitol Building"],
+                correct: 0
             }
         ];
 
@@ -163,6 +163,7 @@
             const messageElement = document.getElementById("message");
             messageElement.textContent = "Congratulations! You've completed the quiz!";
             document.getElementById("question-container").style.display = "none";
+            location.href = `space://do?action=send_event&event_message=quiz-completed`;
         }
 
         // Initialize the quiz
