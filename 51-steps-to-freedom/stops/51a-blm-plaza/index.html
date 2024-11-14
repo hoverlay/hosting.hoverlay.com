@@ -6,10 +6,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <title>Responsive Quiz App</title>
     <style>
-        body {
+        html, body {
             font-family: Georgia, serif;
             margin: 0;
             padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,12 +30,30 @@
             padding: 20px;
             max-width: 600px;
             width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
 
         h1 {
             text-align: center;
             color: #ffd024;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #31092f;
+            cursor: pointer;
+        }
+
+        .close-button i {
+            pointer-events: none;
         }
 
         .question {
