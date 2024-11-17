@@ -1,0 +1,86 @@
+/* styles.css */
+
+:root {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --text-size: 58px;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    padding: 10px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
+    z-index: 10;
+    transition: opacity 0.3s;
+}
+
+nav.playing {
+    opacity: 0.3;
+    /* Make nav semi-transparent during play */
+}
+
+.content {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: var(--text-size);
+    line-height: 1.8;
+    padding: 5%;
+    overflow-wrap: break-word;
+    overflow-y: scroll;
+    white-space: pre-wrap;
+    outline: none;
+    background-color: var(--bg-color);
+}
+
+button {
+    background: #007BFF;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+button svg {
+    height: 40px;
+    width: 40px;
+    fill: var(--text-color);
+}
+
+input[type="color"],
+input[type="range"] {
+    cursor: pointer;
+}
+
+.flip-horizontal {
+    transform: rotateY(180deg);
+}
+
+.flip-vertical {
+    transform: rotateX(180deg);
+}
