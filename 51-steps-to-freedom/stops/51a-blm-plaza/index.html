@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
-    <title>Responsive Quiz App</title>
+    <title>How Well Do You Know BLM Plaza?</title>
     <style>
         html, body {
             font-family: Georgia, serif;
@@ -94,7 +94,7 @@
     <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
         <i class="fas fa-times-circle"></i>
     </button>
-        <h1>Quiz App</h1>
+        <h1>How Well Do You Know BLM Plaza?</h1>
         <div id="question-container">
             <div class="question" id="question">Question will appear here</div>
             <div class="choices" id="choices"></div>
@@ -111,14 +111,19 @@
                 correct: 1
             },
             {
-                question: "Which street is BLM Plaza located on in Washington DC?",
-                choices: ["A. 16th Street NW", "B. Pennsylvania Avenue", "C. Constitution Avenue", "D. K Street"],
+                question: "WHow many blocks does BLM Plaza mural stretch?",
+                choices: ["A. 7", "B. 2", "C. 4", "D. 1"],
+                correct: 1
+            },
+            {
+                question: "Which mayor renamed the street to Black Lives Matter Plaza NW?",
+                choices: ["A. Mayor Muriel Bowser", "B. Adrian Fenty", "C.  Mayor Vincent C. Gray", "D. Mayor Marion Barry"],
                 correct: 0
             },
             {
-                question: "BLM Plaza is near which famous landmark in Washington DC?",
-                choices: ["A. The White House", "B. Lincoln Memorial", "C. Washington Monument", "D. Capitol Building"],
-                correct: 0
+                question: "How many artists worked on the mural?",
+                choices: ["A. 1", "B. 3", "C.  10", "D. 8"],
+                correct: 3
             }
         ];
 
@@ -163,7 +168,7 @@
         // Display the congratulations message at the end of the quiz
         function displayCongratulations() {
             const messageElement = document.getElementById("message");
-            messageElement.textContent = "Congratulations! You've completed the quiz!";
+            messageElement.textContent = "Great job! You've completed the BLM Plaza quiz!";
             document.getElementById("question-container").style.display = "none";
             location.href = `space://do?action=send_event&event_message=quiz-completed`;
         }
