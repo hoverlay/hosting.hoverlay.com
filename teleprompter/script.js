@@ -25,7 +25,7 @@ let scrollSpeed = 50 - parseInt(speedControlInput.value);
 playPauseButton.addEventListener('click', togglePlayPause);
 loadScriptButton.addEventListener('click', () => fileInput.click());
 fileInput.addEventListener('change', loadScript);
-saveScriptButton.addEventListener('click', saveScript);
+saveScriptButton.addEventListener('click', saveSession);
 textSizeInput.addEventListener('input', () => {
     document.documentElement.style.setProperty('--text-size', `${textSizeInput.value}px`);
 });
@@ -84,17 +84,44 @@ function loadScript(event) {
     if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            scriptContent.innerHTML = e.target.result;
+            try {
+                const sessionData = JSON.parse(e.target.result);
+
+                // Apply the script and settings
+                scriptContent.innerText = sessionData.script || '';
+                textSizeInput.value = sessionData.fontSize || 58;
+                speedControlInput.value = sessionData.speed || 10;
+                bgColorPicker.value = sessionData.bgColor || "#000000";
+                textColorPicker.value = sessionData.textColor || "#FFFFFF";
+
+                // Update CSS styles accordingly
+                document.documentElement.style.setProperty('--text-size', `${textSizeInput.value}px`);
+                document.documentElement.style.setProperty('--bg-color', bgColorPicker.value);
+                document.documentElement.style.setProperty('--text-color', textColorPicker.value);
+            } catch (error) {
+                console.error("Error parsing the loaded file: ", error);
+            }
         };
         reader.readAsText(file);
     }
 }
 
-function saveScript() {
-    const content = scriptContent.innerHTML;
-    const blob = new Blob([content], { type: 'text/plain' });
+function saveSession() {
+    const sessionData = {
+        script: scriptContent.innerText,
+        fontSize: textSizeInput.value,
+        speed: speedControlInput.value,
+        bgColor: bgColorPicker.value,
+        textColor: textColorPicker.value
+    };
+
+    // Convert session data to JSON string
+    const jsonString = JSON.stringify(sessionData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+
+    // Create a link to download the file
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'teleprompter_script.txt';
+    a.download = 'teleprompter_session.json';
     a.click();
 }
