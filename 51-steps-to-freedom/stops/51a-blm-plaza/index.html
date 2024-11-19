@@ -58,6 +58,16 @@
             pointer-events: none;
         }
 
+        .intro {
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .intro:hover {
+            color: #ffd024;
+        }
+
         .question {
             margin-bottom: 20px;
         }
@@ -85,21 +95,25 @@
 
         #message {
             text-align: center;
-            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 1.2em;
         }
+
+        #correct-message { $1 justify-content: center; }
     </style>
 </head>
 <body>
     <div id="quiz-container">
-    <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
-        <i class="fas fa-times-circle"></i>
-    </button>
+        <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
+            <i class="fas fa-times-circle"></i>
+        </button>
         <h1>How Well Do You Know BLM Plaza?</h1>
-        <div id="question-container">
+        <div class="intro" id="intro" onclick="startQuiz()">How well do you know BLM Plaza? Tap to start the quiz and earn a prize!</div>
+        <div id="message"></div>
+        <div id="question-container" style="display: none;">
             <div class="question" id="question">Question will appear here</div>
             <div class="choices" id="choices"></div>
         </div>
-        <div id="message"></div>
     </div>
 
     <script>
@@ -111,31 +125,40 @@
                 correct: 1
             },
             {
-                question: "WHow many blocks does BLM Plaza mural stretch?",
+                question: "How many blocks does BLM Plaza mural stretch?",
                 choices: ["A. 7", "B. 2", "C. 4", "D. 1"],
                 correct: 1
             },
             {
                 question: "Which mayor renamed the street to Black Lives Matter Plaza NW?",
-                choices: ["A. Mayor Muriel Bowser", "B. Adrian Fenty", "C.  Mayor Vincent C. Gray", "D. Mayor Marion Barry"],
+                choices: ["A. Mayor Muriel Bowser", "B. Adrian Fenty", "C. Mayor Vincent C. Gray", "D. Mayor Marion Barry"],
                 correct: 0
             },
-            {
-                question: "How many artists worked on the mural?",
-                choices: ["A. 1", "B. 3", "C.  10", "D. 8"],
-                correct: 3
-            }
+            // {
+            //     question: "How many artists worked on the mural?",
+            //     choices: ["A. 1", "B. 3", "C. 10", "D. 8"],
+            //     correct: 3
+            // }
         ];
 
         let currentQuestionIndex = 0;
         let userAnswers = Array(questions.length).fill(null);
+
+        // Start the quiz
+        function startQuiz() {
+            document.getElementById("intro").style.display = "none";
+            document.getElementById("question-container").style.display = "block";
+            loadQuestion();
+        }
 
         // Load a question from the questions array
         function loadQuestion() {
             const currentQuestion = questions[currentQuestionIndex];
             const questionElement = document.getElementById("question");
             const choicesElement = document.getElementById("choices");
+            const messageElement = document.getElementById("message");
             
+            messageElement.textContent = "";
             questionElement.textContent = currentQuestion.question;
             choicesElement.innerHTML = "";
 
@@ -153,28 +176,25 @@
             const currentQuestion = questions[currentQuestionIndex];
             const messageElement = document.getElementById("message");
             if (choiceIndex === currentQuestion.correct) {
+                messageElement.innerHTML = `<div id='correct-message' style='justify-content: center; text-align: center; color: green;'$1><i class='fas fa-check-circle'></i> Correct! Well done!</div>`;
                 currentQuestionIndex++;
-                messageElement.textContent = "";
                 if (currentQuestionIndex < questions.length) {
-                    loadQuestion();
+                    setTimeout(loadQuestion, 1000);
                 } else {
-                    displayCongratulations();
+                    setTimeout(displayCongratulations, 1000);
                 }
             } else {
-                messageElement.textContent = "Incorrect! Try again.";
+                messageElement.textContent = "Oops, try again.";
             }
         }
 
         // Display the congratulations message at the end of the quiz
         function displayCongratulations() {
             const messageElement = document.getElementById("message");
-            messageElement.textContent = "Great job! You've completed the BLM Plaza quiz!";
+            messageElement.textContent = "Hello Winner! You have completed the quiz.";
             document.getElementById("question-container").style.display = "none";
             location.href = `space://do?action=send_event&event_message=quiz-completed`;
         }
-
-        // Initialize the quiz
-        loadQuestion();
     </script>
 </body>
 </html>
