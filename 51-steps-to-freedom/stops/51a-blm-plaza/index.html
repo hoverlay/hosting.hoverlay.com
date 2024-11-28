@@ -99,7 +99,30 @@
             font-size: 1.2em;
         }
 
-        #correct-message { $1 justify-content: center; }
+        
+    .start-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #ffd024;
+            color: #31092f;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .start-button:hover {
+            background-color: #31092f;
+            color: #ffd024;
+        }
+        .highlighted {
+            background-color: #31092f;
+            color: #ffd024;
+        }
+        .highlighted {
+            background-color: #31092f;
+            color: #ffd024;
+        }
     </style>
 </head>
 <body>
@@ -108,7 +131,7 @@
             <i class="fas fa-times-circle"></i>
         </button>
         <h1>How Well Do You Know BLM Plaza?</h1>
-        <div class="intro" id="intro" onclick="startQuiz()">How well do you know BLM Plaza? Tap to start the quiz and earn a prize!</div>
+        <div class="intro" id="intro">How well do you know BLM Plaza? Tap to start the quiz and earn a prize!<br><button id="start-button" class="start-button" onclick="startQuiz()">GO</button></div>
         <div id="message"></div>
         <div id="question-container" style="display: none;">
             <div class="question" id="question">Question will appear here</div>
@@ -134,11 +157,11 @@
                 choices: ["A. Mayor Muriel Bowser", "B. Adrian Fenty", "C. Mayor Vincent C. Gray", "D. Mayor Marion Barry"],
                 correct: 0
             },
-            // {
-            //     question: "How many artists worked on the mural?",
-            //     choices: ["A. 1", "B. 3", "C. 10", "D. 8"],
-            //     correct: 3
-            // }
+            {
+                question: "How many artists worked on the mural?",
+                choices: ["A. 1", "B. 3", "C. 10", "D. 8"],
+                correct: 3
+            }
         ];
 
         let currentQuestionIndex = 0;
@@ -158,6 +181,7 @@
             const choicesElement = document.getElementById("choices");
             const messageElement = document.getElementById("message");
             
+            // Reset message and question text
             messageElement.textContent = "";
             questionElement.textContent = currentQuestion.question;
             choicesElement.innerHTML = "";
@@ -166,35 +190,45 @@
                 const button = document.createElement("button");
                 button.textContent = choice;
                 button.classList.add("choice");
-                button.addEventListener("click", () => selectAnswer(index));
+                button.addEventListener("click", function() {
+                    // Highlight the selected answer
+                    document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
+                    button.classList.add('highlighted');
+                    selectAnswer(index);
+                });
                 choicesElement.appendChild(button);
             });
         }
-
         // Select an answer and proceed accordingly
         function selectAnswer(choiceIndex) {
             const currentQuestion = questions[currentQuestionIndex];
             const messageElement = document.getElementById("message");
             if (choiceIndex === currentQuestion.correct) {
-                messageElement.innerHTML = `<div id='correct-message' style='justify-content: center; text-align: center; color: green;'$1><i class='fas fa-check-circle'></i> Correct! Well done!</div>`;
+                messageElement.innerHTML = `<div id='correct-message' style='display: flex; justify-content: center; align-items: center; color: green;'><i class='fas fa-check-circle'></i> Correct! Well done!</div>`;
                 currentQuestionIndex++;
                 if (currentQuestionIndex < questions.length) {
-                    setTimeout(loadQuestion, 1000);
+                    setTimeout(() => {
+                    // Remove highlighted state from all choices
+                    const allChoices = document.querySelectorAll('.choice');
+                    allChoices.forEach(choice => choice.classList.remove('highlighted'));
+                    loadQuestion();
+                }, 1000);
                 } else {
                     setTimeout(displayCongratulations, 1000);
                 }
             } else {
-                messageElement.textContent = "Oops, try again.";
+                messageElement.innerHTML = `<div style='color: crimson;'>Oops, try again.</div>`;
             }
         }
 
         // Display the congratulations message at the end of the quiz
         function displayCongratulations() {
             const messageElement = document.getElementById("message");
-            messageElement.textContent = "Hello Winner! You have completed the quiz.";
+            messageElement.textContent = "Great job! You've completed the BLM Plaza quiz!";
             document.getElementById("question-container").style.display = "none";
             location.href = `space://do?action=send_event&event_message=quiz-completed`;
         }
+    
     </script>
 </body>
 </html>
