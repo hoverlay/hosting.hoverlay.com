@@ -15,34 +15,40 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             text-align: center;
-            padding: 20px;
             box-sizing: border-box;
         }
 
         .container {
-            max-width: 600px;
+            max-width: 90%;
             background-color: white;
             color: #31092f;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 90%;
+            box-sizing: border-box;
         }
 
         h1 {
             color: #ffd024;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
+            font-size: 24px;
         }
 
         p {
-            margin-bottom: 20px;
-            line-height: 1.6;
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
         .button {
             display: inline-block;
-            padding: 12px 20px;
+            padding: 10px 15px;
             background-color: #ffd024;
             color: #31092f;
             text-decoration: none;
@@ -50,6 +56,7 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             transition: background-color 0.3s ease;
+            font-size: 14px;
         }
 
         .button:hover {
@@ -62,7 +69,7 @@
             right: 10px;
             background: none;
             border: none;
-            font-size: 36px;
+            font-size: 28px;
             color: #ffd024;
             cursor: pointer;
         }
@@ -70,7 +77,6 @@
         .close-button i {
             pointer-events: none;
         }
-
     </style>
 </head>
 <body>
@@ -78,12 +84,12 @@
         <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
             <i class="fas fa-times-circle"></i>
         </button>
-        <h1>Did you know you can sponsor this stop? </h1>
+        <h1>Did you know you can sponsor this stop?</h1>
         <p>
-            Sponsoring the 51 Steps to Freedom Trail offers your organization a unique opportunity to support a transformative educational initiative while gaining valuable exposure. Together, we can honor the past and shape the future, all while boosting your brand’s visibility and recognition.
+            Sponsoring the 51 Steps to Freedom Trail offers your organization a unique opportunity to support a transformative educational initiative while gaining valuable exposure.
         </p>
         <p>
-            Tap the button below to learn how your sponsorship supports the trail and benefits your business. Thank you for making a lasting impact!
+            Together, we can honor the past and shape the future, all while boosting your brand’s visibility and recognition.
         </p>
         <a class="button" href="mailto:info@51StepsToFreedom.org?subject=Sponsoring%20an%20AR%20stop">
             Sponsor This Stop
