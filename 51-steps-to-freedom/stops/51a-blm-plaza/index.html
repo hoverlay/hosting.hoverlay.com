@@ -145,22 +145,26 @@
             {
                 question: "In which year was BLM Plaza officially named?",
                 choices: ["A. 2018", "B. 2020", "C. 2021", "D. 2019"],
-                correct: 1
+                correct: [1],
+                successMessage: "Correct! BLM Plaza was officially named in 2020."
             },
             {
                 question: "How many blocks does BLM Plaza mural stretch?",
                 choices: ["A. 7", "B. 2", "C. 4", "D. 1"],
-                correct: 1
+                correct: [1, 2],
+                successMessage: "Great job! The mural stretches over 2 blocks."
             },
             {
                 question: "Which mayor renamed the street to Black Lives Matter Plaza NW?",
                 choices: ["A. Mayor Muriel Bowser", "B. Adrian Fenty", "C. Mayor Vincent C. Gray", "D. Mayor Marion Barry"],
-                correct: 0
+                correct: [0],
+                successMessage: "Well done! Mayor Muriel Bowser renamed the street."
             },
             {
                 question: "How many artists worked on the mural?",
                 choices: ["A. 1", "B. 3", "C. 10", "D. 8"],
-                correct: 3
+                correct: [3],
+                successMessage: "Excellent! 8 artists worked on the mural."
             }
         ];
 
@@ -203,8 +207,8 @@
         function selectAnswer(choiceIndex) {
             const currentQuestion = questions[currentQuestionIndex];
             const messageElement = document.getElementById("message");
-            if (choiceIndex === currentQuestion.correct) {
-                messageElement.innerHTML = `<div id='correct-message' style='display: flex; justify-content: center; align-items: center; color: green;'><i class='fas fa-check-circle'></i> Correct! Well done!</div>`;
+            if (currentQuestion.correct.includes(choiceIndex)) {
+                messageElement.innerHTML = `<div id='correct-message' style='display: flex; justify-content: center; align-items: center; color: green;'><i class='fas fa-check-circle'></i> ${currentQuestion.successMessage}</div>`;
                 currentQuestionIndex++;
                 if (currentQuestionIndex < questions.length) {
                     setTimeout(() => {
@@ -228,7 +232,7 @@
             document.getElementById("question-container").style.display = "none";
             location.href = `space://do?action=send_event&event_message=quiz-completed`;
         }
-    
+        
     </script>
 </body>
 </html>
