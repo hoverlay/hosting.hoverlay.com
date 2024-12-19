@@ -165,7 +165,7 @@
                 choices: ["A. 1", "B. 3", "C. 10", "D. 8"],
                 correct: [3],
                 successMessage: "Excellent! 8 artists worked on the mural."
-            }
+                  }
         ];
 
         let currentQuestionIndex = 0;
@@ -205,25 +205,26 @@
         }
         // Select an answer and proceed accordingly
         function selectAnswer(choiceIndex) {
-            const currentQuestion = questions[currentQuestionIndex];
-            const messageElement = document.getElementById("message");
-            if (currentQuestion.correct.includes(choiceIndex)) {
-                messageElement.innerHTML = `<div id='correct-message' style='display: flex; justify-content: center; align-items: center; color: green;'><i class='fas fa-check-circle'></i> ${currentQuestion.successMessage}</div>`;
-                currentQuestionIndex++;
-                if (currentQuestionIndex < questions.length) {
-                    setTimeout(() => {
-                    // Remove highlighted state from all choices
-                    const allChoices = document.querySelectorAll('.choice');
-                    allChoices.forEach(choice => choice.classList.remove('highlighted'));
-                    loadQuestion();
-                }, 1000);
-                } else {
-                    setTimeout(displayCongratulations, 1000);
-                }
+    const currentQuestion = questions[currentQuestionIndex];
+    const messageElement = document.getElementById("message");
+    const allChoices = document.querySelectorAll('.choice'); // Get all choice buttons
+
+    if (currentQuestion.correct.includes(choiceIndex)) {
+        messageElement.innerHTML = `<div id='correct-message' style='display: flex; justify-content: center; align-items: center; color: green;'><i class='fas fa-check-circle'></i> ${currentQuestion.successMessage}</div>`;
+        currentQuestionIndex++;
+        setTimeout(() => {
+            allChoices.forEach(choice => choice.classList.remove('highlighted')); // Clear highlights
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
             } else {
-                messageElement.innerHTML = `<div style='color: crimson;'>Oops, try again.</div>`;
+                displayCongratulations();
             }
-        }
+        }, 1000);
+    } else {
+        messageElement.innerHTML = `<div style='color: crimson;'>Oops, try again.</div>`;
+        allChoices.forEach(choice => choice.classList.remove('highlighted')); // Clear highlights
+    }
+}
 
         // Display the congratulations message at the end of the quiz
         function displayCongratulations() {
