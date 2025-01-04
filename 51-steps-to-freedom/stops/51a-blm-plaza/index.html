@@ -40,7 +40,7 @@
 
         h1 {
             text-align: center;
-            color: #ffd024;
+            color: #31092f;
         }
 
         .close-button {
@@ -96,7 +96,7 @@
         #message {
             text-align: center;
             margin-bottom: 20px;
-            font-size: 1.2em;
+            font-size: 1.4em;
         }
 
         
@@ -144,25 +144,35 @@
         const questions = [
             {
                 layout: "grid",
+                question: "Which decade is commonly associated with the origins of the Black Liberation Movement (BLM)?",
+                choices: ["A. 1860s", "B. 1940s", "C. 1980s", "D. 2020s"],
+                correct: [1],
+                successMessage: "Correct! It started with black veterans demanding equality after World War II.",
+                exitAfterAttempt: false
+            },
+            {
+                layout: "grid",
                 question: "In which year was BLM Plaza officially named?",
                 choices: ["A. 2018", "B. 2020", "C. 2021", "D. 2019"],
                 correct: [1],
-                successMessage: "Correct! BLM Plaza was officially named in 2020."
+                successMessage: "Correct! BLM Plaza was officially named in 2020.",
+                exitAfterAttempt: false
             },
             {
                 layout: "list",
                 question: "How many blocks does BLM Plaza mural stretch?",
                 choices: ["A. 7", "B. 2", "C. 4", "D. 1"],
                 correct: [1, 2],
-                successMessage: "Great job! The mural stretches over 2 blocks."
+                successMessage: "Great job! The mural stretches over 2 blocks.",
+                exitAfterAttempt: false
             },
-            {
-                layout: "list",
-                question: "Which mayor renamed the street to Black Lives Matter Plaza NW?",
-                choices: ["A. Mayor Muriel Bowser", "B. Adrian Fenty", "C. Mayor Vincent C. Gray", "D. Mayor Marion Barry"],
-                correct: [0],
-                successMessage: "Well done! Mayor Muriel Bowser renamed the street."
-            },
+            // {
+            //     layout: "list",
+            //     question: "Which mayor renamed the street to Black Lives Matter Plaza NW?",
+            //     choices: ["A. Mayor Muriel Bowser", "B. Adrian Fenty", "C. Mayor Vincent C. Gray", "D. Mayor Marion Barry"],
+            //     correct: [0],
+            //     successMessage: "Well done! Mayor Muriel Bowser renamed the street."
+            // },
             // {
             //     layout: "grid",
             //     question: "How many artists worked on the mural?",
@@ -205,19 +215,14 @@
                 const button = document.createElement("button");
                 button.textContent = choice;
                 button.classList.add("choice");
-                button.addEventListener("click", function() {
-                    // Highlight the selected answer
+                button.addEventListener("click", function () {
                     document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
                     button.classList.add('highlighted');
                     selectAnswer(index);
                 });
                 choicesElement.appendChild(button);
             });
-        }
-            const currentQuestion = questions[currentQuestionIndex];
-            const questionElement = document.getElementById("question");
-            const choicesElement = document.getElementById("choices");
-            const messageElement = document.getElementById("message");
+            
             
             // Reset message and question text
             messageElement.textContent = "";
@@ -236,28 +241,40 @@
                 });
                 choicesElement.appendChild(button);
             });
+        
+        // setTimeout(() => {
+        //         document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
+        //         if (currentQuestionIndex < questions.length) {
+        //             loadQuestion();
+        //         } else {
+        //             displayCongratulations();
+        //         }
+        //     }, 4000);
+            }
+
         // Select an answer and proceed accordingly
         function selectAnswer(choiceIndex) {
-    const currentQuestion = questions[currentQuestionIndex];
-    const messageElement = document.getElementById("message");
-    const allChoices = document.querySelectorAll('.choice'); // Get all choice buttons
+            const currentQuestion = questions[currentQuestionIndex];
+            const messageElement = document.getElementById("message");
 
-    if (currentQuestion.correct.includes(choiceIndex)) {
-        messageElement.innerHTML = `<div id='correct-message' style='display: flex; justify-content: center; align-items: center; color: green;'><i class='fas fa-check-circle'></i> ${currentQuestion.successMessage}</div>`;
-        currentQuestionIndex++;
-        setTimeout(() => {
-            allChoices.forEach(choice => choice.classList.remove('highlighted')); // Clear highlights
-            if (currentQuestionIndex < questions.length) {
-                loadQuestion();
+            if (currentQuestion.correct.includes(choiceIndex)) {
+                messageElement.innerHTML = `<div id='correct-message' style='display: flex; justify-content: center; align-items: center; color: green;'><i class='fas fa-check-circle'></i> ${currentQuestion.successMessage}</div>`;
             } else {
-                displayCongratulations();
+                messageElement.innerHTML = `<div style='color: crimson;'>Oops, try again.</div>`;
             }
-        }, 1000);
-    } else {
-        messageElement.innerHTML = `<div style='color: crimson;'>Oops, try again.</div>`;
-        allChoices.forEach(choice => choice.classList.remove('highlighted')); // Clear highlights
-    }
-}
+
+            if (currentQuestion.exitAfterAttempt || currentQuestion.correct.includes(choiceIndex)) {
+                setTimeout(() => {
+                    document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        loadQuestion();
+                    } else {
+                        displayCongratulations();
+                    }
+                }, 3500);
+            }
+        }
 
         // Display the congratulations message at the end of the quiz
         function displayCongratulations() {
