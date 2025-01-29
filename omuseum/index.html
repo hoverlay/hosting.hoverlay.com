@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Experiences</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f7;
+            padding: 16px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Landscape phone and small tablets */
+        @media (min-width: 667px) and (orientation: landscape) {
+            .gallery {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Larger tablets and desktop */
+        @media (min-width: 1024px) {
+            .gallery {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+        }
+
+        .card {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Tap card to activate AR</div>
+    <div class="gallery">
+        <a href="https://hoverlay.io/space/gxo" class="card">
+            <img src="./assets/images/graceland-room.jpg" alt="Elvis">
+            <div class="card-content">
+                <h2 class="card-title">Graceland</h2>
+                <p class="card-subtitle">Snap photo with the king!</p>
+            </div>
+        </a>
+        <a href="ar-link-2" class="card">
+            <img src="./assets/images/safari-room.jpg" alt="Safari">
+            <div class="card-content">
+                <h2 class="card-title">Safari Room</h2>
+                <p class="card-subtitle">Teleport into the African Savannah</p>
+            </div>
+        </a>
+        <a href="https://hoverlay.io/space/91037" class="card">
+            <img src="./assets/images/entrance-balcony.jpg" alt="Rosa Parks">
+            <div class="card-content">
+                <h2 class="card-title">Rosa Parks</h2>
+                <p class="card-subtitle">Meet the iconic civil right leader</p>
+            </div>
+        </a>
+        <a href="https://hoverlay.io/space/9hg" class="card">
+            <img src="./assets/images/secret-garden.jpg" alt="Secret Garden">
+            <div class="card-content">
+                <h2 class="card-title">Secret Garden</h2>
+                <p class="card-subtitle">What wings do you fly on?</p>
+            </div>
+        </a>
+        <a href="ar-link-5" class="card">
+            <img src="./assets/images/tattoo-room.jpg" alt="Tattoo Room">
+            <div class="card-content">
+                <h2 class="card-title">Tattoo Room</h2>
+                <p class="card-subtitle">Unexpected words of wisdom</p>
+            </div>
+        </a>
+    </div>
+</body>
+</html>
