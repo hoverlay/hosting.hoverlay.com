@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AR Experiences</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -25,14 +26,12 @@
             margin: 0 auto;
         }
 
-        /* Landscape phone and small tablets */
         @media (min-width: 667px) and (orientation: landscape) {
             .gallery {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
 
-        /* Larger tablets and desktop */
         @media (min-width: 1024px) {
             .gallery {
                 grid-template-columns: repeat(4, 1fr);
@@ -49,6 +48,19 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             aspect-ratio: 3/4;
             cursor: pointer;
+        }
+
+        .card.locked::before {
+            content: '\f023';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 24px;
+            color: white;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         .card:hover {
@@ -82,6 +94,7 @@
             font-size: 0.9rem;
             opacity: 0.9;
         }
+
         .header {
             text-align: center;
             margin-bottom: 24px;
@@ -89,46 +102,253 @@
             font-size: 1.1rem;
             font-weight: 500;
         }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .question-box {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 400px;
+            margin: 40px auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .answer-option {
+            padding: 12px;
+            background: #f5f5f7;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .answer-option:hover {
+            background: #e5e5e7;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: #0066CC;
+        }
     </style>
 </head>
 <body>
-    <div class="header">Tap card to activate AR</div>
-    <div class="gallery">
-        <a href="https://hoverlay.io/space/gxo" class="card">
-            <img src="./assets/images/graceland-room.jpg" alt="Elvis">
-            <div class="card-content">
-                <h2 class="card-title">Graceland</h2>
-                <p class="card-subtitle">Snap photo with the king!</p>
-            </div>
-        </a>
-        <a href="https://hoverlay.io/space/jivb" class="card">
-            <img src="./assets/images/safari-room.jpg" alt="Safari">
-            <div class="card-content">
-                <h2 class="card-title">Safari Room</h2>
-                <p class="card-subtitle">Teleport into the African Savannah</p>
-            </div>
-        </a>
-        <a href="https://hoverlay.io/space/91037" class="card">
-            <img src="./assets/images/entrance-balcony.jpg" alt="Rosa Parks">
-            <div class="card-content">
-                <h2 class="card-title">Rosa Parks</h2>
-                <p class="card-subtitle">Meet the iconic civil right leader</p>
-            </div>
-        </a>
-        <a href="https://hoverlay.io/space/9hg" class="card">
-            <img src="./assets/images/secret-garden.jpg" alt="Secret Garden">
-            <div class="card-content">
-                <h2 class="card-title">Secret Garden</h2>
-                <p class="card-subtitle">What wings do you fly on?</p>
-            </div>
-        </a>
-        <a href="https://hoverlay.io/space/xi5s" class="card">
-            <img src="./assets/images/tattoo-room.jpg" alt="Tattoo Room">
-            <div class="card-content">
-                <h2 class="card-title">Tattoo Room</h2>
-                <p class="card-subtitle">Unexpected words of wisdom</p>
-            </div>
-        </a>
+    <div class="header">Once you are in the room, tap card to unlock</div>
+    <div class="gallery"></div>
+    <div class="overlay">
+        <div class="question-box">
+            <button class="close-btn">&times;</button>
+            <div class="question-text"></div>
+            <div class="answer-container"></div>
+            <button class="submit-btn">Submit</button>
+        </div>
     </div>
+
+    <script>
+        const cardData = [
+            {
+                id: 'graceland',
+                title: 'Graceland',
+                subtitle: 'Snap photo with the king!',
+                image: './assets/images/graceland-room.jpg',
+                arLink: 'https://hoverlay.io/space/gxo',
+                questionType: 'multiple',
+                question: 'What can you play in this room?',
+                options: ['Darts', 'Pinball', 'Pool', 'Video Game'],
+                answer: 'Pinball',
+            },
+            {
+                id: 'safari',
+                title: 'Safari Room',
+                subtitle: 'Teleport into the African Savannah',
+                image: './assets/images/safari-room.jpg',
+                arLink: 'https://hoverlay.io/space/jivb',
+                questionType: 'multiple',
+                question: 'Which animal is known as the king of the jungle?',
+                options: ['Tiger', 'Lion', 'Elephant', 'Giraffe'],
+                answer: 'Lion',
+            },
+            {
+                id: 'rosa',
+                title: 'Rosa Parks',
+                subtitle: 'Meet the iconic civil right leader',
+                image: './assets/images/entrance-balcony.jpg',
+                arLink: 'https://hoverlay.io/space/91037',
+                questionType: 'text',
+                question: 'In which year did Rosa Parks refuse to give up her bus seat?',
+                answer: '1955',
+            },
+            {
+                id: 'garden',
+                title: 'Secret Garden',
+                subtitle: 'What wings do you fly on?',
+                image: './assets/images/secret-garden.jpg',
+                arLink: 'https://hoverlay.io/space/9hg',
+                questionType: 'multiple',
+                question: 'Which butterfly has blue wings?',
+                options: ['Monarch', 'Blue Morpho', 'Swallowtail', 'Painted Lady'],
+                answer: 'Blue Morpho',
+            },
+            {
+                id: 'tattoo',
+                title: 'Tattoo Room',
+                subtitle: 'Unexpected words of wisdom',
+                image: './assets/images/tattoo-room.jpg',
+                arLink: 'https://hoverlay.io/space/xi5s',
+                questionType: 'text',
+                question: 'How many tattoo photographs are on the wall?',
+                answer: '8',
+            }
+        ];
+
+        // Load unlock status from localStorage
+        const unlockedCards = new Set(JSON.parse(localStorage.getItem('unlockedCards') || '[]'));
+
+        function createCard(data) {
+            const card = document.createElement('div');
+            card.className = `card ${unlockedCards.has(data.id) ? '' : 'locked'}`;
+            card.innerHTML = `
+                <img src="${data.image}" alt="${data.title}">
+                <div class="card-content">
+                    <h2 class="card-title">${data.title}</h2>
+                    <p class="card-subtitle">${data.subtitle}</p>
+                </div>
+            `;
+            return card;
+        }
+
+        function showQuestion(cardData) {
+            const overlay = document.querySelector('.overlay');
+            const questionText = overlay.querySelector('.question-text');
+            const answerContainer = overlay.querySelector('.answer-container');
+            const submitBtn = overlay.querySelector('.submit-btn');
+
+            questionText.textContent = cardData.question;
+            answerContainer.innerHTML = '';
+
+            if (cardData.questionType === 'text') {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'answer-input';
+                answerContainer.appendChild(input);
+            } else {
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'answer-options';
+                cardData.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'answer-option';
+                    button.textContent = option;
+                    button.onclick = () => {
+                        document.querySelectorAll('.answer-option').forEach(btn => 
+                            btn.style.background = '#f5f5f7');
+                        button.style.background = '#e0e0e0';
+                        button.dataset.selected = 'true';
+                    };
+                    optionsDiv.appendChild(button);
+                });
+                answerContainer.appendChild(optionsDiv);
+            }
+
+            overlay.style.display = 'block';
+
+            return new Promise((resolve) => {
+                submitBtn.onclick = () => {
+                    let answer;
+                    if (cardData.questionType === 'text') {
+                        answer = answerContainer.querySelector('input').value;
+                    } else {
+                        const selected = answerContainer.querySelector('[data-selected="true"]');
+                        answer = selected ? selected.textContent : '';
+                    }
+                    resolve(answer.trim());
+                };
+            });
+        }
+
+        function unlockCard(cardElement, cardId) {
+            cardElement.classList.remove('locked');
+            unlockedCards.add(cardId);
+            localStorage.setItem('unlockedCards', JSON.stringify([...unlockedCards]));
+        }
+
+        async function handleCardClick(cardElement, cardData) {
+            if (!unlockedCards.has(cardData.id)) {
+                const answer = await showQuestion(cardData);
+                if (answer.toLowerCase() === cardData.answer.toLowerCase()) {
+                    unlockCard(cardElement, cardData.id);
+                    window.location.href = cardData.arLink;
+                } else {
+                    alert('Incorrect answer. Try again!');
+                }
+            } else {
+                window.location.href = cardData.arLink;
+            }
+        }
+
+        // Initialize gallery
+        const gallery = document.querySelector('.gallery');
+        cardData.forEach(data => {
+            const card = createCard(data);
+            card.onclick = () => handleCardClick(card, data);
+            gallery.appendChild(card);
+        });
+
+        // Close overlay when clicking X
+        document.querySelector('.close-btn').onclick = () => {
+            document.querySelector('.overlay').style.display = 'none';
+        };
+    </script>
 </body>
 </html>
