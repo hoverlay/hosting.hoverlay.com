@@ -60,7 +60,7 @@
             font-size: 24px;
             color: white;
             z-index: 2;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .card:hover {
@@ -95,12 +95,94 @@
             opacity: 0.9;
         }
 
-        .header {
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 0 16px;
+        }
+
+        .progress-container {
+            margin: 0 16px 24px;
             text-align: center;
-            margin-bottom: 24px;
+        }
+
+        .progress-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            max-width: 300px;
+            height: 8px;
+            background: #E5E5EA;
+            border-radius: 4px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #34C759;
+            transition: width 0.3s ease;
+        }
+
+        .header {
             color: #333;
             font-size: 1.1rem;
             font-weight: 500;
+        }
+
+        .reset-btn {
+            background: none;
+            border: 1px solid #007AFF;
+            color: #007AFF;
+            padding: 4px 6px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 0.6rem;
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: #007AFF;
+            color: white;
+        }
+
+        .confirm-reset {
+            background: white;
+            text-align: center;
+        }
+
+        .confirm-reset .question-text {
+            margin-bottom: 32px;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .confirm-btn {
+            padding: 8px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border: none;
+        }
+
+        .confirm-btn.yes {
+            background: #FF3B30;
+            color: white;
+        }
+
+        .confirm-btn.no {
+            background: #8E8E93;
+            color: white;
         }
 
         .overlay {
@@ -185,7 +267,16 @@
     </style>
 </head>
 <body>
-    <div class="header">Once you are in the room, tap card to unlock</div>
+    <div class="header-container">
+        <div class="header">Once you are in the room, tap card to unlock</div>
+        <button class="reset-btn">Reset Progress</button>
+    </div>
+    <div class="progress-container">
+        <div class="progress-text">Rooms Unlocked: <span class="rooms-count">0</span>/<span class="total-rooms">5</span></div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 0%"></div>
+        </div>
+    </div>
     <div class="gallery"></div>
     <div class="overlay">
         <div class="question-box">
@@ -205,30 +296,41 @@
                 image: './assets/images/graceland-room.jpg',
                 arLink: 'https://hoverlay.io/space/gxo',
                 questionType: 'multiple',
-                question: 'What can you play in this room?',
-                options: ['Darts', 'Pinball', 'Pool', 'Video Game'],
-                answer: 'Pinball',
+                question: 'What color is the bar in the Graceland Room?',
+                options: ['Purple', 'Pink', 'Yellow', 'Orange'],
+                answer: 'Pink',
             },
             {
                 id: 'safari',
                 title: 'Safari Room',
                 subtitle: 'Teleport into the African Savannah',
                 image: './assets/images/safari-room.jpg',
-                arLink: 'https://hoverlay.io/space/jivb',
+                // arLink: 'https://hoverlay.io/space/jivb',
+                arLink: 'https://hoverlay.io/space/pkre',
                 questionType: 'multiple',
                 question: 'Which animal is known as the king of the jungle?',
-                options: ['Tiger', 'Lion', 'Elephant', 'Giraffe'],
+                options: ['Zebra', 'Lion', 'Elephant', 'Giraffe'],
                 answer: 'Lion',
             },
+            // {
+            //     id: 'rosa',
+            //     title: 'Rosa Parks',
+            //     subtitle: 'Meet the iconic civil right leader',
+            //     image: './assets/images/entrance-balcony.jpg',
+            //     arLink: 'https://hoverlay.io/space/97203',
+            //     questionType: 'text',
+            //     question: 'For how many years did Rosa Parks stay here?',
+            //     answer: '10',
+            // },
             {
                 id: 'rosa',
                 title: 'Rosa Parks',
                 subtitle: 'Meet the iconic civil right leader',
-                image: './assets/images/entrance-balcony.jpg',
+                image: './assets/images/rosa-parks-room.jpg',
                 arLink: 'https://hoverlay.io/space/91037',
                 questionType: 'text',
-                question: 'In which year did Rosa Parks refuse to give up her bus seat?',
-                answer: '1955',
+                question: 'For how many years did Rosa Parks stay here?',
+                answer: '10',
             },
             {
                 id: 'garden',
@@ -242,15 +344,48 @@
                 answer: 'Blue Morpho',
             },
             {
-                id: 'tattoo',
-                title: 'Tattoo Room',
-                subtitle: 'Unexpected words of wisdom',
-                image: './assets/images/tattoo-room.jpg',
-                arLink: 'https://hoverlay.io/space/xi5s',
-                questionType: 'text',
-                question: 'How many tattoo photographs are on the wall?',
-                answer: '8',
-            }
+                id: 'amnesia',
+                title: 'Amnesia Room',
+                subtitle: 'Did you say spies?',
+                image: './assets/images/amnesia-room.jpg',
+                arLink: 'https://hoverlay.io/space/vosn',
+                questionType: 'multiple',
+                question: 'What performing group did the CIA use to spy behind the Iron Curtain?',
+                options: ['Ballet', 'Circus', 'Orchestra'],
+                answer: 'Circus',
+            },
+            {
+                id: 'gate',
+                title: 'Gate House',
+                subtitle: 'Christmas spirit all year round',
+                image: './assets/images/missing.png',
+                arLink: 'https://hoverlay.io/space/xeh',
+                questionType: 'multiple',
+                question: 'What is on the Gate House secret door?',
+                options: ['Bricks', 'Wood', 'Curtain'],
+                answer: 'Bricks',
+            },
+            {
+                id: 'ballroom',
+                title: 'Ballroom',
+                subtitle: 'Reveal your inner angel',
+                image: './assets/images/ball-room.jpg',
+                arLink: 'https://hoverlay.io/space/47102',
+                questionType: 'multiple',
+                question: 'What is on the Gate House secret door?',
+                options: ['Bricks', 'Wood', 'Curtain'],
+                answer: 'Bricks',
+            },
+            // {
+            //     id: 'tattoo',
+            //     title: 'Tattoo Room',
+            //     subtitle: 'Unexpected words of wisdom',
+            //     image: './assets/images/tattoo-room.jpg',
+            //     arLink: 'https://hoverlay.io/space/xi5s',
+            //     questionType: 'text',
+            //     question: 'What is the art of tattooing called in Japanese?',
+            //     answer: 'Irezumi',
+            // }
         ];
 
         // Load unlock status from localStorage
@@ -317,11 +452,25 @@
             });
         }
 
+        function updateProgress() {
+            const unlockedCount = unlockedCards.size;
+            const totalRooms = cardData.length;
+            const progressPercentage = (unlockedCount / totalRooms) * 100;
+            
+            document.querySelector('.rooms-count').textContent = unlockedCount;
+            document.querySelector('.total-rooms').textContent = totalRooms;
+            document.querySelector('.progress-fill').style.width = `${progressPercentage}%`;
+        }
+
         function unlockCard(cardElement, cardId) {
             cardElement.classList.remove('locked');
             unlockedCards.add(cardId);
             localStorage.setItem('unlockedCards', JSON.stringify([...unlockedCards]));
+            updateProgress();
         }
+
+        // Initialize progress on load
+        updateProgress();
 
         async function handleCardClick(cardElement, cardData) {
             if (!unlockedCards.has(cardData.id)) {
@@ -345,7 +494,42 @@
             gallery.appendChild(card);
         });
 
-        // Close overlay when clicking X
+        function showResetConfirmation() {
+            const overlay = document.querySelector('.overlay');
+            const questionBox = overlay.querySelector('.question-box');
+            
+            questionBox.classList.add('confirm-reset');
+            questionBox.innerHTML = `
+                <div class="question-text">Are you sure you want to reset all progress?</div>
+                <div class="confirm-buttons">
+                    <button class="confirm-btn no">Cancel</button>
+                    <button class="confirm-btn yes">Reset All</button>
+                </div>
+            `;
+            
+            overlay.style.display = 'block';
+            
+            const resetBtn = questionBox.querySelector('.yes');
+            const cancelBtn = questionBox.querySelector('.no');
+            
+            resetBtn.onclick = () => {
+                localStorage.removeItem('unlockedCards');
+                unlockedCards.clear();
+                document.querySelectorAll('.card').forEach(card => {
+                    card.classList.add('locked');
+                });
+                updateProgress();
+                overlay.style.display = 'none';
+            };
+            
+            cancelBtn.onclick = () => {
+                overlay.style.display = 'none';
+            };
+        }
+
+        // Event Listeners
+        document.querySelector('.reset-btn').onclick = showResetConfirmation;
+        
         document.querySelector('.close-btn').onclick = () => {
             document.querySelector('.overlay').style.display = 'none';
         };
