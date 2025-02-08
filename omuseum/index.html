@@ -253,6 +253,7 @@
         .submit-btn {
             width: 100%;
             padding: 12px;
+            margin-top: 16px;
             background: #007AFF;
             color: white;
             border: none;
@@ -453,6 +454,10 @@
             });
         }
 
+        function hideQuestion() {
+            document.querySelector('.overlay').style.display = 'none';
+        }
+
         function updateProgress() {
             const unlockedCount = unlockedCards.size;
             const totalRooms = cardData.length;
@@ -481,6 +486,7 @@
                     window.location.href = cardData.arLink;
                 } else {
                     alert('Incorrect answer. Try again!');
+                    hideQuestion();
                 }
             } else {
                 window.location.href = cardData.arLink;
@@ -532,7 +538,7 @@
         document.querySelector('.reset-btn').onclick = showResetConfirmation;
         
         document.querySelector('.close-btn').onclick = () => {
-            document.querySelector('.overlay').style.display = 'none';
+            hideQuestion();
         };
     </script>
 </body>
