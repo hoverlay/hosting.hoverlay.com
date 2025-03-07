@@ -319,7 +319,7 @@
                 title: 'Welcome to O Museum',
                 subtitle: 'Meet the iconic civil rights leader',
                 image: './assets/images/outside-lion.jpg',
-                arLink: 'https://hoverlay.io/space/97203',
+                spacePid: '97203',
                 questionType: 'text',
                 question: 'How many years did Mrs. Rosa Parks stay here?',
                 answer: '10',
@@ -329,7 +329,7 @@
                 title: 'Graceland',
                 subtitle: 'Snap photos with the King!',
                 image: './assets/images/graceland-room-2.jpg',
-                arLink: 'https://hoverlay.io/space/gxo',
+                spacePid: 'gxo',
                 questionType: 'multiple',
                 question: 'What can you play in the Graceland Room?',
                 options: ['Pool', 'Darts', 'Pinball', 'Chess'],
@@ -340,8 +340,8 @@
                 title: 'Safari',
                 subtitle: 'Transport yourself to the Serengeti',
                 image: './assets/images/safari-room.jpg',
-                arLink: 'https://hoverlay.io/space/jivb',
-                //arLink: 'https://hoverlay.io/space/pkre',
+                spacePid: 'jivb',
+                //spacePid: 'pkre',
                 questionType: 'multiple',
                 question: 'Which animal is known as the king of the jungle?',
                 options: ['Zebra', 'Lion', 'Elephant', 'Giraffe'],
@@ -352,7 +352,7 @@
                 title: 'Mrs Rosa Parks',
                 subtitle: 'Take a photo & look up, she loved her clouds',
                 image: './assets/images/mrs-rosa-parks-room.jpg',
-                arLink: 'https://hoverlay.io/space/91037',
+                spacePid: '91037',
                 questionType: 'text',
                 question: 'How many years did Mrs. Rosa Parks stay here?',
                 answer: '10',
@@ -362,7 +362,7 @@
                 title: 'Secret Garden',
                 subtitle: 'What wings do you fly on?',
                 image: './assets/images/secret-garden.jpg',
-                arLink: 'https://hoverlay.io/space/9hg',
+                spacePid: '9hg',
                 questionType: 'multiple',
                 question: 'What word can you find on the rainbow building?', 
                 options: ['Love', 'Inspire', 'Miracle'],
@@ -373,7 +373,7 @@
                 title: 'Amnesia',
                 subtitle: 'Did you say spies?',
                 image: './assets/images/amnesia-room-2.jpg',
-                arLink: 'https://hoverlay.io/space/vosn',
+                spacePid: 'vosn',
                 questionType: 'multiple',
                 question: 'What floor are we on?',
                 options: ['First', 'Second', 'Third'],
@@ -384,8 +384,8 @@
                 title: 'Gatehouse',
                 subtitle: 'Christmas spirit — all year round!',
                 image: './assets/images/gatehouse.jpg',
-                arLink: 'https://hoverlay.io/space/corv',
-                // arLink: 'https://hoverlay.io/space/xeh',
+                spacePid: 'corv',
+                // spacePid: 'xeh',
                 questionType: 'multiple',
                 question: 'What is on the Gatehouse secret door?',
                 options: ['Bricks', 'Wood', 'Curtain'],
@@ -396,7 +396,7 @@
                 title: 'Ballroom',
                 subtitle: 'Reveal your inner angel',
                 image: './assets/images/ballroom.jpg',
-                arLink: 'https://hoverlay.io/space/47102',
+                spacePid: '47102',
                 questionType: 'multiple',
                 question: 'What is on the ceiling of the archway leading into this room?',
                 options: ['Legos', 'Cherubs', 'Clouds'],
@@ -407,7 +407,7 @@
                 title: 'Tattoo Exhibit',
                 subtitle: 'Unexpected words of wisdom',
                 image: './assets/images/tattoo-room.jpg',
-                arLink: 'https://hoverlay.io/space/xi5s',
+                spacePid: 'xi5s',
                 questionType: 'text',
                 question: 'How many tattoo photos are on the walls?',
                 answer: '8',
@@ -514,13 +514,13 @@
                 const answer = await showQuestion(cardData);
                 if (answer.toLowerCase() === cardData.answer.toLowerCase()) {
                     unlockCard(cardElement, cardData.id);
-                    window.location.href = cardData.arLink;
+                    loadSpace(cardData.spacePid);
                 } else {
                     alert('Incorrect answer. Try again!');
                     hideAndResetOverlayPanel();
                 }
             } else {
-                window.location.href = cardData.arLink;
+                loadSpace(cardData.spacePid);
             }
         }
 
@@ -567,6 +567,10 @@
             };
         }
 
+        function loadSpace(pid) {
+            window.location.href =
+            "space://do?action=load&space_pid=" + pid + "&when_done=hide";
+        }
         // Event Listeners
         document.querySelector('.reset-btn').onclick = showResetConfirmation;
         
