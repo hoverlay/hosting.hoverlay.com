@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Image Generator</title>
+    <script>
+        // Execute when page loads
+        window.onload = function() {
+            // Create canvas element
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 300;
+            const ctx = canvas.getContext('2d');
+            
+            // Generate random content
+            generateRandomImage(ctx, canvas.width, canvas.height);
+            
+            // Convert to image and display
+            const imgType = Math.random() > 0.5 ? 'image/jpeg' : 'image/png';
+            const dataURL = canvas.toDataURL(imgType, 0.9);
+            
+            // Replace the entire page with just the image
+            document.body.innerHTML = '';
+            const img = new Image();
+            img.src = dataURL;
+            document.body.appendChild(img);
+            
+            // Set content type in the header (note: this won't work client-side)
+            // This would need server-side implementation to actually set headers
+        };
+        
+        function generateRandomImage(ctx, width, height) {
+            // Choose a random style for the image
+            const style = Math.floor(Math.random() * 5);
+            
+            switch(style) {
+                case 0: // Colorful gradient
+                    const gradient = ctx.createLinearGradient(0, 0, width, height);
+                    for(let i = 0; i < 5; i++) {
+                        gradient.addColorStop(i/4, getRandomColor());
+                    }
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, width, height);
+                    break;
+                    
+                case 1: // Random shapes
+                    ctx.fillStyle = getRandomColor();
+                    ctx.fillRect(0, 0, width, height);
+                    
+                    for(let i = 0; i < 20; i++) {
+                        ctx.fillStyle = getRandomColor();
+                        const shapeType = Math.floor(Math.random() * 3);
+                        
+                        if(shapeType === 0) { // Rectangle
+                            ctx.fillRect(
+                                Math.random() * width,
+                                Math.random() * height,
+                                Math.random() * 100,
+                                Math.random() * 100
+                            );
+                        } else if(shapeType === 1) { // Circle
+                            ctx.beginPath();
+                            ctx.arc(
+                                Math.random() * width,
+                                Math.random() * height,
+                                Math.random() * 50,
+                                0, Math.PI * 2
+                            );
+                            ctx.fill();
+                        } else { // Triangle
+                            ctx.beginPath();
+                            ctx.moveTo(Math.random() * width, Math.random() * height);
+                            ctx.lineTo(Math.random() * width, Math.random() * height);
+                            ctx.lineTo(Math.random() * width, Math.random() * height);
+                            ctx.closePath();
+                            ctx.fill();
+                        }
+                    }
+                    break;
+                    
+                case 2: // Noise pattern
+                    for(let x = 0; x < width; x++) {
+                        for(let y = 0; y < height; y++) {
+                            if(Math.random() > 0.5) {
+                                ctx.fillStyle = getRandomColor();
+                                ctx.fillRect(x, y, 1, 1);
+                            }
+                        }
+                    }
+                    break;
+                    
+                case 3: // Abstract lines
+                    ctx.fillStyle = getRandomColor();
+                    ctx.fillRect(0, 0, width, height);
+                    
+                    ctx.lineWidth = Math.random() * 10;
+                    for(let i = 0; i < 20; i++) {
+                        ctx.strokeStyle = getRandomColor();
+                        ctx.beginPath();
+                        ctx.moveTo(Math.random() * width, Math.random() * height);
+                        ctx.lineTo(Math.random() * width, Math.random() * height);
+                        ctx.stroke();
+                    }
+                    break;
+                    
+                case 4: // Circles pattern
+                    ctx.fillStyle = getRandomColor();
+                    ctx.fillRect(0, 0, width, height);
+                    
+                    for(let i = 0; i < 50; i++) {
+                        ctx.fillStyle = getRandomColor(0.7); // Semi-transparent
+                        ctx.beginPath();
+                        ctx.arc(
+                            Math.random() * width,
+                            Math.random() * height,
+                            Math.random() * 40 + 10,
+                            0, Math.PI * 2
+                        );
+                        ctx.fill();
+                    }
+                    break;
+            }
+            
+            // Add some text with timestamp
+            ctx.fillStyle = '#000';
+            ctx.font = '16px Arial';
+            ctx.fillText('Random Image: ' + new Date().toISOString(), 10, height - 20);
+        }
+        
+        function getRandomColor(alpha = 1) {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+    </script>
+</head>
+<body>
+    <p>Generating random image...</p>
+</body>
+</html>
