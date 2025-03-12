@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Transform any picture into a polaroid photo. It's free, easy and fast!">
+  <meta name="keywords" content="javascript, jquery, polaroid, frame, photo, canvas, image, photo converter, image converter, polaroid maker, image vintage, print polaroid, download polaroid, polaroid picture maker, polaroid picture creator">
+
+  <meta name="author" content="Manuel Fernandes">
+
+  <title>Polaroid</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+
+  <link href="css/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
+
+  <!-- Custom styles for this template -->
+  <link href="css/polaroid.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<!-- NAVBAR
+================================================== -->
+<!-- Fixed navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only trn">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Hoverlay Utilities</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class=""><a href="index.html" class="trn">Add Frame</a></li>
+        <li class="active"><a href="polaroid.html" class="trn">Polaroid Style Photos</a></li>
+        <li><a href="#" class="trn" data-toggle="modal" data-target="#modal_about">More</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<div class="jumbotron" id="file_dd">
+  <div class="container">
+
+    <h1>Add Polaroid styling to photos</h1>
+    <p class="trn" data-trn-key="subtitle_key">Transform any picture into a polaroid photo</p>
+
+    <div style="position: absolute; left: -999em;">
+      <input type="file" id="fileInput" name="open image file">
+    </div>
+    <div>
+      <button id="button_dd" type="button" class="btn btn-primary btn-lg">1. Drag and drop your picture here or click to open image</button>
+    </div>
+
+    <div class="">
+      <img id="my_img" class="img-responsive" style="padding-top: 10px; padding-bottom: 5px;width: 250px; height: auto;"/>
+    </div>
+
+    <div>
+      <a href="" id="download_img" download="image.png" class="hidden btn btn-primary" role="button">2. Download your polaroid image</a>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="container">
+  <h2>What to do next?</h2>
+  <p>Download the photo and upload to Hoverlay as an image.</p>
+
+  <hr/>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="js/modernizr.custom.37345.js"></script>
+<script src="js/jquery.pnotify.min.js"></script>
+
+
+<script src="js/polaroid.js"></script>
+<script src="js/polaroidify.js"></script>
+
+</body>
+</html>
+
+

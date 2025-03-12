@@ -1,0 +1,18 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+.dd_rest {
+  border:3px solid #eeeeee;
+  cursor: pointer;
+}
+
+.dd_hilite {
+  /*border:3px dashed #0B85A1;*/
+
+  color:#fff;
+  background-color:#5cb85c;
+  border-color:#4cae4c
+}

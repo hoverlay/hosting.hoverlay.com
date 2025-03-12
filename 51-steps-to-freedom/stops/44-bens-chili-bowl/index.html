@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
-    <title>How Well Do You Know BLM Plaza?</title>
+    <title>How Well Do You Know Ben's Chili?</title>
     <style>
         html, body {
             font-family: Georgia, serif;
@@ -130,8 +130,8 @@
         <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
             <i class="fas fa-times-circle"></i>
         </button>
-        <h1>How Well Do You Know BLM Plaza?</h1>
-        <div class="intro" id="intro">How well do you know BLM Plaza? Tap to start the quiz and earn a prize!<br><button id="start-button" class="start-button" onclick="startQuiz()">GO</button></div>
+        <h1>How Well Do You Know Ben's Chili?</h1>
+        <div class="intro" id="intro">How well do you know Ben's Chili? Tap to start the quiz and earn a prize!<br><button id="start-button" class="start-button" onclick="startQuiz()">GO</button></div>
         <div id="message"></div>
         <div id="question-container" style="display: none;">
             <div class="question" id="question">Question will appear here</div>
@@ -146,21 +146,22 @@
                 layout: "grid",
                 question: "Which decade is commonly associated with the origins of the Black Liberation Movement (BLM)?",
                 choices: ["A. 1860s", "B. 1940s", "C. 1980s", "D. 2020s"],
-                correct: [1],
+                correct: [0,1,2,3],
                 successMessage: "Correct! It started with black veterans demanding equality after World War II.",
+                successMessageDuration: 4000,
                 exitAfterAttempt: false
             },
             {
                 layout: "grid",
-                question: "In which year was BLM Plaza officially named?",
+                question: "In which year was Ben's Chili officially named?",
                 choices: ["A. 2018", "B. 2020", "C. 2021", "D. 2019"],
                 correct: [1],
-                successMessage: "Correct! BLM Plaza was officially named in 2020.",
+                successMessage: "Correct! Ben's Chili was officially named in 2020.",
                 exitAfterAttempt: false
             },
             {
                 layout: "list",
-                question: "How many blocks does BLM Plaza mural stretch?",
+                question: "How many blocks does Ben's Chili mural stretch?",
                 choices: ["A. 7", "B. 2", "C. 4", "D. 1"],
                 correct: [1, 2],
                 successMessage: "Great job! The mural stretches over 2 blocks.",
@@ -272,7 +273,7 @@
         // Display the congratulations message at the end of the quiz
         function displayCongratulations() {
             const messageElement = document.getElementById("message");
-            messageElement.textContent = "Great job! You've completed the BLM Plaza quiz!";
+            messageElement.textContent = "Great job! You've completed the Ben's Chili quiz!";
             document.getElementById("question-container").style.display = "none";
             location.href = `space://do?action=send_event&event_message=quiz-completed`;
         }

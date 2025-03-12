@@ -1,0 +1,19 @@
+<h2>Polaroid Processor</h2>
+<div id="polaroid-container">
+    <div class="row">
+      <div id="left-panel" class="col-md-6">
+        <div id="upload-area" class="well text-center">
+          <p>Drag and drop an image or click to upload</p>
+          <input type="file" id="polaroid-file" accept="image/*,video/*" hidden />
+        </div>
+        <div id="parameters" class="well">
+          <!-- Dynamic input fields for parameters -->
+        </div>
+      </div>
+      <div id="right-panel" class="col-md-5 text-center">
+        <button id="apply-polaroid">Apply</button>
+        <canvas id="polaroid-canvas" class="img-responsive center-block"></canvas>
+        <button id="download-btn" class="btn btn-success">Download</button>
+      </div>
+    </div>
+</div>
