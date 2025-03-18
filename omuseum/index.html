@@ -284,6 +284,87 @@
         .submit-btn:hover {
             background: #0066CC;
         }
+
+        .tutorial-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            padding: 20px;
+            color: white;
+        }
+
+        .tutorial-content {
+            max-width: 600px;
+            margin: 20px auto;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .tutorial-title {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .tutorial-video {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tutorial-tips {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tutorial-tips li {
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .tutorial-tips li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #34C759;
+        }
+
+        .tutorial-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .help-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 999;
+        }
     </style>
 </head>
 <body>
@@ -313,7 +394,24 @@
             </div>
         </div>
     </div>
-
+    <div class="tutorial-overlay">
+        <div class="tutorial-content">
+            <button class="tutorial-close">&times;</button>
+            <h2 class="tutorial-title">Welcome to AR Magic! 🪄</h2>
+            <video class="tutorial-video" controls>
+                <source src="./assets/videos/OMansion AR Tutorial V4 - 576.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <ul class="tutorial-tips">
+                <li>Turn your sound "on" and "up"</li>
+                <li>View the experience through the phone</li>
+                <li>Read and follow the prompts on the screen</li>
+                <li>Pan around with your phone to explore</li>
+                <li>Tap the circle to take photos and videos</li>
+            </ul>
+        </div>
+    </div>
+    <div class="help-button" style="display: none;">?</div>
     <script>
         const cardData = [
             {
@@ -579,6 +677,63 @@
         document.querySelector('.close-btn').onclick = () => {
             hideAndResetOverlayPanel();
         };
+
+        // Add this JavaScript right after your existing scripts
+        document.addEventListener('DOMContentLoaded', function() {
+            const tutorialOverlay = document.querySelector('.tutorial-overlay');
+            const tutorialClose = document.querySelector('.tutorial-close');
+            const helpButton = document.querySelector('.help-button');
+            const video = document.querySelector('.tutorial-video');
+
+            // Check if tutorial has been shown before
+            const tutorialShown = localStorage.getItem('tutorialShown');
+
+            function showTutorial() {
+                tutorialOverlay.style.display = 'block';
+            }
+
+            function hideTutorial() {
+                tutorialOverlay.style.display = 'none';
+                helpButton.style.display = 'flex';
+                // Stop and reset the video
+                video.pause();
+                video.currentTime = 0;
+                localStorage.setItem('tutorialShown', 'true');
+            }
+
+            // Show tutorial if it hasn't been shown before
+            if (!tutorialShown) {
+                showTutorial();
+            } else {
+                helpButton.style.display = 'flex';
+            }
+
+            // Event listeners
+            tutorialClose.addEventListener('click', hideTutorial);
+            helpButton.addEventListener('click', showTutorial);
+            video.addEventListener('ended', hideTutorial);
+
+            // Close tutorial when clicking outside
+            tutorialOverlay.addEventListener('click', function(e) {
+                if (e.target === tutorialOverlay) {
+                    hideTutorial();
+                }
+            });
+        });
+
+        // Add context menu handler for help button
+        document.querySelector('.help-button').addEventListener('contextmenu', function(e) {
+            e.preventDefault(); // Prevent default context menu
+            localStorage.removeItem('tutorialShown');
+            console.log('Tutorial reset - refresh page to see tutorial again');
+            
+            // Optional: Show visual feedback
+            const helpButton = this;
+            helpButton.style.backgroundColor = '#FF3B30';
+            setTimeout(() => {
+                helpButton.style.backgroundColor = 'white';
+            }, 200);
+        });
     </script>
 </body>
 </html>
