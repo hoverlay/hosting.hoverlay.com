@@ -499,8 +499,7 @@
         // Add the tutorial card data to the end of cardData array
         cardData.push({
             id: 'tutorial',
-            title: 'AR Tips & Tricks',
-            subtitle: 'Learn how to get the most out of AR',
+            title: 'Tap for AR Tips & Tricks',
             image: 'none', // This will trigger our special background
             spacePid: 'tutorial' // Special identifier for tutorial card
         });
@@ -518,8 +517,7 @@
                 card.style.background = '#960615'; 
                 card.innerHTML = `
                     <div class="card-content" style="background: none; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                        <h2 class="card-title" style="font-size: 1.8rem; margin-bottom: 16px;">${data.title}</h2>
-                        <p class="card-subtitle">Tap to learn more</p>
+                        <h2 class="card-title" style="font-size: 1.6rem; margin-bottom: 16px;">${data.title}</h2>
                     </div>
                 `;
             } else {
