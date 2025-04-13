@@ -18,9 +18,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             background-color: #31092f;
             color: #fff;
+            min-height: 100vh;
+            position: relative;
         }
 
         #quiz-container {
@@ -28,14 +29,21 @@
             color: #31092f;
             border-radius: 8px;
             padding: 20px;
-            max-width: 600px;
             width: 90%;
-            max-height: 100%;
-            height: 90%;
-            box-sizing: border-box;
-            overflow-y: auto;
+            max-width: 600px;
+            height: auto;
+            max-height: 80vh; /* Limit height in viewport units */
+            overflow-y: auto; /* Enable vertical scrolling */
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             position: relative;
+            -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+        }
+
+        /* Add padding to bottom of scrollable content */
+        #quiz-container::after {
+            content: '';
+            display: block;
+            height: 20px; /* Bottom padding inside scrollable area */
         }
 
         h1 {
@@ -99,8 +107,7 @@
             font-size: 1.4em;
         }
 
-        
-    .start-button {
+        .start-button {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 1.2em;
@@ -115,10 +122,7 @@
             background-color: #31092f;
             color: #ffd024;
         }
-        .highlighted {
-            background-color: #31092f;
-            color: #ffd024;
-        }
+
         .highlighted {
             background-color: #31092f;
             color: #ffd024;
