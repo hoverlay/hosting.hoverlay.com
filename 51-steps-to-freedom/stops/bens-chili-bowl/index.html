@@ -184,6 +184,7 @@
             messageElement.textContent = "";
             questionElement.textContent = currentQuestion.question;
             choicesElement.innerHTML = "";
+            document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));            
             
             // Apply layout based on question configuration
             if (currentQuestion.layout === "list") {
