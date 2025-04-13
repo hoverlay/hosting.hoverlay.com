@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
-    <title>How Well Do You Know Ben's Chili?</title>
+    <title>How Well Do You Know Ben's Chili Bowls?</title>
     <style>
         html, body {
             font-family: Georgia, serif;
@@ -144,43 +144,29 @@
         const questions = [
             {
                 layout: "grid",
-                question: "Which decade is commonly associated with the origins of the Black Liberation Movement (BLM)?",
-                choices: ["A. 1860s", "B. 1940s", "C. 1980s", "D. 2020s"],
+                question: "Ben's Chili Bowl was featured in…",
+                choices: ["A. The Pelican Brief (1993)", "B. State of Play (2009)", "C. House of Cards (2010)", "D. Cross (2024)"],
                 correct: [0,1,2,3],
-                successMessage: "Correct! It started with black veterans demanding equality after World War II.",
+                successMessage: "Correct! In fact, Ben's Chili Bowl was featured in all of these movies.",
                 successMessageDuration: 4000,
                 exitAfterAttempt: false
             },
             {
                 layout: "grid",
-                question: "In which year was Ben's Chili officially named?",
-                choices: ["A. 2018", "B. 2020", "C. 2021", "D. 2019"],
-                correct: [1],
-                successMessage: "Correct! Ben's Chili was officially named in 2020.",
+                question: "Which celebrities/political figures have been to Ben's Chili Bowl?",
+                choices: ["A. Bono", "B. Barack Obama", "C. Ella Fitzgerald", "D. Kevin Hart", "E. Rosa Parks", "D. Kevin Durant"],
+                correct: [0, 1, 2, 3, 4, 5],
+                successMessage: "Correct! In fact, all of these celebrities and political figures have visited Ben's Chili Bowl.",
                 exitAfterAttempt: false
             },
             {
                 layout: "list",
-                question: "How many blocks does Ben's Chili mural stretch?",
-                choices: ["A. 7", "B. 2", "C. 4", "D. 1"],
-                correct: [1, 2],
-                successMessage: "Great job! The mural stretches over 2 blocks.",
+                question: "Ben's Chili Bowl is considered a DC landmark because… ",
+                choices: ["A. It stayed open during the 1968 uprising and Covid pandemic", "B. It celebrates DC's African American history, culture, and character.", "C. It has been a gathering place for all since 1958.", "D. All of the above."],
+                correct: [3],
+                successMessage: "Correct! Ben's Chili Bowl is a DC landmark for all of these reasons.",
                 exitAfterAttempt: false
             },
-            // {
-            //     layout: "list",
-            //     question: "Which mayor renamed the street to Black Lives Matter Plaza NW?",
-            //     choices: ["A. Mayor Muriel Bowser", "B. Adrian Fenty", "C. Mayor Vincent C. Gray", "D. Mayor Marion Barry"],
-            //     correct: [0],
-            //     successMessage: "Well done! Mayor Muriel Bowser renamed the street."
-            // },
-            // {
-            //     layout: "grid",
-            //     question: "How many artists worked on the mural?",
-            //     choices: ["A. 1", "B. 3", "C. 10", "D. 8"],
-            //     correct: [3],
-            //     successMessage: "Excellent! 8 artists worked on the mural."
-            // }
         ];
 
         let currentQuestionIndex = 0;
@@ -204,8 +190,7 @@
             messageElement.textContent = "";
             questionElement.textContent = currentQuestion.question;
             choicesElement.innerHTML = "";
-            document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
-
+            
             // Apply layout based on question configuration
             if (currentQuestion.layout === "list") {
                 choicesElement.style.gridTemplateColumns = "1fr";
@@ -217,33 +202,15 @@
                 const button = document.createElement("button");
                 button.textContent = choice;
                 button.classList.add("choice");
-                button.addEventListener("click", function () {
-                    document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
-                    button.classList.add('highlighted');
-                    selectAnswer(index);
-                });
-                choicesElement.appendChild(button);
-            });
-            
-            
-            // Reset message and question text
-            messageElement.textContent = "";
-            questionElement.textContent = currentQuestion.question;
-            choicesElement.innerHTML = "";
-
-            currentQuestion.choices.forEach((choice, index) => {
-                const button = document.createElement("button");
-                button.textContent = choice;
-                button.classList.add("choice");
                 button.addEventListener("click", function() {
-                    // Highlight the selected answer
                     document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
                     button.classList.add('highlighted');
                     selectAnswer(index);
                 });
                 choicesElement.appendChild(button);
             });
-        
+        }
+
         // Select an answer and proceed accordingly
         function selectAnswer(choiceIndex) {
             const currentQuestion = questions[currentQuestionIndex];
@@ -277,7 +244,6 @@
             document.getElementById("question-container").style.display = "none";
             location.href = `space://do?action=send_event&event_message=quiz-completed`;
         }
-        
     </script>
 </body>
 </html>
