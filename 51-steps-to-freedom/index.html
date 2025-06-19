@@ -51,6 +51,11 @@
             cursor: pointer;
         }
 
+        .card.full-width {
+            grid-column: 1 / -1;
+            aspect-ratio: 16/9;
+        }
+
         .card.unlocked::before {
             content: '\f00c';
             font-family: 'Font Awesome 6 Free';
@@ -378,6 +383,14 @@
         // Updated cardData list
         const cardData = [
             {
+                id: 'channel-link',
+                title: 'Channel Map',
+                subtitle: '',
+                image: './assets/images/51-steps-channel-map.png',
+                url: 'https://hoverlay.io/51stepstofreedom',
+                fullWidth: true
+            },
+            {
                 id: 'lafayette-square',
                 title: '51e. Lafayette Square',
                 subtitle: '',
@@ -467,13 +480,27 @@
                 subtitle: '',
                 image: './assets/images/blm-plaza.jpeg',
                 spacePid: 'jtry'
+            },
+            {
+                id: 'o-museum',
+                title: 'O Museum in the Mansion',
+                subtitle: '',
+                image: './assets/images/outside-lion.jpg',
+                spacePid: 'si07t'
+            },
+            {
+                id: 'lincoln-memorial',
+                title: 'Lincoln Memorial',
+                subtitle: '',
+                image: './assets/images/lincoln-memorial.jpg',
+                spacePid: 'pgjns'
             }
         ];
 
         const gallery = document.querySelector('.gallery');
         cardData.forEach(data => {
             const card = document.createElement('div');
-            card.className = 'card unlocked'; // show all as unlocked
+            card.className = `card unlocked ${data.fullWidth ? 'full-width' : ''}`;
             card.innerHTML = `
 				<img src="${data.image}" alt="${data.title}">
                 <div class="card-content">
@@ -481,7 +508,11 @@
                 </div>
             `;
             card.onclick = () => {
-                window.location.href = `https://hoverlay.io/space/${data.spacePid}`;
+                if (data.url) {
+                    window.open(data.url, '_blank');
+                } else {
+                    window.location.href = `https://hoverlay.io/space/${data.spacePid}`;
+                }
             };
             gallery.appendChild(card);
         });
