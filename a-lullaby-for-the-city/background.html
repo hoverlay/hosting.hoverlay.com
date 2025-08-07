@@ -190,6 +190,11 @@
         
         // Start the animation
         animate();
+        
+        // Add touch event listener for the hobject:// call
+        document.addEventListener('touchstart', function(e) {
+            location.href = 'hobject://do?when_done=hide';
+        });
     </script>
 </body>
 </html>
