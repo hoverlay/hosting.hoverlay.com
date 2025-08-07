@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Day/Night Tint Overlay</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background: transparent;
+            position: relative;
+        }
+
+        .tint-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            mix-blend-mode: multiply;
+            transition: background-color 0.5s ease;
+            z-index: 1000;
+        }
+
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: monospace;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <div class="tint-overlay" id="tintOverlay"></div>
+    <div class="debug-info" id="debugInfo"></div>
+
+    <script>
+        // Color definitions
+        let sunriseColor, middayColor, sunsetColor, nightColor;
+        let totalLength = 4 * 60000; // 4 minutes = 24h simulated
+        
+        // Debug phase tracking
+        let currentPhase = "";
+        
+        // Phase times as HH:MM (editable)
+        let sunriseTimeStr = "06:00";
+        let middayTimeStr = "12:00";
+        let sunsetTimeStr = "20:30";
+        let nightTimeStr = "01:30";
+        
+        // Converted to minutes
+        let sunriseM, middayM, sunsetM, nightM;
+        
+        // Initialize colors
+        sunriseColor = { r: 255, g: 170, b: 120 }; // warm orange-pink
+        middayColor = { r: 255, g: 255, b: 255 };  // white (neutral)
+        sunsetColor = { r: 255, g: 90, b: 60 };    // deep orange-red
+        nightColor = { r: 30, g: 50, b: 120 };     // dark blue
+        
+        // Convert time strings to minutes
+        function timeToMinutes(timeStr) {
+            let [h, m] = timeStr.split(":").map(Number);
+            return h * 60 + m;
+        }
+        
+        // Initialize time values
+        sunriseM = timeToMinutes(sunriseTimeStr);
+        middayM = timeToMinutes(middayTimeStr);
+        sunsetM = timeToMinutes(sunsetTimeStr);
+        nightM = timeToMinutes(nightTimeStr);
+        
+        // Exponential ease-in-out function
+        function easeInOutExpo(t) {
+            return (t < 0.5)
+                ? 0.5 * Math.pow(2, 20 * t - 10)
+                : 1 - 0.5 * Math.pow(2, -20 * t + 10);
+        }
+        
+        // Map function (similar to p5.js map)
+        function map(value, start1, stop1, start2, stop2) {
+            return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
+        }
+        
+        // Linear interpolation between colors
+        function lerpColor(colorA, colorB, t) {
+            return {
+                r: Math.round(colorA.r + (colorB.r - colorA.r) * t),
+                g: Math.round(colorA.g + (colorB.g - colorA.g) * t),
+                b: Math.round(colorA.b + (colorB.b - colorA.b) * t)
+            };
+        }
+        
+        // Log phase changes
+        function logPhaseChange(phase) {
+            if (currentPhase !== phase) {
+                currentPhase = phase;
+                console.log(`Phase changed to: ${phase}`);
+            }
+        }
+        
+        // Get tint color for given time in minutes
+        function getTintForTime(minutes) {
+            let phase;
+            
+            if (minutes >= sunriseM && minutes < middayM) {
+                // Sunrise → Midday
+                phase = "Sunrise → Midday";
+                let t = map(minutes, sunriseM, middayM, 0, 1);
+                t = easeInOutExpo(t);
+                logPhaseChange(phase);
+                return lerpColor(sunriseColor, middayColor, t);
+                
+            } else if (minutes >= middayM && minutes < sunsetM) {
+                // Midday → Sunset
+                phase = "Midday → Sunset";
+                let t = map(minutes, middayM, sunsetM, 0, 1);
+                t = easeInOutExpo(t);
+                logPhaseChange(phase);
+                return lerpColor(middayColor, sunsetColor, t);
+                
+            } else if (minutes >= sunsetM || minutes < nightM) {
+                // Sunset → Night (wraps past midnight)
+                phase = "Sunset → Night";
+                let start = sunsetM;
+                let end = nightM + 1440; // handle wrap-around
+                let m = minutes < nightM ? minutes + 1440 : minutes;
+                let t = map(m, start, end, 0, 1);
+                t = easeInOutExpo(t);
+                logPhaseChange(phase);
+                return lerpColor(sunsetColor, nightColor, t);
+                
+            } else {
+                // Night → Sunrise
+                phase = "Night → Sunrise";
+                let t = map(minutes, nightM, sunriseM, 0, 1);
+                t = easeInOutExpo(t);
+                logPhaseChange(phase);
+                return lerpColor(nightColor, sunriseColor, t);
+            }
+        }
+        
+        // Convert minutes to HH:MM format
+        function minutesToTime(minutes) {
+            let h = Math.floor(minutes / 60) % 24;
+            let m = minutes % 60;
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+        }
+        
+        // Main animation loop
+        function animate() {
+            let currentTime = Date.now();
+            let cyclePosition = (currentTime % totalLength) / totalLength;
+            let simulatedMinutes = cyclePosition * 1440; // 1440 minutes in a day
+            
+            let tintColor = getTintForTime(simulatedMinutes);
+            
+            // Apply tint to overlay
+            let overlay = document.getElementById('tintOverlay');
+            overlay.style.backgroundColor = `rgb(${tintColor.r}, ${tintColor.g}, ${tintColor.b})`;
+            
+            // Update debug info
+            let debugInfo = document.getElementById('debugInfo');
+            debugInfo.innerHTML = `
+                Time: ${minutesToTime(simulatedMinutes)}<br>
+                Phase: ${currentPhase}<br>
+                Tint: rgb(${tintColor.r}, ${tintColor.g}, ${tintColor.b})<br>
+                Cycle: ${(cyclePosition * 100).toFixed(1)}%
+            `;
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // Start the animation
+        animate();
+    </script>
+</body>
+</html>
