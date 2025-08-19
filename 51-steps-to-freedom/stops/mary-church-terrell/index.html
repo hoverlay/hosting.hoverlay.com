@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <title>How Well Do You Marie Church Terrell?</title>
+    <style>
+        html, body {
+            font-family: Georgia, serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #31092f;
+            color: #fff;
+            overflow-y: auto;
+        }
+
+        body {
+            display: block;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        #quiz-container {
+            background-color: #fff;
+            color: #31092f;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            height: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #31092f;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #31092f;
+            cursor: pointer;
+        }
+
+        .close-button i {
+            pointer-events: none;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .intro:hover {
+            color: #ffd024;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .choice {
+            border-radius: 20px;
+            padding: 10px;
+            background-color: #ffd024;
+            color: #31092f;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .choice:hover {
+            background-color: #31092f;
+            color: #ffd024;
+        }
+
+        #message {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .start-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #ffd024;
+            color: #31092f;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .start-button:hover {
+            background-color: #31092f;
+            color: #ffd024;
+        }
+
+        .highlighted {
+            background-color: #31092f;
+            color: #ffd024;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
+            <i class="fas fa-times-circle"></i>
+        </button>
+        <h1>How Well Do You Know Mary Church Terrell?</h1>
+        <div class="intro" id="intro">How well do you know Mary Church Terrell? Tap to start the quiz and earn a prize!<br><button id="start-button" class="start-button" onclick="startQuiz()">GO</button></div>
+        <div id="message"></div>
+        <div id="question-container" style="display: none;">
+            <div class="question" id="question">Question will appear here</div>
+            <div class="choices" id="choices"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sample questions JSON structure
+        const questions = [
+            {
+                layout: "list",
+                question: "Mary Church Terrell chose the \"gentlemen's course\" at Oberlin College, which included which subjects?",
+                choices: ["A) Chemistry, Engineering, and Astronomy", "B) French, Latin, and Greek", "C) History, Economics, and Law"],
+                correct: [1],
+                correctAnswer: "Well done — you know your history",
+                correctAnswerDuration: 4000,
+                incorrectAnswer: "Not quite — but every day is a good day to learn more.",
+                exitAfterAttempt: false
+            },
+            {
+                layout: "list",
+                question: "In the late 1940s and early 1950s, Mary helped lead protests in DC against segregated restaurants. Why was DC unique in this fight?",
+                choices: ["A) It had brand-new civil rights laws in the 1950s.", "B) Washington already had laws from the 1870s that made segregation illegal, but for decades no one enforced them.", "C) Segregation had never been legal there."],
+                correct: [1],
+                correctAnswer: "Well done — you know your history",
+                correctAnswerDuration: 4000,
+                incorrectAnswer: "Not quite — but every day is a good day to learn more.",
+                exitAfterAttempt: false
+            },
+            {
+                layout: "list",
+                question: "What school celebration Mary organized in 1895 helped inspire what would become Black History Month?",
+                choices: ["A) Frederick Douglass Day at the M Street School", "B) Emancipation Day at Dunbar High School", "C) Harriet Tubman Day at Howard University"],
+                correct: [0],
+                correctAnswer: "Well done — you know your history",
+                correctAnswerDuration: 4000,
+                incorrectAnswer: "Not quite — but every day is a good day to learn more.",
+                exitAfterAttempt: false
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = Array(questions.length).fill(null);
+
+        // Start the quiz
+        function startQuiz() {
+            document.getElementById("intro").style.display = "none";
+            document.getElementById("question-container").style.display = "block";
+            loadQuestion();
+        }
+
+        // Load a question from the questions array
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            const questionElement = document.getElementById("question");
+            const choicesElement = document.getElementById("choices");
+            const messageElement = document.getElementById("message");
+            
+            // Reset message, question text and answer highlights
+            messageElement.textContent = "";
+            questionElement.textContent = currentQuestion.question;
+            choicesElement.innerHTML = "";
+            document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));            
+            
+            // Apply layout based on question configuration
+            if (currentQuestion.layout === "list") {
+                choicesElement.style.gridTemplateColumns = "1fr";
+            } else {
+                choicesElement.style.gridTemplateColumns = "1fr 1fr";
+            }
+
+            currentQuestion.choices.forEach((choice, index) => {
+                const button = document.createElement("button");
+                button.textContent = choice;
+                button.classList.add("choice");
+                button.addEventListener("click", function() {
+                    document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
+                    button.classList.add('highlighted');
+                    selectAnswer(index);
+                });
+                choicesElement.appendChild(button);
+            });
+        }
+
+        // Select an answer and proceed accordingly
+        function selectAnswer(choiceIndex) {
+            const currentQuestion = questions[currentQuestionIndex];
+            const messageElement = document.getElementById("message");
+            // If a duration is set for displaying success message, use it, otherwise use a default
+            const correctAnswerDuration = currentQuestion.correctAnswerDuration || 3500;
+
+            if (currentQuestion.correct.includes(choiceIndex)) {
+                messageElement.innerHTML = `<div id='correct-message' style='display: flex; justify-content: center; align-items: center; color: green;'><i class='fas fa-check-circle'></i> ${currentQuestion.correctAnswer}</div>`;
+            } else {
+                messageElement.innerHTML = `<div style='color: crimson;'>${currentQuestion.incorrectAnswer}</div>`;
+            }
+
+            if (currentQuestion.exitAfterAttempt || currentQuestion.correct.includes(choiceIndex)) {
+                setTimeout(() => {
+                    document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        loadQuestion();
+                    } else {
+                        displayCongratulations();
+                    }
+                }, correctAnswerDuration || 3500);
+            }
+        }
+
+        // Display the congratulations message at the end of the quiz
+        function displayCongratulations() {
+            const messageElement = document.getElementById("message");
+            messageElement.textContent = "Great job! You've completed the Mary Church Terrell quiz!";
+            document.getElementById("question-container").style.display = "none";
+            location.href = `space://do?action=send_event&event_message=quiz-completed`;
+        }
+    </script>
+</body>
+</html>
