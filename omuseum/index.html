@@ -403,6 +403,13 @@
                 spacePid: 'tutorial' // Special identifier for tutorial card
             },
             {
+                id: 'founder',
+                title: 'Meet H Leonard',
+                subtitle: 'The visionary behind the OMuseum',
+                image: './assets/images/founder.jpeg',
+                spacePid: 'fcy'
+            },
+            {
                 id: 'rosa',
                 title: 'Welcome to O Museum',
                 subtitle: 'Everything is possible',
@@ -504,6 +511,13 @@
 
         // Load unlock status from localStorage
         const unlockedCards = new Set(JSON.parse(localStorage.getItem('unlockedCards') || '[]'));
+
+        // Auto-unlock cards that don't have questions
+        cardData.forEach(card => {
+            if (!card.question && card.id !== 'tutorial') {
+                unlockedCards.add(card.id);
+            }
+        });
 
         // Modify the createCard function to handle the tutorial card
         function createCard(data) {
@@ -615,6 +629,13 @@
         async function handleCardClick(cardElement, cardData) {
             if (cardData.id === 'tutorial') {
                 showTutorial();
+                return;
+            }
+            
+            // If card has no question, unlock it automatically and load space
+            if (!cardData.question) {
+                unlockCard(cardElement, cardData.id);
+                loadSpace(cardData.spacePid);
                 return;
             }
             
