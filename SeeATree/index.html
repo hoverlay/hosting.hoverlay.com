@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Wings We Fly On</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <style>
+        @font-face {
+            font-family:"Belinda-W00-Regular";
+            src:url("./assets/fonts/242487aa-209a-4dbd-aca2-64a3c73a8946.woff2") format("woff2"),url("./assets/fonts/4381b252-d9f8-4201-bbf3-9440e21259e7.woff") format("woff");
+            font-display: block;
+        }
+        html {
+            font-size: 18px;
+            line-height: 1.5;
+            font-weight: 200;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0; 
+            height: 250px;
+            overflow: hidden; /* Prevents scrolling if the content exceeds the viewport */
+            background-color: #ecf0f9;
+            background-attachment: fixed;
+        }
+        /* Center the title */
+        .title {
+            text-align: center;
+            font-size: 2rem;
+            font-family: 'Belinda-W00-Regular', sans-serif;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 200;
+            font-family: 'Georgia', serif;
+        }
+
+        .close-button {
+            position: absolute;
+            right: 10px;
+            top: 4px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #31092f;
+            cursor: pointer;
+        }
+
+        .close-button i {
+            pointer-events: none;
+        }
+        /* Carousel container */
+        .carousel {
+            display: flex;
+            height: 100%;
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+            overflow-y: hidden;
+        }
+
+        /* Individual poster */
+        .poster {
+            flex: 0 0 auto;
+            width: 53%;
+            height: 100%;
+            scroll-snap-align: start;
+            background-color: #f2f2f2;
+            text-align: center;
+            margin: 1rem;
+            perspective: 1000px;
+        }
+
+        .front, .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+        }
+
+        .front {
+            z-index: 2;
+            display: flex;
+            background-color:white;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .front img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            z-index: 1;
+        }
+
+        .front h2 {
+            z-index: 2;
+            position: absolute;
+            font-size: 1.5rem;
+            top: 0;
+            width: 90%;
+            padding: .2rem;
+            background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0.6));
+            color: #31092f;
+            text-align: center;
+        }
+
+        .back {
+            transform: rotateY(180deg);
+            background-color: #131007;
+            color: #f2f2f2;
+        }
+
+        .back h4 {
+            font-size: 1.2rem;
+            margin: 1rem;
+        }
+
+        .back p {
+            font-size: 1rem;
+            margin: .5rem;
+        }
+
+        .poster:hover .front {
+            transform: rotateY(-180deg);
+        }
+
+        .poster:hover .back {
+            transform: rotateY(0deg);
+        }
+
+        .back .button {
+            position: relative;
+            background: #3f4644;
+            cursor: pointer;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            font-weight: bold;
+            color: #ffffff;
+            margin-top:.1rem;
+            padding: .5rem 2rem;
+            border-radius: 100px;
+            font: inherit;
+            border: none;
+            overflow: hidden;
+        }
+
+        .back .button::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.4s ease-out;
+            pointer-events: none;
+        }
+
+        .back .button:active::after {
+            transform: translate(-50%, -50%) scale(4);
+            transition: transform 0.4s ease-out;
+        }
+
+        .checkmark {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6rem;
+            color: #28a745;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .checkmark-message {
+            display: none;
+            position: absolute;
+            top: 75%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #ffffff;
+            background-color: #28a745;
+            padding: 0.4rem 1rem;
+            border-radius: 7px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .tap-icon {
+            position: absolute;
+            bottom:  2rem;
+            right:  2rem;
+            font-size:  1.5rem;
+            color: #31092f;
+            z-index: 3;
+        }
+        
+        .scroll-arrow {
+            position: absolute;
+            right: 10px;
+            top: 90px;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: #0000006b;
+            z-index: 3;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">
+        See A Tree
+    </div>
+    <div class="subtitle">
+        What tree do you want to see?
+    </div>
+    <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
+        <i class="fas fa-times-circle"></i>
+    </button>
+    <div class="carousel">
+        <div class="poster">
+            <div class="front">
+                <h2>Palo Verde</h2>
+                <img src="./assets/img/palo-verde-5.png">
+                <i class="fas fa-hand-point-up tap-icon"></i> 
+            </div>
+             <div class="back">
+                <h4>Palo Verde</h4>
+                <button onclick="handleButtonClick(event, 'palo-verde-5')" class="button">1 year</button>
+                <button onclick="handleButtonClick(event, 'palo-verde-5')" class="button">5 years</button>
+                <button onclick="handleButtonClick(event, 'palo-verde-5')" class="button">10 years</button>
+                <p>A native desert trees with a green trunk and branches and small leaves that are shed during drought</p>
+                <i class="fas fa-check-circle checkmark"></i>
+                <div class="checkmark-message">Tree planted!</div>
+                <br>
+            </div>
+        </div>
+        <div class="poster">
+            <div class="front"> 
+                <h2>More Trees Coming Soon!</h2>
+                <img src="./assets/img/palo-verde-5.png">
+                <i class="fas fa-hand-point-up tap-icon"></i> 
+            </div>
+             <div class="back">
+                <h4>coming soon</h4>
+                <br>
+            </div>
+        </div>
+        <div class="scroll-arrow">
+            <i class="fas fa-arrow-right"></i>
+        </div>
+    </div>
+    <script>
+        // Set the size of the font based on the width of the webview
+        document.addEventListener("DOMContentLoaded", function() {
+            var webviewHeight = window.innerHeight; // Gets the height of the webview
+            var baseFontSize = webviewHeight / 70; 
+            document.documentElement.style.fontSize = baseFontSize + 'px';
+        });
+
+        function adjustHeight() {
+            const viewportHeight = window.innerHeight;
+            document.documentElement.style.height = `${viewportHeight}px`;
+            document.body.style.height = `${viewportHeight}px`;
+            document.querySelector('.subtitle').textContent = `Viewport height: ${viewportHeight}px`;
+        }
+
+        function handleButtonClick(event, message) {
+            location.href = `space://do?action=send_event&event_message=${message}`;
+            const checkmark = event.target.parentElement.querySelector('.checkmark');
+            const checkmarkMessage = event.target.parentElement.querySelector('.checkmark-message');
+            checkmark.style.display = 'block';
+            checkmark.style.opacity = '1';
+            checkmarkMessage.style.display = 'block';
+            checkmarkMessage.style.opacity = '1';
+            setTimeout(() => {
+                checkmark.style.opacity = '0';
+                checkmarkMessage.style.opacity = '0';
+                setTimeout(() => {
+                    checkmark.style.display = 'none';
+                    checkmarkMessage.style.display = 'none';
+                }, 500);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
