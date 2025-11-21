@@ -4,50 +4,71 @@
     <title>The Wings We Fly On</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         @font-face {
             font-family:"Belinda-W00-Regular";
             src:url("./assets/fonts/242487aa-209a-4dbd-aca2-64a3c73a8946.woff2") format("woff2"),url("./assets/fonts/4381b252-d9f8-4201-bbf3-9440e21259e7.woff") format("woff");
             font-display: block;
         }
+        
+        :root {
+            --color-background: #f4f2e8;
+            --color-text-primary: #364634;
+            --color-icon-primary: #babf45;
+            --color-icon-secondary: #40452e;
+            --color-button-primary: #eeec96;
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --button-min-height: 44px;
+            --border-radius-button: 12px;
+            --border-radius-card: 20px;
+        }
+        
         html {
             font-size: 18px;
             line-height: 1.5;
-            font-weight: 200;
-            color: #333;
+            font-weight: 400;
+            color: var(--color-text-primary);
             margin: 0;
             padding: 0;
         }
         body {
-            font-family: 'Georgia', serif;
+            font-family: 'Nunito Sans', sans-serif;
             margin: 0;
             padding: 0; 
             height: 250px;
-            overflow: hidden; /* Prevents scrolling if the content exceeds the viewport */
-            background-color: #ecf0f9;
+            overflow: hidden;
+            background-color: var(--color-background);
             background-attachment: fixed;
         }
         /* Center the title */
         .title {
             text-align: center;
             font-size: 2rem;
-            font-family: 'Belinda-W00-Regular', sans-serif;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            color: var(--color-text-primary);
         }
         .subtitle {
             text-align: center;
             font-size: 1.5rem;
-            font-weight: 200;
-            font-family: 'Georgia', serif;
+            font-weight: 600;
+            font-family: 'Nunito Sans', sans-serif;
+            color: var(--color-text-primary);
         }
 
         .close-button {
             position: absolute;
-            right: 10px;
+            left: 10px;
             top: 4px;
             background: none;
             border: none;
             font-size: 24px;
-            color: #31092f;
+            color: var(--color-button-primary);
+            background-color: var(--color-text-primary);
             cursor: pointer;
         }
 
@@ -66,13 +87,14 @@
         /* Individual poster */
         .poster {
             flex: 0 0 auto;
-            width: 53%;
+            width: 100%;
             height: 100%;
             scroll-snap-align: start;
-            background-color: #f2f2f2;
+            background-color: white;
             text-align: center;
-            margin: 1rem;
+            margin: var(--spacing-md);
             perspective: 1000px;
+            border-radius: var(--border-radius-card);
         }
 
         .front, .back {
@@ -81,12 +103,13 @@
             height: 100%;
             backface-visibility: hidden;
             transition: transform 0.6s;
+            border-radius: var(--border-radius-card);
         }
 
         .front {
             z-index: 2;
             display: flex;
-            background-color:white;
+            background-color: white;
             justify-content: center;
             align-items: center;
             overflow: hidden;
@@ -106,28 +129,34 @@
             z-index: 2;
             position: absolute;
             font-size: 1.5rem;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
             top: 0;
             width: 90%;
-            padding: .2rem;
+            padding: var(--spacing-xs);
             background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0.6));
-            color: #31092f;
+            color: var(--color-text-primary);
             text-align: center;
         }
 
         .back {
             transform: rotateY(180deg);
-            background-color: #131007;
-            color: #f2f2f2;
+            background-color: var(--color-background);
+            color: var(--text-primary);
         }
 
         .back h4 {
             font-size: 1.2rem;
-            margin: 1rem;
+            font-family: 'Nunito Sans', sans-serif;
+            font-weight: 600;
+            margin: var(--spacing-md);
         }
 
         .back p {
             font-size: 1rem;
-            margin: .5rem;
+            font-family: 'Nunito Sans', sans-serif;
+            font-weight: 400;
+            margin: var(--spacing-sm);
         }
 
         .poster:hover .front {
@@ -140,15 +169,17 @@
 
         .back .button {
             position: relative;
-            background: #3f4644;
+            background: var(--color-button-primary);
             cursor: pointer;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            font-weight: bold;
-            color: #ffffff;
-            margin-top:.1rem;
-            padding: .5rem 2rem;
-            border-radius: 100px;
+            font-weight: 600;
+            font-family: 'Nunito Sans', sans-serif;
+            color: var(--color-text-primary);
+            margin-top: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            min-height: var(--button-min-height);
+            border-radius: var(--border-radius-button);
             font: inherit;
             border: none;
             overflow: hidden;
@@ -162,7 +193,6 @@
             width: 100%;
             height: 100%;
             background: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
             transform: translate(-50%, -50%) scale(0);
             transition: transform 0.4s ease-out;
             pointer-events: none;
@@ -180,7 +210,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 6rem;
-            color: #28a745;
+            color: var(--color-icon-primary);
             opacity: 0;
             transition: opacity 0.5s ease;
         }
@@ -192,10 +222,11 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 1.1rem;
-            font-weight: 400;
-            color: #ffffff;
-            background-color: #28a745;
-            padding: 0.4rem 1rem;
+            font-weight: 600;
+            font-family: 'Nunito Sans', sans-serif;
+            color: var(--color-text-primary);
+            background-color: var(--color-icon-primary);
+            padding: var(--spacing-sm) var(--spacing-md);
             border-radius: 7px;
             opacity: 0;
             transition: opacity 0.5s ease;
@@ -206,7 +237,7 @@
             bottom:  2rem;
             right:  2rem;
             font-size:  1.5rem;
-            color: #31092f;
+            color: var(--color-icon-secondary);
             z-index: 3;
         }
         
@@ -216,7 +247,8 @@
             top: 90px;
             transform: translateY(-50%);
             font-size: 2rem;
-            color: #0000006b;
+            color: var(--color-icon-secondary);
+            opacity: 0.7;
             z-index: 3;
             cursor: pointer;
         }
@@ -226,9 +258,6 @@
     <div class="title">
         See A Tree
     </div>
-    <div class="subtitle">
-        What tree do you want to see?
-    </div>
     <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
         <i class="fas fa-times-circle"></i>
     </button>
@@ -236,11 +265,12 @@
         <div class="poster">
             <div class="front">
                 <h2>Palo Verde</h2>
-                <img src="./assets/img/PaloVerde-5yr-ink.png">
-                <i class="fas fa-hand-point-up tap-icon"></i> 
+                <div class="subtitle">
+                    What tree do you want to see?
+                </div>
             </div>
              <div class="back">
-                <h4>Palo Verde</h4>
+                <h2>PALO VERDE</h2>
                 <button onclick="handleButtonClick(event, '3year')" class="button">3 year</button>
                 <button onclick="handleButtonClick(event, '5year')" class="button">5 years</button>
                 <button onclick="handleButtonClick(event, '10year')" class="button">10 years</button>
