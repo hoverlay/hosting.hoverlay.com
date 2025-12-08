@@ -15,10 +15,16 @@ const textColorPicker = document.getElementById('textColorPicker');
 const flipHorizontalButton = document.getElementById('flipHorizontalButton');
 const flipVerticalButton = document.getElementById('flipVerticalButton');
 const controlPanel = document.getElementById('controlPanel');
+const startDelaySelect = document.getElementById('startDelay');
+const countdownOverlay = document.getElementById('countdownOverlay');
+const countdownNumber = document.getElementById('countdownNumber');
+const settingsButton = document.getElementById('settingsButton');
+const settingsMenu = document.getElementById('settingsMenu');
 
 // Variables
 let isPlaying = false;
 let scrollInterval;
+let countdownInterval;
 let scrollSpeed = 50 - parseInt(speedControlInput.value);
 
 // Event Listeners
@@ -26,6 +32,11 @@ playPauseButton.addEventListener('click', togglePlayPause);
 loadScriptButton.addEventListener('click', () => fileInput.click());
 fileInput.addEventListener('change', loadScript);
 saveScriptButton.addEventListener('click', saveSession);
+scriptContent.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text');
+    document.execCommand('insertText', false, text);
+});
 textSizeInput.addEventListener('input', () => {
     document.documentElement.style.setProperty('--text-size', `${textSizeInput.value}px`);
 });
@@ -41,6 +52,7 @@ flipHorizontalButton.addEventListener('click', () => {
 flipVerticalButton.addEventListener('click', () => {
     scriptContent.classList.toggle('flip-vertical');
 });
+
 speedControlInput.addEventListener('input', () => {
     scrollSpeed = 50 - parseInt(speedControlInput.value);
     if (isPlaying) {
@@ -50,13 +62,55 @@ speedControlInput.addEventListener('input', () => {
     }
 });
 
+settingsButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    settingsMenu.style.display = settingsMenu.style.display === 'none' ? 'block' : 'none';
+});
+
+document.addEventListener('click', (e) => {
+    if (settingsMenu.style.display === 'block' && !settingsMenu.contains(e.target) && e.target !== settingsButton) {
+        settingsMenu.style.display = 'none';
+    }
+});
+
 // Functions
 function togglePlayPause() {
-    if (isPlaying) {
+    // If counting down or playing, stop everything
+    if (isPlaying || countdownOverlay.style.display === 'flex') {
         pauseScroll();
     } else {
-        startScroll();
+        // Starting from pause - apply delay if set
+        const delay = parseInt(startDelaySelect.value);
+        if (delay > 0) {
+            startCountdown(delay);
+        } else {
+            startScroll();
+        }
     }
+}
+
+function startCountdown(seconds) {
+    let remaining = seconds;
+    
+    // Show overlay and initial number
+    countdownOverlay.style.display = 'flex';
+    countdownNumber.textContent = remaining;
+    
+    // Update UI to show we're starting
+    playIcon.style.display = 'none';
+    pauseIcon.style.display = 'block';
+    scriptContent.contentEditable = 'false';
+    
+    countdownInterval = setInterval(() => {
+        remaining--;
+        if (remaining > 0) {
+            countdownNumber.textContent = remaining;
+        } else {
+            clearInterval(countdownInterval);
+            countdownOverlay.style.display = 'none';
+            startScroll();
+        }
+    }, 1000);
 }
 
 function startScroll() {
@@ -71,12 +125,24 @@ function startScroll() {
 }
 
 function pauseScroll() {
+    // Clear countdown if it's running
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+        countdownOverlay.style.display = 'none';
+    }
+    
+    // Clear scroll if it's running
+    if (scrollInterval) {
+        clearInterval(scrollInterval);
+    }
+    
+    // Reset UI
     playIcon.style.display = 'block';
     pauseIcon.style.display = 'none';
     scriptContent.contentEditable = 'true';
     isPlaying = false;
     controlPanel.classList.remove('playing');
-    clearInterval(scrollInterval);
 }
 
 function loadScript(event) {
