@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>The Wings We Fly On</title>
+    <title>See A Tree</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        @font-face {
-            font-family:"Belinda-W00-Regular";
-            src:url("./assets/fonts/242487aa-209a-4dbd-aca2-64a3c73a8946.woff2") format("woff2"),url("./assets/fonts/4381b252-d9f8-4201-bbf3-9440e21259e7.woff") format("woff");
-            font-display: block;
-        }
         
         :root {
             --color-background: #f4f2e8;
@@ -44,148 +39,194 @@
             background-color: var(--color-background);
             background-attachment: fixed;
         }
+        /* Title bar */
+        .title-bar {
+            display: grid;
+            grid-template-columns: 44px 1fr 44px;
+            align-items: center;
+            padding: 4px 10px;
+            position: relative;
+        }
+
         /* Center the title */
         .title {
+            grid-column: 2;
             text-align: center;
-            font-size: 2rem;
+            font-size: 8rem;
             font-family: 'Nunito', sans-serif;
             font-weight: 600;
             color: var(--color-text-primary);
         }
+
+        .title-bar .close-button {
+            grid-column: 1;
+        }
+
+        .back-button {
+            grid-column: 3;
+            background-color: var(--color-icon-primary);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+            color: var(--color-text-primary);
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .back-button.visible {
+            display: flex;
+        }
+
+        .back-button i {
+            pointer-events: none;
+        }
         .subtitle {
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 4rem;
             font-weight: 600;
             font-family: 'Nunito Sans', sans-serif;
             color: var(--color-text-primary);
         }
 
         .close-button {
-            position: absolute;
-            left: 10px;
-            top: 4px;
-            background: none;
+            background-color: var(--color-button-primary);
             border: none;
-            font-size: 24px;
-            color: var(--color-button-primary);
-            background-color: var(--color-text-primary);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+            color: var(--color-text-primary);
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .close-button i {
             pointer-events: none;
         }
         /* Carousel container */
-        .carousel {
+        .carousel-container {
             display: flex;
-            height: 100%;
-            overflow-x: scroll;
-            scroll-snap-type: x mandatory;
-            overflow-y: hidden;
+            flex-direction: column;
+            height: calc(100vh - 60px);
+            padding: var(--spacing-md);
+        }
+
+        .question-text {
+            font-size: 5rem;
+            font-family: 'Nunito Sans', sans-serif;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            text-align: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .carousel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--spacing-md);
+            position: relative;
+            padding: 0 var(--spacing-md);
         }
 
         /* Individual poster */
         .poster {
-            flex: 0 0 auto;
-            width: 100%;
-            height: 100%;
-            scroll-snap-align: start;
-            background-color: white;
-            text-align: center;
-            margin: var(--spacing-md);
+            display: none;
+            flex: 1;
+            max-width: 500px;
             perspective: 1000px;
+        }
+
+        .poster.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
             border-radius: var(--border-radius-card);
+        }
+
+        .card-container.flipped {
+            transform: rotateY(180deg);
         }
 
         .front, .back {
             position: absolute;
             width: 100%;
-            height: 100%;
             backface-visibility: hidden;
-            transition: transform 0.6s;
             border-radius: var(--border-radius-card);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
         }
 
         .front {
-            z-index: 2;
-            display: flex;
-            background-color: white;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .front img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            z-index: 1;
+            background-color: var(--color-background);
         }
 
         .front h2 {
-            z-index: 2;
-            position: absolute;
-            font-size: 1.5rem;
-            font-family: 'Nunito', sans-serif;
+            font-size: 3.2rem;
+            font-family: 'Nunito Sans', sans-serif;
             font-weight: 600;
-            top: 0;
-            width: 90%;
-            padding: var(--spacing-xs);
-            background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0.6));
             color: var(--color-text-primary);
-            text-align: center;
+            margin-bottom: var(--spacing-sm);
         }
 
         .back {
             transform: rotateY(180deg);
             background-color: var(--color-background);
-            color: var(--text-primary);
+            color: var(--color-text-primary);
         }
 
-        .back h4 {
-            font-size: 1.2rem;
-            font-family: 'Nunito Sans', sans-serif;
+        .back h2 {
+            font-size: 8rem;
+            font-family: 'Nunito', sans-serif;
             font-weight: 600;
-            margin: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
         }
 
         .back p {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-family: 'Nunito Sans', sans-serif;
             font-weight: 400;
             margin: var(--spacing-sm);
+            text-align: center;
         }
 
-        .poster:hover .front {
-            transform: rotateY(-180deg);
-        }
-
-        .poster:hover .back {
-            transform: rotateY(0deg);
-        }
-
-        .back .button {
+        .tree-button {
             position: relative;
             background: var(--color-button-primary);
             cursor: pointer;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
             font-weight: 600;
             font-family: 'Nunito Sans', sans-serif;
             color: var(--color-text-primary);
-            margin-top: var(--spacing-xs);
-            padding: var(--spacing-sm) var(--spacing-lg);
+            padding: var(--spacing-md) var(--spacing-lg);
             min-height: var(--button-min-height);
             border-radius: var(--border-radius-button);
-            font: inherit;
+            font-size: 6rem;
             border: none;
             overflow: hidden;
+            text-transform: uppercase;
         }
 
-        .back .button::after {
+        .tree-button::after {
             content: "";
             position: absolute;
             top: 50%;
@@ -198,9 +239,49 @@
             pointer-events: none;
         }
 
-        .back .button:active::after {
+        .tree-button:active::after {
             transform: translate(-50%, -50%) scale(4);
             transition: transform 0.4s ease-out;
+        }
+
+        .year-button {
+            position: relative;
+            background: var(--color-button-primary);
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Nunito Sans', sans-serif;
+            color: var(--color-text-primary);
+            margin: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            min-height: var(--button-min-height);
+            border-radius: var(--border-radius-button);
+            border: none;
+            overflow: hidden;
+        }
+
+        .year-button::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.4s ease-out;
+            pointer-events: none;
+        }
+
+        .year-button:active::after {
+            transform: translate(-50%, -50%) scale(4);
+            transition: transform 0.4s ease-out;
+        }
+
+        .year-buttons {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .checkmark {
@@ -232,88 +313,167 @@
             transition: opacity 0.5s ease;
         }
 
-        .tap-icon {
-            position: absolute;
-            bottom:  2rem;
-            right:  2rem;
-            font-size:  1.5rem;
-            color: var(--color-icon-secondary);
-            z-index: 3;
-        }
-        
-        .scroll-arrow {
-            position: absolute;
-            right: 10px;
-            top: 90px;
-            transform: translateY(-50%);
-            font-size: 2rem;
-            color: var(--color-icon-secondary);
-            opacity: 0.7;
-            z-index: 3;
+        .nav-arrow {
+            background-color: var(--color-icon-primary);
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            font-size: 4rem;
+            color: var(--color-text-primary);
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+            z-index: 100;
+        }
+
+        .nav-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .nav-arrow.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
-    <div class="title">
-        See A Tree
+    <div class="title-bar">
+        <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="title">
+            See A Tree
+        </div>
+        <button id="backButton" class="back-button" onclick="flipBackToFront()">
+            <i class="fas fa-chevron-down"></i>
+        </button>
     </div>
-    <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
-        <i class="fas fa-times-circle"></i>
-    </button>
-    <div class="carousel">
-        <div class="poster">
-            <div class="front">
-                <h2>Palo Verde</h2>
-                <div class="subtitle">
-                    What tree do you want to see?
+    <div class="carousel-container">
+        <div class="carousel">
+            <button class="nav-arrow" id="prevBtn" onclick="navigateCarousel(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <div class="poster active" data-tree="palo-verde">
+                <div class="card-container">
+                    <div class="front">
+                        <div class="question-text">What Tree Do You Want to See?</div>
+                        <button class="tree-button" onclick="flipCard(0)">Palo Verde</button>
+                    </div>
+                    <div class="back">
+                        <h2>PALO VERDE</h2>
+                        <div class="year-buttons">
+                            <button onclick="handleButtonClick(event, '3year')" class="year-button">3 years</button>
+                            <button onclick="handleButtonClick(event, '5year')" class="year-button">5 years</button>
+                            <button onclick="handleButtonClick(event, '10year')" class="year-button">10 years</button>
+                        </div>
+                        <p>A native desert tree with a green trunk and branches and small leaves that are shed during drought</p>
+                        <i class="fas fa-check-circle checkmark"></i>
+                        <div class="checkmark-message">Tree planted!</div>
+                    </div>
                 </div>
             </div>
-             <div class="back">
-                <h2>PALO VERDE</h2>
-                <button onclick="handleButtonClick(event, '3year')" class="button">3 year</button>
-                <button onclick="handleButtonClick(event, '5year')" class="button">5 years</button>
-                <button onclick="handleButtonClick(event, '10year')" class="button">10 years</button>
-                <p>A native desert trees with a green trunk and branches and small leaves that are shed during drought</p>
-                <i class="fas fa-check-circle checkmark"></i>
-                <div class="checkmark-message">Tree planted!</div>
-                <br>
+
+            <div class="poster" data-tree="coming-soon">
+                <div class="card-container">
+                    <div class="front">
+                        <div class="question-text">What Tree Do You Want to See?</div>
+                        <button class="tree-button" onclick="flipCard(1)">More Soon!</button>
+                    </div>
+                    <div class="back">
+                        <h2>COMING SOON</h2>
+                        <p>More trees will be available soon!</p>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="poster">
-            <div class="front"> 
-                <h2>More Trees Coming Soon!</h2>
-                <img src="./assets/img/PaloVerde-5yr-ink.png">
-                <i class="fas fa-hand-point-up tap-icon"></i> 
-            </div>
-             <div class="back">
-                <h4>coming soon</h4>
-                <br>
-            </div>
-        </div>
-        <div class="scroll-arrow">
-            <i class="fas fa-arrow-right"></i>
+
+            <button class="nav-arrow" id="nextBtn" onclick="navigateCarousel(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
     </div>
     <script>
+        let currentIndex = 0;
+        const posters = document.querySelectorAll('.poster');
+
         // Set the size of the font based on the width of the webview
         document.addEventListener("DOMContentLoaded", function() {
-            var webviewHeight = window.innerHeight; // Gets the height of the webview
-            var baseFontSize = webviewHeight / 70; 
+            var webviewHeight = window.innerHeight;
+            var baseFontSize = webviewHeight / 70;
             document.documentElement.style.fontSize = baseFontSize + 'px';
+            updateNavButtons();
         });
 
-        function adjustHeight() {
-            const viewportHeight = window.innerHeight;
-            document.documentElement.style.height = `${viewportHeight}px`;
-            document.body.style.height = `${viewportHeight}px`;
-            document.querySelector('.subtitle').textContent = `Viewport height: ${viewportHeight}px`;
+        function navigateCarousel(direction) {
+            const newIndex = currentIndex + direction;
+
+            if (newIndex < 0 || newIndex >= posters.length) {
+                return;
+            }
+
+            // Reset any flipped cards
+            posters[currentIndex].querySelector('.card-container').classList.remove('flipped');
+
+            // Hide current poster
+            posters[currentIndex].classList.remove('active');
+
+            // Show new poster
+            currentIndex = newIndex;
+            posters[currentIndex].classList.add('active');
+
+            updateNavButtons();
+        }
+
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === posters.length - 1;
+        }
+
+        function flipCard(index) {
+            const card = posters[index].querySelector('.card-container');
+            const isFlipped = card.classList.contains('flipped');
+
+            card.classList.toggle('flipped');
+
+            // Toggle navigation arrows and back button
+            const navArrows = document.querySelectorAll('.nav-arrow');
+            const backButton = document.getElementById('backButton');
+
+            if (!isFlipped) {
+                // Card is being flipped to back
+                navArrows.forEach(arrow => arrow.classList.add('hidden'));
+                backButton.classList.add('visible');
+            } else {
+                // Card is being flipped to front
+                navArrows.forEach(arrow => arrow.classList.remove('hidden'));
+                backButton.classList.remove('visible');
+            }
+        }
+
+        function flipBackToFront() {
+            const activeCard = posters[currentIndex].querySelector('.card-container');
+            activeCard.classList.remove('flipped');
+
+            // Show navigation arrows, hide back button
+            const navArrows = document.querySelectorAll('.nav-arrow');
+            const backButton = document.getElementById('backButton');
+            navArrows.forEach(arrow => arrow.classList.remove('hidden'));
+            backButton.classList.remove('visible');
         }
 
         function handleButtonClick(event, message) {
             location.href = `space://do?action=send_event&event_message=${message}`;
-            const checkmark = event.target.parentElement.querySelector('.checkmark');
-            const checkmarkMessage = event.target.parentElement.querySelector('.checkmark-message');
+            const back = event.target.closest('.back');
+            const checkmark = back.querySelector('.checkmark');
+            const checkmarkMessage = back.querySelector('.checkmark-message');
             checkmark.style.display = 'block';
             checkmark.style.opacity = '1';
             checkmarkMessage.style.display = 'block';
