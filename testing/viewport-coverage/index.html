@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <title>UniWebView Layout & Font Test</title>
+
+  <style>
+    :root {
+      /* Try adjusting these to see how your typography responds */
+      --base-min: 14px;
+      --base-max: 18px;
+      --base-fluid: 1.2vw + 10px;
+
+      /* Safe-area insets (useful on notched devices) */
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+    }
+
+    /* Base font scale: stable + responsive */
+    html {
+      font-size: clamp(var(--base-min), calc(var(--base-fluid)), var(--base-max));
+      height: 100%;
+    }
+
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.35;
+      background: #0b0c10;
+      color: #e9eef6;
+      overflow: hidden; /* important: layout controls scroll region */
+    }
+
+    /* Full-height app shell = exactly the WebView viewport */
+    #app {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      padding:
+        calc(10px + var(--safe-top))
+        calc(10px + var(--safe-right))
+        calc(10px + var(--safe-bottom))
+        calc(10px + var(--safe-left));
+      gap: 10px;
+    }
+
+    header, footer {
+      flex: 0 0 auto;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      padding: 10px 12px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .pill {
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.2);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.10);
+      color: #e9eef6;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 1rem;
+    }
+    .btn:active { transform: translateY(1px); }
+
+    /* The only scrollable region (validates “nothing out of screen” layout) */
+    main {
+      flex: 1 1 auto;
+      min-height: 0; /* crucial for flex + overflow on mobile */
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    section {
+      border: 1px dashed rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    h1 { margin: 0; font-size: 1.6rem; }
+    h2 { margin: 0 0 8px; font-size: 1.2rem; }
+    p  { margin: 0 0 8px; font-size: 1rem; opacity: 0.95; }
+
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+    /* Font scale preview: rem-based */
+    .scale-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .sample {
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 12px;
+      padding: 10px;
+      background: rgba(0,0,0,0.18);
+    }
+
+    .sample .label {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      margin-bottom: 6px;
+    }
+
+    .rem-075 { font-size: 0.75rem; }
+    .rem-0875 { font-size: 0.875rem; }
+    .rem-1 { font-size: 1rem; }
+    .rem-1125 { font-size: 1.125rem; }
+    .rem-125 { font-size: 1.25rem; }
+    .rem-15 { font-size: 1.5rem; }
+    .rem-2 { font-size: 2rem; }
+
+    /* Demonstrate em behavior inside a component */
+    .component {
+      font-size: 1rem; /* change this to see em scale */
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6em; /* em-based spacing */
+      border: 1px solid rgba(255,255,255,0.16);
+      padding: 0.7em 0.9em;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+    }
+    .component .icon {
+      width: 1.2em;
+      height: 1.2em;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.22);
+      display: inline-block;
+    }
+
+    /* Orientation hint */
+    .orientation {
+      font-weight: 600;
+    }
+
+    /* Optional: show a strict “100% height” test block */
+    .height-test {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.18);
+      padding: 10px;
+      text-align: center;
+    }
+
+    /* Make it feel nicer in landscape */
+    @media (orientation: landscape) {
+      #app { padding: 10px; }
+      h1 { font-size: 1.4rem; }
+      .scale-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <h1>UniWebView Layout & Font Test</h1>
+      <div class="row">
+        <span class="pill mono" id="dims">dims…</span>
+        <span class="pill mono" id="vh">vh…</span>
+        <span class="pill orientation" id="ori">orientation…</span>
+      </div>
+      <div class="row">
+        <button class="btn" id="toggleOverflow">Toggle body overflow</button>
+        <button class="btn" id="bumpFont">Bump base font (min/max)</button>
+        <button class="btn" id="resetFont">Reset font</button>
+      </div>
+      <div class="row">
+        <span class="pill">html font-size: <span class="mono" id="rootFont">…</span></span>
+        <span class="pill">devicePixelRatio: <span class="mono" id="dpr">…</span></span>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <h2>1) Height / viewport validation</h2>
+        <p>
+          This page is a flex column with <span class="mono">#app { height: 100% }</span>.
+          Only <span class="mono">&lt;main&gt;</span> scrolls. Header/footer should always remain visible.
+        </p>
+        <div class="height-test">
+          <div>
+            <div class="mono">If you never see content hidden behind the footer/header, the setup is correct.</div>
+            <div class="mono">Try rotating to landscape.</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>2) Font scale preview (rem-based)</h2>
+        <p>
+          Base size uses <span class="mono">clamp()</span>. All samples are in <span class="mono">rem</span>.
+          Rotate the phone and compare.
+        </p>
+
+        <div class="scale-grid">
+          <div class="sample">
+            <div class="label mono">0.75rem</div>
+            <div class="rem-075">The quick brown fox jumps over the lazy dog. 0123456789</div>
+          </div>
+
+          <div class="sample">
+            <div class="label mono">0.875rem</div>
+            <div class="rem-0875">The quick brown fox jumps over the lazy dog. 0123456789</div>
+          </div>
+
+          <div class="sample">
+            <div class="label mono">1rem (body)</div>
+            <div class="rem-1">The quick brown fox jumps over the lazy dog. 0123456789</div>
+          </div>
+
+          <div class="sample">
+            <div class="label mono">1.125rem</div>
+            <div class="rem-1125">The quick brown fox jumps over the lazy dog. 0123456789</div>
+          </div>
+
+          <div class="sample">
+            <div class="label mono">1.25rem</div>
+            <div class="rem-125">The quick brown fox jumps over the lazy dog. 0123456789</div>
+          </div>
+
+          <div class="sample">
+            <div class="label mono">1.5rem</div>
+            <div class="rem-15">The quick brown fox jumps over the lazy dog. 0123456789</div>
+          </div>
+
+          <div class="sample">
+            <div class="label mono">2rem</div>
+            <div class="rem-2">The quick brown fox jumps over the lazy dog. 0123456789</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>em scaling inside a component</h2>
+        <p>
+          This shows why <span class="mono">em</span> is great for “internal component sizing”.
+        </p>
+        <div class="row">
+          <div class="component" style="font-size: 0.9rem">
+            <span class="icon"></span><span>Component at 0.9rem</span>
+          </div>
+          <div class="component" style="font-size: 1.1rem">
+            <span class="icon"></span><span>Component at 1.1rem</span>
+          </div>
+          <div class="component" style="font-size: 1.3rem">
+            <span class="icon"></span><span>Component at 1.3rem</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Scroll stress test</h2>
+        <p>Below is filler to confirm only this middle region scrolls.</p>
+        <div class="mono" id="filler"></div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="row">
+        <span class="pill mono">footer visible</span>
+        <span class="pill">Tip: rotate + watch the numbers update</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const dims = document.getElementById("dims");
+    const vh = document.getElementById("vh");
+    const ori = document.getElementById("ori");
+    const rootFont = document.getElementById("rootFont");
+    const dpr = document.getElementById("dpr");
+    const filler = document.getElementById("filler");
+
+    // Fill content for scroll test
+    let text = "";
+    for (let i = 1; i <= 80; i++) {
+      text += `Line ${String(i).padStart(2, "0")} — Lorem ipsum dolor sit amet.\n`;
+    }
+    filler.textContent = text;
+
+    function updateDebug() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const d = window.devicePixelRatio || 1;
+
+      dims.textContent = `inner: ${w}×${h}px`;
+      vh.textContent = `1vh≈${(h / 100).toFixed(2)}px`;
+      ori.textContent = (w > h) ? "landscape" : "portrait";
+      rootFont.textContent = getComputedStyle(document.documentElement).fontSize;
+      dpr.textContent = d.toFixed(2);
+    }
+
+    // Rotation/resizing
+    window.addEventListener("resize", updateDebug);
+    window.addEventListener("orientationchange", updateDebug);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) updateDebug();
+    });
+
+    // Buttons
+    let overflowHidden = true;
+    document.getElementById("toggleOverflow").addEventListener("click", () => {
+      overflowHidden = !overflowHidden;
+      document.body.style.overflow = overflowHidden ? "hidden" : "auto";
+    });
+
+    const defaultVars = {
+      min: getComputedStyle(document.documentElement).getPropertyValue("--base-min").trim(),
+      max: getComputedStyle(document.documentElement).getPropertyValue("--base-max").trim(),
+      fluid: getComputedStyle(document.documentElement).getPropertyValue("--base-fluid").trim(),
+    };
+
+    document.getElementById("bumpFont").addEventListener("click", () => {
+      // Increase min/max by 1px each click (cap a bit)
+      const minPx = Math.min(parseInt(defaultVars.min) + 2, 18);
+      const maxPx = Math.min(parseInt(defaultVars.max) + 3, 22);
+      document.documentElement.style.setProperty("--base-min", `${minPx}px`);
+      document.documentElement.style.setProperty("--base-max", `${maxPx}px`);
+      updateDebug();
+    });
+
+    document.getElementById("resetFont").addEventListener("click", () => {
+      document.documentElement.style.setProperty("--base-min", defaultVars.min);
+      document.documentElement.style.setProperty("--base-max", defaultVars.max);
+      document.documentElement.style.setProperty("--base-fluid", defaultVars.fluid);
+      updateDebug();
+    });
+
+    updateDebug();
+  </script>
+</body>
+</html>
