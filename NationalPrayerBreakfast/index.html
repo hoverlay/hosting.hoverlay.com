@@ -34,7 +34,7 @@
       background: radial-gradient(circle at top, #fdf8f2 0, #f3e7d7 50%, #e8dac7 100%);
       color: var(--text-main);
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 16px;
     }
@@ -89,6 +89,7 @@
       text-transform: uppercase;
       letter-spacing: 0.18em;
       color: var(--text-muted);
+      text-align: center;
     }
 
     .textarea-shell {
@@ -129,28 +130,12 @@
       gap: 8px;
     }
 
-    .support-chip {
-      font-size: 0.7rem;
-      padding: 3px 9px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(184, 138, 74, 0.4);
-      background: rgba(246, 233, 214, 0.7);
-      white-space: nowrap;
-    }
-
     .controls-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       gap: 10px;
       margin-top: 2px;
-    }
-
-    .left-controls {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
     }
 
     .btn {
@@ -166,36 +151,6 @@
       gap: 6px;
       transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
       white-space: nowrap;
-    }
-
-    .btn-icon {
-      font-size: 0.9rem;
-    }
-
-    .btn-mic {
-      background: #f7eee1;
-      border: 1px solid rgba(184, 138, 74, 0.55);
-      color: var(--text-main);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-    }
-
-    .btn-mic:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.14);
-    }
-
-    .btn-mic.active {
-      background: #c09048;
-      color: #fff9f0;
-      box-shadow: 0 10px 24px rgba(168, 112, 42, 0.45);
-    }
-
-    .btn-mic.disabled {
-      background: #f1e6d8;
-      border-color: rgba(122, 103, 84, 0.4);
-      color: rgba(122, 103, 84, 0.7);
-      cursor: not-allowed;
-      box-shadow: none;
     }
 
     .btn-send {
@@ -217,61 +172,6 @@
       cursor: not-allowed;
     }
 
-    .status-line {
-      min-height: 18px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: #c2b09a;
-      flex-shrink: 0;
-    }
-
-    .status-dot.listening {
-      background: #c96b3b;
-      box-shadow: 0 0 0 5px rgba(201, 107, 59, 0.25);
-      animation: pulseDot 1.8s infinite;
-    }
-
-    .status-dot.error {
-      background: var(--error);
-      box-shadow: 0 0 0 4px rgba(139, 58, 58, 0.28);
-    }
-
-    @keyframes pulseDot {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      70% {
-        transform: scale(1.4);
-        opacity: 0;
-      }
-      100% {
-        transform: scale(1.4);
-        opacity: 0;
-      }
-    }
-
-    .status-text {
-      flex: 1;
-    }
-
-    .status-text strong {
-      font-weight: 600;
-    }
-
-    .status-text.error {
-      color: var(--error);
-    }
-
     .signature {
       text-align: center;
       font-size: 0.7rem;
@@ -284,7 +184,7 @@
   <div class="app-shell" aria-label="Prayer input with optional voice input">
     <header class="header">
       <div class="title">National Prayer Breakfast</div>
-      <div class="subtitle">Offer your prayer in a few words</div>
+      <!-- <div class="subtitle"></div> -->
     </header>
 
     <main class="content">
@@ -293,37 +193,18 @@
         <div class="textarea-shell">
           <textarea
             id="prayerInput"
-            placeholder="In a few words, what are you praying for today?"
+            placeholder="Offer your prayer in a few words..."
             aria-label="Prayer text"
           ></textarea>
           <div class="helper-text">
-            <span>Type or speak a short intention.</span>
-            <span class="support-chip" id="supportChip">Speech input available</span>
+            <span>Type a short intention.</span>
           </div>
         </div>
 
         <div class="controls-row">
-          <div class="left-controls">
-            <button
-              id="micButton"
-              class="btn btn-mic"
-              type="button"
-            >
-              <span class="btn-icon">🎙️</span>
-              <span id="micLabel">Speak your prayer</span>
-            </button>
-          </div>
-
           <button id="sendButton" class="btn btn-send" type="button" disabled>
-            Send your prayer to light candle
+            Send your prayer
           </button>
-        </div>
-
-        <div class="status-line" aria-live="polite">
-          <div id="statusDot" class="status-dot"></div>
-          <div id="statusText" class="status-text">
-            Ready when you are.
-          </div>
         </div>
 
         <div class="signature">
@@ -336,12 +217,7 @@
   <script>
     (function () {
       const prayerInput = document.getElementById('prayerInput');
-      const micButton = document.getElementById('micButton');
-      const micLabel = document.getElementById('micLabel');
       const sendButton = document.getElementById('sendButton');
-      const supportChip = document.getElementById('supportChip');
-      const statusDot = document.getElementById('statusDot');
-      const statusText = document.getElementById('statusText');
 
       // Enable/disable send button based on content
       function updateSendState() {
@@ -351,114 +227,19 @@
 
       prayerInput.addEventListener('input', updateSendState);
 
-      // --- Speech Recognition (Option 1) ---
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      let recognition = null;
-      let isListening = false;
-
-      function setStatus({ text, mode }) {
-        statusText.textContent = text;
-        statusText.classList.remove('error');
-        statusDot.classList.remove('listening', 'error');
-
-        if (mode === 'listening') {
-          statusDot.classList.add('listening');
-        } else if (mode === 'error') {
-          statusDot.classList.add('error');
-          statusText.classList.add('error');
-        }
-      }
-
-      function setMicState(active) {
-        isListening = active;
-        if (active) {
-          micButton.classList.add('active');
-          micLabel.textContent = 'Listening… tap to stop';
-        } else {
-          micButton.classList.remove('active');
-          micLabel.textContent = 'Speak your prayer';
-        }
-      }
-
-      if (!SpeechRecognition) {
-        // No native speech recognition available
-        micButton.classList.add('disabled');
-        micButton.disabled = true;
-        supportChip.textContent = 'Speech input not available';
-        setStatus({
-          text: 'Voice input is not supported in this browser. You may still type your prayer.',
-          mode: 'error'
-        });
-      } else {
-        recognition = new SpeechRecognition();
-        recognition.lang = 'en-US';
-        recognition.continuous = false;
-        recognition.interimResults = false;
-
-        recognition.onstart = function () {
-          setMicState(true);
-          setStatus({ text: 'Listening… speak your prayer intention.', mode: 'listening' });
-        };
-
-        recognition.onresult = function (event) {
-          const transcript = event.results[0][0].transcript;
-          const existing = prayerInput.value.trim();
-          const joined = existing ? existing + ' ' + transcript : transcript;
-          prayerInput.value = joined;
-          updateSendState();
-          setStatus({ text: 'We heard: "' + transcript + '". You may edit before sending.', mode: null });
-        };
-
-        recognition.onerror = function (event) {
-          console.error('Speech recognition error:', event.error);
-          let message = 'We were not able to capture your voice. Please try again or type your prayer.';
-          if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-            message = 'Microphone access was not granted. You can still type your prayer.';
-          }
-          setStatus({ text: message, mode: 'error' });
-          setMicState(false);
-        };
-
-        recognition.onend = function () {
-          setMicState(false);
-          if (!statusText.classList.contains('error')) {
-            setStatus({ text: 'Listening stopped. You may review or send your prayer.', mode: null });
-          }
-        };
-
-        micButton.addEventListener('click', function () {
-          if (!recognition) return;
-          if (isListening) {
-            // Stop listening
-            recognition.stop();
-          } else {
-            try {
-              recognition.start();
-            } catch (err) {
-              // Some browsers may throw if called too quickly
-              console.error('Error starting recognition:', err);
-            }
-          }
-        });
-      }
-
       // --- Send / Submit prayer ---
       sendButton.addEventListener('click', function () {
         const text = (prayerInput.value || '').trim();
         if (!text) return;
 
-        // Basic status feedback
-        setStatus({ text: 'Thank you. Your prayer has been received and joined with many others.', mode: null });
-
-        // Optionally clear the text after a short delay
+        // Clear the text and send event to Unity
         setTimeout(() => {
           prayerInput.value = '';
-          location.href='hobject://do?when_done=hide'
+          location.href = `space://do?action=send_event&event_message=sent`;
         }, 1200);
       });
 
       // Initial state
-      setStatus({ text: 'Ready when you are.', mode: null });
       updateSendState();
     })();
   </script>
