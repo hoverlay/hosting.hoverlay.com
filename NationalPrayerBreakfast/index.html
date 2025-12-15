@@ -235,7 +235,7 @@
         // Clear the text and send event to Unity
         setTimeout(() => {
           prayerInput.value = '';
-          location.href = `space://do?action=send_event&event_message=sent`;
+          location.href = `space://do?action=send_event&event_message=sent&when_done=hide`;
         }, 1200);
       });
 
