@@ -30,24 +30,33 @@
             margin: 0;
             padding: 0;
             height: 100%;
+            width: 100%;
         }
         body {
             font-family: 'Nunito Sans', sans-serif;
             margin: 0;
             padding: 0;
             height: 100%;
+            width: 100%;
             overflow: hidden;
             background-color: var(--color-background);
+            box-sizing: border-box;
+        }
+
+        #app {
+            height: 100%;
+            width: 100%;
             display: flex;
             flex-direction: column;
+            box-sizing: border-box;
         }
         /* Title bar */
         .title-bar {
+            flex: 0 0 auto;
             display: grid;
             grid-template-columns: 44px 1fr 44px;
             align-items: center;
             padding: 4px 10px;
-            flex-shrink: 0;
         }
 
         /* Center the title */
@@ -115,15 +124,17 @@
         }
         /* Carousel container */
         .carousel-container {
+            flex: 1 1 auto;
+            min-height: 0;
             display: flex;
             flex-direction: column;
-            flex: 1;
-            min-height: 0;
             padding: var(--spacing-md);
+            overflow: hidden;
         }
 
         .question-text {
-            font-size: 1.45rem;
+            flex: 0 0 auto;
+            font-size: 1rem;
             font-family: 'Nunito Sans', sans-serif;
             font-weight: 600;
             color: var(--color-text-primary);
@@ -357,28 +368,30 @@
     </style>
 </head>
 <body>
-    <div class="title-bar">
-        <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="title">
-            See A Tree
+    <div id="app">
+        <div class="title-bar">
+            <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="title">
+                See A Tree
+            </div>
+            <button id="backButton" class="back-button" onclick="flipBackToFront()">
+                <i class="fas fa-chevron-down"></i>
+            </button>
         </div>
-        <button id="backButton" class="back-button" onclick="flipBackToFront()">
-            <i class="fas fa-chevron-down"></i>
-        </button>
-    </div>
-    <div class="carousel-container">
-        <div class="question-text">What Tree Do You Want to See?</div>
+        <div class="carousel-container">
+            <div class="question-text">What Tree Do You Want to See?</div>
 
-        <div class="carousel">
-            <button class="nav-arrow" id="prevBtn" onclick="navigateCarousel(-1)">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <!-- Tree cards will be generated dynamically here -->
-            <button class="nav-arrow" id="nextBtn" onclick="navigateCarousel(1)">
-                <i class="fas fa-chevron-right"></i>
-            </button>
+            <div class="carousel">
+                <button class="nav-arrow" id="prevBtn" onclick="navigateCarousel(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <!-- Tree cards will be generated dynamically here -->
+                <button class="nav-arrow" id="nextBtn" onclick="navigateCarousel(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
     </div>
     <script>
