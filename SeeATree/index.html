@@ -29,15 +29,17 @@
             color: var(--color-text-primary);
             margin: 0;
             padding: 0;
+            height: 100%;
         }
         body {
             font-family: 'Nunito Sans', sans-serif;
             margin: 0;
-            padding: 0; 
-            height: 250px;
+            padding: 0;
+            height: 100%;
             overflow: hidden;
             background-color: var(--color-background);
-            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
         }
         /* Title bar */
         .title-bar {
@@ -45,7 +47,7 @@
             grid-template-columns: 44px 1fr 44px;
             align-items: center;
             padding: 4px 10px;
-            position: relative;
+            flex-shrink: 0;
         }
 
         /* Center the title */
@@ -115,7 +117,8 @@
         .carousel-container {
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 60px);
+            flex: 1;
+            min-height: 0;
             padding: var(--spacing-md);
         }
 
