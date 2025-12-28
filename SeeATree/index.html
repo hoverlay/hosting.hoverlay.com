@@ -23,7 +23,7 @@
         }
         
         html {
-            font-size: 18px;
+            font-size: 16px;
             line-height: 1.5;
             font-weight: 400;
             color: var(--color-text-primary);
@@ -52,7 +52,7 @@
         .title {
             grid-column: 2;
             text-align: center;
-            font-size: 8rem;
+            font-size: 3rem;
             font-family: 'Nunito', sans-serif;
             font-weight: 600;
             color: var(--color-text-primary);
@@ -87,7 +87,7 @@
         }
         .subtitle {
             text-align: center;
-            font-size: 4rem;
+            font-size: 1rem;
             font-weight: 600;
             font-family: 'Nunito Sans', sans-serif;
             color: var(--color-text-primary);
@@ -120,7 +120,7 @@
         }
 
         .question-text {
-            font-size: 5rem;
+            font-size: 1.45rem;
             font-family: 'Nunito Sans', sans-serif;
             font-weight: 600;
             color: var(--color-text-primary);
@@ -130,9 +130,9 @@
 
         .carousel {
             flex: 1;
-            display: flex;
+            display: grid;
+            grid-template-columns: 44px 1fr 44px;
             align-items: center;
-            justify-content: space-between;
             gap: var(--spacing-md);
             position: relative;
             padding: 0 var(--spacing-md);
@@ -141,22 +141,23 @@
         /* Individual poster */
         .poster {
             display: none;
-            flex: 1;
-            max-width: 500px;
             perspective: 1000px;
+            grid-column: 2;
         }
 
         .poster.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: block;
+        }
+
+        .poster.active.showing-back {
+            grid-column: 1 / 4;
         }
 
         .card-container {
             position: relative;
             width: 100%;
             height: 200px;
-            transition: transform 0.6s;
+            transition: transform 0.6s, width 0.3s;
             transform-style: preserve-3d;
             border-radius: var(--border-radius-card);
         }
@@ -168,6 +169,7 @@
         .front, .back {
             position: absolute;
             width: 100%;
+            height: 100%;
             backface-visibility: hidden;
             border-radius: var(--border-radius-card);
             display: flex;
@@ -175,6 +177,7 @@
             align-items: center;
             justify-content: center;
             padding: var(--spacing-md);
+            box-sizing: border-box;
         }
 
         .front {
@@ -182,7 +185,7 @@
         }
 
         .front h2 {
-            font-size: 3.2rem;
+            font-size: 2rem;
             font-family: 'Nunito Sans', sans-serif;
             font-weight: 600;
             color: var(--color-text-primary);
@@ -196,10 +199,11 @@
         }
 
         .back h2 {
-            font-size: 8rem;
+            font-size: 1.5rem;
             font-family: 'Nunito', sans-serif;
             font-weight: 600;
             margin-bottom: var(--spacing-md);
+            text-align: center;
         }
 
         .back p {
@@ -220,7 +224,7 @@
             padding: var(--spacing-md) var(--spacing-lg);
             min-height: var(--button-min-height);
             border-radius: var(--border-radius-button);
-            font-size: 6rem;
+            font-size: 1.5rem;
             border: none;
             overflow: hidden;
             text-transform: uppercase;
@@ -280,7 +284,7 @@
         .year-buttons {
             display: flex;
             gap: var(--spacing-sm);
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             justify-content: center;
         }
 
@@ -319,15 +323,13 @@
             border-radius: 50%;
             width: 44px;
             height: 44px;
-            flex-shrink: 0;
-            font-size: 4rem;
+            font-size: 1.2rem;
             color: var(--color-text-primary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.3s;
-            z-index: 100;
+            transition: opacity 0.3s, visibility 0.3s;
         }
 
         .nav-arrow:disabled {
@@ -337,7 +339,16 @@
 
         .nav-arrow.hidden {
             opacity: 0;
+            visibility: hidden;
             pointer-events: none;
+        }
+
+        #prevBtn {
+            grid-column: 1;
+        }
+
+        #nextBtn {
+            grid-column: 3;
         }
     </style>
 </head>
@@ -354,60 +365,119 @@
         </button>
     </div>
     <div class="carousel-container">
+        <div class="question-text">What Tree Do You Want to See?</div>
+
         <div class="carousel">
             <button class="nav-arrow" id="prevBtn" onclick="navigateCarousel(-1)">
                 <i class="fas fa-chevron-left"></i>
             </button>
-
-            <div class="poster active" data-tree="palo-verde">
-                <div class="card-container">
-                    <div class="front">
-                        <div class="question-text">What Tree Do You Want to See?</div>
-                        <button class="tree-button" onclick="flipCard(0)">Palo Verde</button>
-                    </div>
-                    <div class="back">
-                        <h2>PALO VERDE</h2>
-                        <div class="year-buttons">
-                            <button onclick="handleButtonClick(event, '3year')" class="year-button">3 years</button>
-                            <button onclick="handleButtonClick(event, '5year')" class="year-button">5 years</button>
-                            <button onclick="handleButtonClick(event, '10year')" class="year-button">10 years</button>
-                        </div>
-                        <p>A native desert tree with a green trunk and branches and small leaves that are shed during drought</p>
-                        <i class="fas fa-check-circle checkmark"></i>
-                        <div class="checkmark-message">Tree planted!</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="poster" data-tree="coming-soon">
-                <div class="card-container">
-                    <div class="front">
-                        <div class="question-text">What Tree Do You Want to See?</div>
-                        <button class="tree-button" onclick="flipCard(1)">More Soon!</button>
-                    </div>
-                    <div class="back">
-                        <h2>COMING SOON</h2>
-                        <p>More trees will be available soon!</p>
-                    </div>
-                </div>
-            </div>
-
+            <!-- Tree cards will be generated dynamically here -->
             <button class="nav-arrow" id="nextBtn" onclick="navigateCarousel(1)">
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>
     </div>
     <script>
-        let currentIndex = 0;
-        const posters = document.querySelectorAll('.poster');
+        // Tree data structure
+        const trees = [
+            {
+                id: "blue-palo-verde",
+                name: "Blue Palo Verde",
+                description: "Fast-growing. Green trunk, thorns, abundant yellow flowers that attract pollinators, fixes nitrogen in soil."
+            },
+            {
+                id: "desert-ironwood",
+                name: "Desert Ironwood",
+                description: "Slow-growing. Nitrogen-fixer, edible purple flowers and seeds. Attracts native wildlife and can live over 1,000 years."
+            },
+            {
+                id: "velvet-mesquite",
+                name: "Velvet Mesquite",
+                description: "Fast-growing nitrogen fixer with seeds that can be ground into flour. Dense shade, thorns, supports native pollinators."
+            },
+            {
+                id: "desert-willow",
+                name: "Desert Willow",
+                description: "Fast-growing with abundant flowers that attract hummingbirds and pollinators. Wood used for basketmaking."
+            },
+            {
+                id: "palo-brea",
+                name: "Palo Brea",
+                description: "Fast-growing tree related to the Palo Verde but with a twisted trunk. Bright yellow spring flowers."
+            },
+            {
+                id: "cascalote",
+                name: "Cascalote",
+                description: "Slow-growing with thorns from Mexican Tropics. Yellow flowers in Winter and Spring."
+            },
+            {
+                id: "thornless-hybrid-palo-verde",
+                name: "Thornless Hybrid Palo Verde",
+                description: "Fast-growing. Green trunk, thornless, abundant yellow flowers that attract pollinators, fixes nitrogen in soil."
+            },
+            {
+                id: "smoothie-cascalote",
+                name: "Smoothie Cascalote",
+                description: "Slow-growing, thornless from Mexican Tropics. Yellow flowers in Winter and Spring."
+            },
+            {
+                id: "thornless-mesquite",
+                name: "Thornless Mesquite",
+                description: "Fast-growing nitrogen fixer with seeds that can be ground into flour. Dense shade, supports native pollinators."
+            }
+        ];
 
-        // Set the size of the font based on the width of the webview
+        let currentIndex = 0;
+        let posters = [];
+
+        // Initialize on DOM load
         document.addEventListener("DOMContentLoaded", function() {
-            var webviewHeight = window.innerHeight;
-            var baseFontSize = webviewHeight / 70;
-            document.documentElement.style.fontSize = baseFontSize + 'px';
+            generateTreeCards();
+            posters = document.querySelectorAll('.poster');
             updateNavButtons();
         });
+
+        function generateTreeCards() {
+            const carousel = document.querySelector('.carousel');
+            const navArrows = carousel.querySelectorAll('.nav-arrow');
+
+            // Clear existing posters (keep nav arrows)
+            carousel.innerHTML = '';
+
+            // Add back the left arrow
+            carousel.appendChild(navArrows[0]);
+
+            // Generate tree cards
+            trees.forEach((tree, index) => {
+                const poster = document.createElement('div');
+                poster.className = index === 0 ? 'poster active' : 'poster';
+                poster.setAttribute('data-tree', tree.id);
+
+                poster.innerHTML = `
+                    <div class="card-container">
+                        <div class="front">
+                            <button class="tree-button" onclick="flipCard(${index})">${tree.name}</button>
+                        </div>
+                        <div class="back">
+                            <h2 onclick="flipBackToFront()" style="cursor: pointer;">${tree.name.toUpperCase()}</h2>
+                            <div class="year-buttons">
+                                <button onclick="handleButtonClick(event, '${tree.id}', 3)" class="year-button">3 years</button>
+                                <button onclick="handleButtonClick(event, '${tree.id}', 5)" class="year-button">5 years</button>
+                                <button onclick="handleButtonClick(event, '${tree.id}', 10)" class="year-button">10 years</button>
+                            </div>
+                            <p onclick="flipBackToFront()" style="cursor: pointer;">${tree.description}</p>
+                            <i class="fas fa-check-circle checkmark"></i>
+                            <div class="checkmark-message">Tree planted!</div>
+                        </div>
+                    </div>
+                `;
+
+                carousel.appendChild(poster);
+            });
+
+            // Add back the right arrow
+            carousel.appendChild(navArrows[1]);
+        }
 
         function navigateCarousel(direction) {
             const newIndex = currentIndex + direction;
@@ -417,10 +487,12 @@
             }
 
             // Reset any flipped cards
-            posters[currentIndex].querySelector('.card-container').classList.remove('flipped');
+            const currentPoster = posters[currentIndex];
+            currentPoster.querySelector('.card-container').classList.remove('flipped');
+            currentPoster.classList.remove('showing-back');
 
             // Hide current poster
-            posters[currentIndex].classList.remove('active');
+            currentPoster.classList.remove('active');
 
             // Show new poster
             currentIndex = newIndex;
@@ -438,10 +510,12 @@
         }
 
         function flipCard(index) {
-            const card = posters[index].querySelector('.card-container');
+            const poster = posters[index];
+            const card = poster.querySelector('.card-container');
             const isFlipped = card.classList.contains('flipped');
 
             card.classList.toggle('flipped');
+            poster.classList.toggle('showing-back');
 
             // Toggle navigation arrows and back button
             const navArrows = document.querySelectorAll('.nav-arrow');
@@ -459,8 +533,10 @@
         }
 
         function flipBackToFront() {
-            const activeCard = posters[currentIndex].querySelector('.card-container');
+            const poster = posters[currentIndex];
+            const activeCard = poster.querySelector('.card-container');
             activeCard.classList.remove('flipped');
+            poster.classList.remove('showing-back');
 
             // Show navigation arrows, hide back button
             const navArrows = document.querySelectorAll('.nav-arrow');
@@ -469,7 +545,8 @@
             backButton.classList.remove('visible');
         }
 
-        function handleButtonClick(event, message) {
+        function handleButtonClick(event, treeId, years) {
+            const message = `${treeId}-${years}`;
             location.href = `space://do?action=send_event&event_message=${message}`;
             const back = event.target.closest('.back');
             const checkmark = back.querySelector('.checkmark');
