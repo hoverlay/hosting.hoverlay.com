@@ -505,10 +505,13 @@
         }
 
         function navigateCarousel(direction) {
-            const newIndex = currentIndex + direction;
+            let newIndex = currentIndex + direction;
 
-            if (newIndex < 0 || newIndex >= posters.length) {
-                return;
+            // Wrap around to create continuous flow
+            if (newIndex < 0) {
+                newIndex = posters.length - 1;
+            } else if (newIndex >= posters.length) {
+                newIndex = 0;
             }
 
             // Reset any flipped cards
@@ -530,8 +533,9 @@
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
 
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex === posters.length - 1;
+            // Never disable buttons for continuous navigation
+            prevBtn.disabled = false;
+            nextBtn.disabled = false;
         }
 
         function flipCard(index) {
