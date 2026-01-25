@@ -30,6 +30,21 @@ nav {
     z-index: 10;
     transition: opacity 0.3s;
     border-bottom: 1px solid #333;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+nav::-webkit-scrollbar {
+    height: 4px;
+}
+
+nav::-webkit-scrollbar-track {
+    background: #222;
+}
+
+nav::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 2px;
 }
 
 .slider-container {
@@ -151,6 +166,37 @@ button svg {
     height: 40px;
     width: 40px;
     fill: var(--text-color);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    nav {
+        padding: 0 10px;
+        gap: 8px;
+    }
+
+    button {
+        padding: 0.4rem 0.8rem;
+        flex-shrink: 0;
+    }
+
+    button svg {
+        height: 28px;
+        width: 28px;
+    }
+
+    .slider-container {
+        min-width: 120px;
+        max-width: 150px;
+    }
+
+    .slider-container label {
+        font-size: 10px;
+    }
+
+    .flip-controls {
+        gap: 5px;
+    }
 }
 
 input[type="color"],
