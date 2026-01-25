@@ -303,6 +303,9 @@ async function loadFromCloud() {
             document.documentElement.style.setProperty('--bg-color', bgColorPicker.value);
             document.documentElement.style.setProperty('--text-color', textColorPicker.value);
 
+            // Update scroll speed variable
+            scrollSpeed = 50 - parseInt(speedControlInput.value);
+
             // Update script name input
             scriptNameInput.value = scriptName;
 
