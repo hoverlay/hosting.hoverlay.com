@@ -93,7 +93,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .settings-menu {
-    position: absolute;
+    position: fixed;
     top: 80px;
     right: 10px;
     background-color: #222;
@@ -105,6 +105,9 @@ input[type="range"]::-webkit-slider-thumb {
     gap: 15px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     z-index: 20;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    max-width: 90vw;
 }
 
 .settings-group {
