@@ -20,18 +20,34 @@ const countdownOverlay = document.getElementById('countdownOverlay');
 const countdownNumber = document.getElementById('countdownNumber');
 const settingsButton = document.getElementById('settingsButton');
 const settingsMenu = document.getElementById('settingsMenu');
+const scriptNameInput = document.getElementById('scriptNameInput');
+const saveToCloudButton = document.getElementById('saveToCloudButton');
+const loadFromCloudButton = document.getElementById('loadFromCloudButton');
+const cloudScriptsList = document.getElementById('cloudScriptsList');
+const cameraButton = document.getElementById('cameraButton');
+const cameraVideo = document.getElementById('cameraVideo');
+
+// Cloud Storage Configuration
+// IMPORTANT: Replace this with your Google Apps Script web app URL
+const CLOUD_API_URL = 'https://script.google.com/macros/s/AKfycbwBbsuTez6AXyqiv4acyMBIum1JveQ6XG-PDyttEioCML-gsZ-t5cZAhax3jnCFc21x/exec';
 
 // Variables
 let isPlaying = false;
 let scrollInterval;
 let countdownInterval;
 let scrollSpeed = 50 - parseInt(speedControlInput.value);
+let cameraStream = null;
+let currentFacingMode = 'user'; // 'user' for front camera, 'environment' for back camera
 
 // Event Listeners
 playPauseButton.addEventListener('click', togglePlayPause);
 loadScriptButton.addEventListener('click', () => fileInput.click());
 fileInput.addEventListener('change', loadScript);
 saveScriptButton.addEventListener('click', saveSession);
+saveToCloudButton.addEventListener('click', saveToCloud);
+loadFromCloudButton.addEventListener('click', loadFromCloud);
+cameraButton.addEventListener('click', toggleCamera);
+cameraButton.addEventListener('dblclick', switchCamera);
 scriptContent.addEventListener('paste', (e) => {
     e.preventDefault();
     const text = (e.clipboardData || window.clipboardData).getData('text');
@@ -190,4 +206,195 @@ function saveSession() {
     a.href = URL.createObjectURL(blob);
     a.download = 'teleprompter_session.json';
     a.click();
+}
+
+// Cloud Storage Functions
+async function saveToCloud() {
+    const scriptName = scriptNameInput.value.trim();
+    if (!scriptName) {
+        alert('Please enter a script name');
+        return;
+    }
+
+    if (CLOUD_API_URL === '') {
+        alert('Please configure your Google Apps Script URL first. See setup instructions.');
+        return;
+    }
+
+    const sessionData = {
+        script: scriptContent.innerText,
+        fontSize: textSizeInput.value,
+        speed: speedControlInput.value,
+        bgColor: bgColorPicker.value,
+        textColor: textColorPicker.value
+    };
+
+    try {
+        saveToCloudButton.disabled = true;
+        saveToCloudButton.textContent = 'Saving...';
+
+        // Use GET request to avoid CORS issues with Google Apps Script
+        const params = new URLSearchParams({
+            action: 'save',
+            name: scriptName,
+            data: JSON.stringify(sessionData)
+        });
+
+        const response = await fetch(`${CLOUD_API_URL}?${params.toString()}`, {
+            method: 'GET',
+            redirect: 'follow'
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert('Script saved to cloud successfully!');
+            await refreshCloudScriptsList();
+        } else {
+            alert('Error saving script: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        alert('Error saving to cloud: ' + error.message);
+    } finally {
+        saveToCloudButton.disabled = false;
+        saveToCloudButton.textContent = 'Save to Cloud';
+    }
+}
+
+async function loadFromCloud() {
+    const scriptName = cloudScriptsList.value;
+    if (!scriptName) {
+        alert('Please select a script to load');
+        return;
+    }
+
+    if (CLOUD_API_URL === '') {
+        alert('Please configure your Google Apps Script URL first. See setup instructions.');
+        return;
+    }
+
+    try {
+        loadFromCloudButton.disabled = true;
+        loadFromCloudButton.textContent = 'Loading...';
+
+        const response = await fetch(`${CLOUD_API_URL}?action=load&name=${encodeURIComponent(scriptName)}`);
+        const result = await response.json();
+
+        if (result.success && result.sessionData) {
+            const sessionData = result.sessionData;
+
+            // Apply the script and settings
+            scriptContent.innerText = sessionData.script || '';
+            textSizeInput.value = sessionData.fontSize || 58;
+            speedControlInput.value = sessionData.speed || 10;
+            bgColorPicker.value = sessionData.bgColor || "#000000";
+            textColorPicker.value = sessionData.textColor || "#FFFFFF";
+
+            // Update CSS styles
+            document.documentElement.style.setProperty('--text-size', `${textSizeInput.value}px`);
+            document.documentElement.style.setProperty('--bg-color', bgColorPicker.value);
+            document.documentElement.style.setProperty('--text-color', textColorPicker.value);
+
+            // Update script name input
+            scriptNameInput.value = scriptName;
+
+            alert('Script loaded successfully!');
+        } else {
+            alert('Error loading script: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        alert('Error loading from cloud: ' + error.message);
+    } finally {
+        loadFromCloudButton.disabled = false;
+        loadFromCloudButton.textContent = 'Load from Cloud';
+    }
+}
+
+async function refreshCloudScriptsList() {
+    if (CLOUD_API_URL === '') {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${CLOUD_API_URL}?action=list`);
+        const result = await response.json();
+
+        if (result.scripts) {
+            cloudScriptsList.innerHTML = '<option value="">-- Select a script --</option>';
+            result.scripts.forEach(script => {
+                const option = document.createElement('option');
+                option.value = script.name;
+                option.textContent = `${script.name}${script.lastModified ? ' (' + script.lastModified + ')' : ''}`;
+                cloudScriptsList.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error refreshing scripts list:', error);
+    }
+}
+
+// Refresh cloud scripts list when settings menu is opened
+settingsButton.addEventListener('click', () => {
+    if (settingsMenu.style.display === 'none') {
+        refreshCloudScriptsList();
+    }
+});
+
+// Camera Functions
+async function toggleCamera() {
+    if (cameraStream) {
+        // Stop camera
+        stopCamera();
+    } else {
+        // Start camera
+        await startCamera();
+    }
+}
+
+async function startCamera() {
+    try {
+        const constraints = {
+            video: {
+                facingMode: currentFacingMode,
+                width: { ideal: 1920 },
+                height: { ideal: 1080 }
+            },
+            audio: false
+        };
+
+        cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+        cameraVideo.srcObject = cameraStream;
+        cameraVideo.classList.add('active');
+        cameraButton.classList.add('active');
+        document.body.classList.add('camera-active');
+    } catch (error) {
+        console.error('Error accessing camera:', error);
+        alert('Unable to access camera. Please ensure camera permissions are granted.');
+    }
+}
+
+function stopCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+        cameraVideo.srcObject = null;
+        cameraVideo.classList.remove('active');
+        cameraButton.classList.remove('active');
+        document.body.classList.remove('camera-active');
+    }
+}
+
+async function switchCamera() {
+    if (!cameraStream) {
+        return;
+    }
+
+    // Toggle between front and back camera
+    currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+
+    // Stop current stream
+    stopCamera();
+
+    // Start with new facing mode
+    await startCamera();
 }

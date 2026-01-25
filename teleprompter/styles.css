@@ -202,3 +202,44 @@ input[type="range"] {
         opacity: 1;
     }
 }
+
+/* Camera Video Background */
+#cameraVideo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    display: none;
+}
+
+#cameraVideo.active {
+    display: block;
+}
+
+/* Make script content semi-transparent when camera is active */
+body.camera-active .content {
+    background-color: transparent;
+    text-shadow:
+        -2px -2px 4px rgba(0, 0, 0, 0.8),
+        2px -2px 4px rgba(0, 0, 0, 0.8),
+        -2px 2px 4px rgba(0, 0, 0, 0.8),
+        2px 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 8px rgba(0, 0, 0, 0.9);
+}
+
+body.camera-active nav {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+/* Active camera button style */
+#cameraButton.active {
+    background: #28a745;
+}
+
+#cameraButton.active:hover {
+    background: #218838;
+}
