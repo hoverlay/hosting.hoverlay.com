@@ -442,18 +442,31 @@ function startRecording() {
     try {
         recordedChunks = [];
 
-        // Set up MediaRecorder with appropriate mime type
-        const options = { mimeType: 'video/webm;codecs=vp8,opus' };
+        // Try MP4 first for better compatibility, then fall back to WebM
+        let mimeType;
+        let fileExtension;
 
-        // Try different codecs if not supported
-        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-            options.mimeType = 'video/webm';
-            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                options.mimeType = 'video/mp4';
-            }
+        if (MediaRecorder.isTypeSupported('video/mp4')) {
+            mimeType = 'video/mp4';
+            fileExtension = 'mp4';
+        } else if (MediaRecorder.isTypeSupported('video/webm;codecs=h264')) {
+            mimeType = 'video/webm;codecs=h264';
+            fileExtension = 'webm';
+        } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')) {
+            mimeType = 'video/webm;codecs=vp9,opus';
+            fileExtension = 'webm';
+        } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus')) {
+            mimeType = 'video/webm;codecs=vp8,opus';
+            fileExtension = 'webm';
+        } else {
+            mimeType = 'video/webm';
+            fileExtension = 'webm';
         }
 
-        mediaRecorder = new MediaRecorder(cameraStream, options);
+        // Store for later use in download
+        mediaRecorder = new MediaRecorder(cameraStream, { mimeType });
+        mediaRecorder.recordedMimeType = mimeType;
+        mediaRecorder.recordedExtension = fileExtension;
 
         mediaRecorder.ondataavailable = (event) => {
             if (event.data.size > 0) {
@@ -506,16 +519,19 @@ async function downloadRecording() {
         return;
     }
 
+    const mimeType = mediaRecorder.recordedMimeType || 'video/webm';
+    const extension = mediaRecorder.recordedExtension || 'webm';
+
     const blob = new Blob(recordedChunks, {
-        type: 'video/webm'
+        type: mimeType
     });
 
-    const fileName = `teleprompter-recording-${Date.now()}.webm`;
+    const fileName = `teleprompter-recording-${Date.now()}.${extension}`;
 
     // Try to use Web Share API first (better for mobile)
     if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName)] })) {
         try {
-            const file = new File([blob], fileName, { type: 'video/webm' });
+            const file = new File([blob], fileName, { type: mimeType });
             await navigator.share({
                 files: [file],
                 title: 'Teleprompter Recording',
