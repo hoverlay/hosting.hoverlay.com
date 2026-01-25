@@ -243,3 +243,56 @@ body.camera-active nav {
 #cameraButton.active:hover {
     background: #218838;
 }
+
+/* Record button styles */
+#recordButton {
+    background: #dc3545;
+}
+
+#recordButton:hover {
+    background: #c82333;
+}
+
+#recordButton.recording {
+    background: #ff0000;
+    animation: recordPulse 2s infinite;
+}
+
+@keyframes recordPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Recording indicator */
+.recording-indicator {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 15;
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+.recording-indicator.active {
+    display: flex;
+}
+
+.recording-indicator::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    animation: recordPulse 2s infinite;
+}

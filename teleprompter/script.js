@@ -26,6 +26,9 @@ const loadFromCloudButton = document.getElementById('loadFromCloudButton');
 const cloudScriptsList = document.getElementById('cloudScriptsList');
 const cameraButton = document.getElementById('cameraButton');
 const cameraVideo = document.getElementById('cameraVideo');
+const recordButton = document.getElementById('recordButton');
+const recordingIndicator = document.getElementById('recordingIndicator');
+const recordingTime = document.getElementById('recordingTime');
 
 // Cloud Storage Configuration
 // IMPORTANT: Replace this with your Google Apps Script web app URL
@@ -38,6 +41,10 @@ let countdownInterval;
 let scrollSpeed = 50 - parseInt(speedControlInput.value);
 let cameraStream = null;
 let currentFacingMode = 'user'; // 'user' for front camera, 'environment' for back camera
+let mediaRecorder = null;
+let recordedChunks = [];
+let recordingStartTime = null;
+let recordingTimer = null;
 
 // Event Listeners
 playPauseButton.addEventListener('click', togglePlayPause);
@@ -48,6 +55,7 @@ saveToCloudButton.addEventListener('click', saveToCloud);
 loadFromCloudButton.addEventListener('click', loadFromCloud);
 cameraButton.addEventListener('click', toggleCamera);
 cameraButton.addEventListener('dblclick', switchCamera);
+recordButton.addEventListener('click', toggleRecording);
 scriptContent.addEventListener('paste', (e) => {
     e.preventDefault();
     const text = (e.clipboardData || window.clipboardData).getData('text');
@@ -340,6 +348,11 @@ settingsButton.addEventListener('click', () => {
     }
 });
 
+// Load cloud scripts list on page load
+window.addEventListener('load', () => {
+    refreshCloudScriptsList();
+});
+
 // Camera Functions
 async function toggleCamera() {
     if (cameraStream) {
@@ -359,7 +372,7 @@ async function startCamera() {
                 width: { ideal: 1920 },
                 height: { ideal: 1080 }
             },
-            audio: false
+            audio: true  // Enable audio for recording
         };
 
         cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -367,6 +380,9 @@ async function startCamera() {
         cameraVideo.classList.add('active');
         cameraButton.classList.add('active');
         document.body.classList.add('camera-active');
+
+        // Show record button when camera is active
+        recordButton.style.display = 'block';
     } catch (error) {
         console.error('Error accessing camera:', error);
         alert('Unable to access camera. Please ensure camera permissions are granted.');
@@ -374,6 +390,11 @@ async function startCamera() {
 }
 
 function stopCamera() {
+    // Stop recording if active
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        stopRecording();
+    }
+
     if (cameraStream) {
         cameraStream.getTracks().forEach(track => track.stop());
         cameraStream = null;
@@ -381,6 +402,7 @@ function stopCamera() {
         cameraVideo.classList.remove('active');
         cameraButton.classList.remove('active');
         document.body.classList.remove('camera-active');
+        recordButton.style.display = 'none';
     }
 }
 
@@ -397,4 +419,126 @@ async function switchCamera() {
 
     // Start with new facing mode
     await startCamera();
+}
+
+// Recording Functions
+function toggleRecording() {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        stopRecording();
+    } else {
+        startRecording();
+    }
+}
+
+function startRecording() {
+    if (!cameraStream) {
+        alert('Please enable camera first');
+        return;
+    }
+
+    try {
+        recordedChunks = [];
+
+        // Set up MediaRecorder with appropriate mime type
+        const options = { mimeType: 'video/webm;codecs=vp8,opus' };
+
+        // Try different codecs if not supported
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+            options.mimeType = 'video/webm';
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                options.mimeType = 'video/mp4';
+            }
+        }
+
+        mediaRecorder = new MediaRecorder(cameraStream, options);
+
+        mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+
+        mediaRecorder.onstop = () => {
+            downloadRecording();
+        };
+
+        mediaRecorder.start();
+        recordButton.classList.add('recording');
+        recordingIndicator.classList.add('active');
+
+        // Start timer
+        recordingStartTime = Date.now();
+        recordingTimer = setInterval(updateRecordingTime, 1000);
+
+    } catch (error) {
+        console.error('Error starting recording:', error);
+        alert('Unable to start recording: ' + error.message);
+    }
+}
+
+function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        recordButton.classList.remove('recording');
+        recordingIndicator.classList.remove('active');
+
+        // Stop timer
+        if (recordingTimer) {
+            clearInterval(recordingTimer);
+            recordingTimer = null;
+        }
+        recordingTime.textContent = '0:00';
+    }
+}
+
+function updateRecordingTime() {
+    const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+    const minutes = Math.floor(elapsed / 60);
+    const seconds = elapsed % 60;
+    recordingTime.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+async function downloadRecording() {
+    if (recordedChunks.length === 0) {
+        return;
+    }
+
+    const blob = new Blob(recordedChunks, {
+        type: 'video/webm'
+    });
+
+    const fileName = `teleprompter-recording-${Date.now()}.webm`;
+
+    // Try to use Web Share API first (better for mobile)
+    if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName)] })) {
+        try {
+            const file = new File([blob], fileName, { type: 'video/webm' });
+            await navigator.share({
+                files: [file],
+                title: 'Teleprompter Recording',
+                text: 'Video recorded with teleprompter'
+            });
+            recordedChunks = [];
+            return;
+        } catch (error) {
+            // User cancelled share or share failed, fall back to download
+            console.log('Share cancelled or failed, falling back to download');
+        }
+    }
+
+    // Fallback to download
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 100);
+
+    recordedChunks = [];
 }
