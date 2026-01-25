@@ -309,7 +309,8 @@ async function loadFromCloud() {
             // Update script name input
             scriptNameInput.value = scriptName;
 
-            alert('Script loaded successfully!');
+            // Close settings menu after successful load
+            settingsMenu.style.display = 'none';
         } else {
             alert('Error loading script: ' + (result.error || 'Unknown error'));
         }

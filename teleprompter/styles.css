@@ -200,6 +200,50 @@ button svg {
     .flip-controls {
         gap: 5px;
     }
+
+    .settings-menu {
+        top: 80px;
+        left: 5px;
+        right: 5px;
+        max-width: calc(100vw - 10px);
+        max-height: calc(100vh - 90px);
+        padding: 12px;
+        gap: 12px;
+        font-size: 14px;
+    }
+
+    .settings-menu h4 {
+        font-size: 13px !important;
+        margin: 0 0 6px 0 !important;
+    }
+
+    .settings-group {
+        gap: 8px;
+        padding-bottom: 8px;
+    }
+
+    .settings-group label {
+        font-size: 13px;
+    }
+
+    .settings-group input[type="text"],
+    .settings-group select {
+        padding: 6px !important;
+        font-size: 14px !important;
+    }
+
+    .settings-group .control-button,
+    .settings-group button {
+        padding: 8px 12px !important;
+        font-size: 13px;
+    }
+
+    .recording-indicator {
+        top: 85px;
+        right: 10px;
+        padding: 6px 12px;
+        font-size: 12px;
+    }
 }
 
 input[type="color"],
