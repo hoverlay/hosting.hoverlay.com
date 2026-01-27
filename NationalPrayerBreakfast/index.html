@@ -223,8 +223,7 @@
       // --- Send / Submit prayer ---
       sendButton.addEventListener('click', function () {
         const text = (prayerInput.value || '').trim();
-        if (!text) return;
-
+        
         // Clear the text and send event to Unity
         setTimeout(() => {
           prayerInput.value = '';
