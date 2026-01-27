@@ -193,22 +193,22 @@
         <div class="textarea-shell">
           <textarea
             id="prayerInput"
-            placeholder="Offer your prayer in a few words..."
+            placeholder="Type, speak, or hold your prayer in your heart, then tap light your lantern"
             aria-label="Prayer text"
           ></textarea>
           <div class="helper-text">
-            <span>Type a short intention.</span>
+            <span>Type a short intention (Optional)</span>
           </div>
         </div>
 
         <div class="controls-row">
-          <button id="sendButton" class="btn btn-send" type="button" disabled>
-            Send your prayer
+          <button id="sendButton" class="btn btn-send" type="button">
+            Light Your Lantern
           </button>
         </div>
 
         <div class="signature">
-          Submitted prayers are the property of the National Prayer Breakfast
+          Your prayers are private.  They are not stored anywhere.
           <!-- Your words are private here and will be joined symbolically with many others. -->
         </div>
       </section>
@@ -219,14 +219,6 @@
     (function () {
       const prayerInput = document.getElementById('prayerInput');
       const sendButton = document.getElementById('sendButton');
-
-      // Enable/disable send button based on content
-      function updateSendState() {
-        const value = (prayerInput.value || '').trim();
-        sendButton.disabled = value.length === 0;
-      }
-
-      prayerInput.addEventListener('input', updateSendState);
 
       // --- Send / Submit prayer ---
       sendButton.addEventListener('click', function () {
@@ -240,8 +232,6 @@
         }, 1200);
       });
 
-      // Initial state
-      updateSendState();
     })();
   </script>
 </body>
