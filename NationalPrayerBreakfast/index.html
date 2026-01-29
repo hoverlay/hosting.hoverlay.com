@@ -174,7 +174,7 @@
 
     .signature {
       text-align: center;
-      font-size: 0.7rem;
+      font-size: 1.3rem;
       color: var(--text-muted);
       margin-top: 2px;
     }
@@ -208,7 +208,8 @@
         </div>
 
         <div class="signature">
-          Your prayers are private.  They are not stored anywhere.
+          Your prayers are private.<br>
+          They are not stored anywhere.
           <!-- Your words are private here and will be joined symbolically with many others. -->
         </div>
       </section>
@@ -223,7 +224,7 @@
       // --- Send / Submit prayer ---
       sendButton.addEventListener('click', function () {
         const text = (prayerInput.value || '').trim();
-        
+
         // Clear the text and send event to Unity
         setTimeout(() => {
           prayerInput.value = '';
