@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prayer Offering</title>
+  <style>
+    :root {
+      --bg: #f7f3ec;
+      --bg-alt: #f0e7db;
+      --accent: #b88a4a;
+      --accent-soft: #e0c9a2;
+      --text-main: #3b2c20;
+      --text-muted: #7a6754;
+      --error: #8b3a3a;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.12);
+      --radius-lg: 24px;
+      --radius-pill: 999px;
+      --transition-fast: 180ms ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
+      background: radial-gradient(circle at top, #fdf8f2 0, #f3e7d7 50%, #e8dac7 100%);
+      color: var(--text-main);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(246, 234, 219, 0.96));
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 20px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border: 1px solid rgba(184, 138, 74, 0.22);
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
+      color: var(--text-main);
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .prayer-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .field-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .textarea-shell {
+      position: relative;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(184, 138, 74, 0.35);
+      padding: 10px 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      max-height: 140px;
+      border: none;
+      resize: none;
+      outline: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--text-main);
+    }
+
+    textarea::placeholder {
+      color: rgba(122, 103, 84, 0.7);
+    }
+
+    .helper-text {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .btn {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 7px 13px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-send {
+      background: #c99d52;
+      color: #2a1f15;
+      padding-inline: 18px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+    }
+
+    .btn-send:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.32);
+    }
+
+    .btn-send:disabled {
+      background: #c2b09a;
+      color: #f8f2ea;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .signature {
+      text-align: center;
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell" aria-label="Prayer input with optional voice input">
+    <header class="header">
+      <div class="title">One Nation, Lighting the Way Together</div>
+      <!-- <div class="subtitle"></div> -->
+    </header>
+
+    <main class="content">
+      <section class="prayer-panel" aria-label="Prayer input">
+        <!-- <div class="field-label">Your prayer</div> -->
+        <div class="textarea-shell">
+          <textarea
+            id="prayerInput"
+            placeholder="Share your hopes, good wishes, and prayers for America. (Optional)"
+            aria-label="Prayer text"
+          ></textarea>
+          <!-- <div class="helper-text">
+            <span>Type a short intention (Optional)</span>
+          </div> -->
+        </div>
+
+        <div class="controls-row">
+          <button id="sendButton" class="btn btn-send" type="button">
+            Light Your Lantern
+          </button>
+        </div>
+
+        <div class="signature">
+          Your prayers are private.<br>
+          They are not stored anywhere.
+          <!-- Your words are private here and will be joined symbolically with many others. -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const prayerInput = document.getElementById('prayerInput');
+      const sendButton = document.getElementById('sendButton');
+
+      // --- Send / Submit prayer ---
+      sendButton.addEventListener('click', function () {
+        const text = (prayerInput.value || '').trim();
+
+        // Clear the text and send event to Unity
+        setTimeout(() => {
+          prayerInput.value = '';
+          location.href = `space://do?action=send_event&event_message=sent&when_done=hide`;
+        }, 1200);
+      });
+
+    })();
+  </script>
+</body>
+</html>
