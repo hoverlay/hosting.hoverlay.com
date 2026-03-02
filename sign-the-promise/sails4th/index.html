@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Experiences</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #ededed;
+            padding: 16px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 667px) and (orientation: landscape) {
+            .gallery {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .gallery {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+        }
+
+        .card {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+        }
+
+        .card.unlocked::before {
+            display: none;
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 24px;
+            color: rgb(71, 247, 138);
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .card.locked::before {
+            content: '\f023';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 24px;
+            color: white;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding: 0 16px;
+            max-width: 1400px;
+            margin: 0 auto 32px;
+        }
+
+        .progress-container {
+            margin: 0 16px 24px;
+            text-align: center;
+        }
+
+        .progress-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            max-width: 300px;
+            height: 8px;
+            background: #E5E5EA;
+            border-radius: 4px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #34C759;
+            transition: width 0.3s ease;
+        }
+
+        .header {
+            color: #333;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+        }
+
+        .reset-btn {
+            background: none;
+            border: 1px solid #007AFF;
+            color: #007AFF;
+            padding: 4px 6px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 0.6rem;
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: #007AFF;
+            color: white;
+        }
+
+        .confirm-reset {
+            background: white;
+            text-align: center;
+        }
+
+        .confirm-reset .question-text {
+            margin-bottom: 32px;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .confirm-btn {
+            padding: 8px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border: none;
+        }
+
+        .confirm-btn.yes {
+            background: #FF3B30;
+            color: white;
+        }
+
+        .confirm-btn.no {
+            background: #8E8E93;
+            color: white;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .question-box, .reset-box {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 400px;
+            margin: 40px auto;
+            position: relative;
+        }
+
+        .reset-box {
+            display: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .answer-input {
+            font-size: 1.2rem;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .answer-option {
+            font-size: 1.2rem;
+            padding: 12px;
+            background: #f5f5f7;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .answer-option:hover {
+            background: #e5e5e7;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 16px;
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .submit-btn:hover {
+            background: #0066CC;
+        }
+
+        .tutorial-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            padding: 20px;
+            color: white;
+        }
+
+        .tutorial-content {
+            max-width: 600px;
+            margin: 20px auto;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .tutorial-title {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .tutorial-video {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tutorial-tips {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tutorial-tips li {
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .tutorial-tips li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #34C759;
+        }
+
+        .tutorial-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .brought-to-you {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .brought-to-you-text {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+
+        .brought-to-you-logo {
+            max-width: 300px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <div class="header">Choose Your AR Experience</div>
+        <!-- <button class="reset-btn">Reset Progress</button> -->
+    </div>
+    <!-- <div class="progress-container">
+        <div class="progress-text">Rooms Unlocked: <span class="rooms-count">0</span>/<span class="total-rooms">5</span></div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 0%"></div>
+        </div>
+    </div> -->
+    <div class="gallery"></div>
+    <div class="brought-to-you">
+        <div class="brought-to-you-text">Brought to you by</div>
+        <img src="./assets/images/reg_51_TITLE ONLY_K.png" alt="51 Steps" class="brought-to-you-logo">
+    </div>
+    <div class="overlay">
+        <div class="question-box">
+            <button class="close-btn">&times;</button>
+            <div class="question-text"></div>
+            <div class="answer-container"></div>
+            <button class="submit-btn">Submit</button>
+        </div>
+        <div class="reset-box">
+            <div class="question-text">Are you sure you want to reset all progress?</div>
+            <div class="confirm-buttons">
+                <button class="confirm-btn no">Cancel</button>
+                <button class="confirm-btn yes">Reset All</button>
+            </div>
+        </div>
+    </div>
+    <div class="tutorial-overlay">
+        <div class="tutorial-content">
+            <button class="tutorial-close">&times;</button>
+            <h2 class="tutorial-title">Welcome to AR Magic! 🪄</h2>
+            <video class="tutorial-video" controls>
+                <source src="./assets/videos/OMansion AR Tutorial V4 - 576.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <ul class="tutorial-tips">
+                <li>Turn your sound "on" and "up"</li>
+                <li>View the experience through the phone</li>
+                <li>Read and follow the prompts on the screen</li>
+                <li>Pan around with your phone to explore</li>
+                <li>Tap the circle to take photos and videos</li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        const cardData = [
+            {
+                id: 'tutorial',
+                title: 'Tutorial',
+                subtitle: 'Learn to use AR magic',
+                image: 'none', // This will trigger our special background
+                spacePid: 's0f' 
+            },
+            {
+                id: 'sign-the-promise',
+                title: 'Sign The Promise',
+                subtitle: '',
+                image: './assets/images/declaration-of-independence-signing.jpg',
+                spacePid: 'sjpc'
+            },
+        ];
+
+        // Load unlock status from localStorage
+        const unlockedCards = new Set(JSON.parse(localStorage.getItem('unlockedCards') || '[]'));
+
+        // Auto-unlock cards that don't have questions
+        cardData.forEach(card => {
+            if (!card.question && card.id !== 'tutorial') {
+                unlockedCards.add(card.id);
+            }
+        });
+
+        // Modify the createCard function to handle the tutorial card
+        function createCard(data) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            // Special handling for tutorial card
+            if (data.id === 'tutorial') {
+                card.style.background = '#960615'; 
+                card.innerHTML = `
+                    <div class="card-content" style="background: none; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <h2 class="card-title" style="font-size: 1.6rem; margin-bottom: 16px;">${data.title}</h2>
+                    </div>
+                `;
+            } else {
+                // Original card creation for normal cards
+                card.className += ` ${unlockedCards.has(data.id) ? 'unlocked' : 'locked'}`;
+                card.innerHTML = `
+                    <img src="${data.image}" alt="${data.title}">
+                    <div class="card-content">
+                        <h2 class="card-title">${data.title}</h2>
+                        <p class="card-subtitle">${data.subtitle}</p>
+                    </div>
+                `;
+            }
+            return card;
+        }
+
+        function showQuestion(cardData) {
+            const overlay = document.querySelector('.overlay');
+            const questionText = overlay.querySelector('.question-text');
+            const answerContainer = overlay.querySelector('.answer-container');
+            const submitBtn = overlay.querySelector('.submit-btn');
+
+            questionText.textContent = cardData.question;
+            answerContainer.innerHTML = '';
+
+            if (cardData.questionType === 'text') {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'answer-input';
+                answerContainer.appendChild(input);
+            } else {
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'answer-options';
+                cardData.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'answer-option';
+                    button.textContent = option;
+                    button.onclick = () => {
+                        document.querySelectorAll('.answer-option').forEach(btn => 
+                            btn.style.background = '#f5f5f7');
+                        button.style.background = '#e0e0e0';
+                        button.dataset.selected = 'true';
+                    };
+                    optionsDiv.appendChild(button);
+                });
+                answerContainer.appendChild(optionsDiv);
+            }
+
+            overlay.style.display = 'block';
+
+            return new Promise((resolve) => {
+                submitBtn.onclick = () => {
+                    let answer;
+                    if (cardData.questionType === 'text') {
+                        answer = answerContainer.querySelector('input').value;
+                    } else {
+                        const selected = answerContainer.querySelector('[data-selected="true"]');
+                        answer = selected ? selected.textContent : '';
+                    }
+                    resolve(answer.trim());
+                };
+            });
+        }
+
+        function hideAndResetOverlayPanel() {
+            document.querySelector('.overlay').style.display = 'none';
+
+            // Reset to questionBox mode
+            const questionBox = document.querySelector('.question-box');
+            const resetBox = document.querySelector('.reset-box');
+            questionBox.style.display = 'block';
+            resetBox.style.display = 'none';
+        }
+
+        function updateProgress() {
+            // const unlockedCount = unlockedCards.size;
+            // const totalRooms = cardData.length;
+            // const progressPercentage = (unlockedCount / totalRooms) * 100;
+            
+            // document.querySelector('.rooms-count').textContent = unlockedCount;
+            // document.querySelector('.total-rooms').textContent = totalRooms;
+            // document.querySelector('.progress-fill').style.width = `${progressPercentage}%`;
+        }
+
+        function unlockCard(cardElement, cardId) {
+            cardElement.classList.remove('locked');
+            cardElement.classList.add('unlocked');
+            unlockedCards.add(cardId);
+            localStorage.setItem('unlockedCards', JSON.stringify([...unlockedCards]));
+            updateProgress();
+        }
+
+        // Initialize progress on load
+        updateProgress();
+
+        // Modify the handleCardClick function to handle tutorial card
+        async function handleCardClick(cardElement, cardData) {
+            if (cardData.id === 'tutorial') {
+                showTutorial();
+                return;
+            }
+            
+            // If card has no question, unlock it automatically and load space
+            if (!cardData.question) {
+                unlockCard(cardElement, cardData.id);
+                loadSpace(cardData.spacePid);
+                return;
+            }
+            
+            if (!unlockedCards.has(cardData.id)) {
+                const answer = await showQuestion(cardData);
+                if (answer.toLowerCase() === cardData.answer.toLowerCase()) {
+                    unlockCard(cardElement, cardData.id);
+                    loadSpace(cardData.spacePid);
+                } else {
+                    alert('Incorrect answer. Try again!');
+                    hideAndResetOverlayPanel();
+                }
+            } else {
+                loadSpace(cardData.spacePid);
+            }
+        }
+
+        // Initialize gallery
+        const gallery = document.querySelector('.gallery');
+        cardData.forEach(data => {
+            const card = createCard(data);
+            card.onclick = () => handleCardClick(card, data);
+            gallery.appendChild(card);
+        });
+
+        // Initialize overlay panel to question mode
+        hideAndResetOverlayPanel();
+
+        function showResetConfirmation() {
+            const overlay = document.querySelector('.overlay');
+            const questionBox = overlay.querySelector('.question-box');
+            const resetBox = overlay.querySelector('.reset-box');
+            
+            questionBox.style.display = 'none';
+            resetBox.style.display = 'block';
+
+            resetBox.classList.add('confirm-reset');
+
+            
+            overlay.style.display = 'block';
+            
+            const resetBtn = resetBox.querySelector('.yes');
+            const cancelBtn = resetBox.querySelector('.no');
+            
+            resetBtn.onclick = () => {
+                localStorage.removeItem('unlockedCards');
+                unlockedCards.clear();
+                document.querySelectorAll('.card').forEach(card => {
+                    card.classList.remove('unlocked');
+                    card.classList.add('locked');
+                });
+                updateProgress();
+                hideAndResetOverlayPanel();
+            };
+            
+            cancelBtn.onclick = () => {
+                hideAndResetOverlayPanel();
+            };
+        }
+
+        function loadSpace(pid) {
+            window.location.href =
+            "space://do?action=load&space_pid=" + pid + "&when_done=hide";
+        }
+        // Event Listeners
+        document.querySelector('.reset-btn').onclick = showResetConfirmation;
+        
+        document.querySelector('.close-btn').onclick = () => {
+            hideAndResetOverlayPanel();
+        };
+
+        function showTutorial() {
+            const tutorialOverlay = document.querySelector('.tutorial-overlay');
+            tutorialOverlay.style.display = 'block';
+        }
+
+        // Update the hideTutorial function to remove help button references
+        function hideTutorial() {
+            tutorialOverlay.style.display = 'none';
+            video.pause();
+            video.currentTime = 0;
+            localStorage.setItem('tutorialShown', 'true');
+        }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const tutorialOverlay = document.querySelector('.tutorial-overlay');
+    const tutorialClose = document.querySelector('.tutorial-close');
+    const video = document.querySelector('.tutorial-video');
+
+    // Check if tutorial has been shown before
+    const tutorialShown = localStorage.getItem('tutorialShown');
+
+    function hideTutorial() {
+        tutorialOverlay.style.display = 'none';
+        video.pause();
+        video.currentTime = 0;
+        localStorage.setItem('tutorialShown', 'true');
+    }
+
+    // Show tutorial if it hasn't been shown before
+    if (!tutorialShown) {
+        showTutorial();
+    }
+
+    // Event listeners
+    tutorialClose.addEventListener('click', hideTutorial);
+    video.addEventListener('ended', hideTutorial);
+
+    // Close tutorial when clicking outside
+    tutorialOverlay.addEventListener('click', function(e) {
+        if (e.target === tutorialOverlay) {
+            hideTutorial();
+        }
+    })
+});
+    </script>
+</body>
+</html>
