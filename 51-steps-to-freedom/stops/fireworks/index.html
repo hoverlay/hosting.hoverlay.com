@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fireworks Launcher</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <style>
+        @font-face {
+            font-family:"Belinda-W00-Regular";
+            src:url("./assets/fonts/242487aa-209a-4dbd-aca2-64a3c73a8946.woff2") format("woff2"),url("./assets/fonts/4381b252-d9f8-4201-bbf3-9440e21259e7.woff") format("woff");
+            font-display: block;
+        }
+        html {
+            font-size: 18px;
+            line-height: 1.5;
+            font-weight: 200;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0; 
+            height: 250px;
+            overflow: hidden; /* Prevents scrolling if the content exceeds the viewport */
+            background-color: #ecf0f9;
+            background-attachment: fixed;
+        }
+        /* Center the title */
+        .title {
+            text-align: center;
+            font-size: 2rem;
+            font-family: 'Belinda-W00-Regular', sans-serif;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 200;
+            font-family: 'Georgia', serif;
+        }
+
+        .close-button {
+            position: absolute;
+            right: 10px;
+            top: 4px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #31092f;
+            cursor: pointer;
+        }
+
+        .close-button i {
+            pointer-events: none;
+        }
+        /* Carousel container */
+        .carousel {
+            display: flex;
+            height: 100%;
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+            overflow-y: hidden;
+        }
+
+        /* Individual poster */
+        .poster {
+            flex: 0 0 auto;
+            width: 53%;
+            height: 100%;
+            scroll-snap-align: start;
+            background-color: #f2f2f2;
+            text-align: center;
+            margin: 1rem;
+            perspective: 1000px;
+        }
+
+        .front {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            background-color:white;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .front:active {
+            transform: scale(0.95);
+        }
+
+        .front img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .front h2 {
+            z-index: 2;
+            position: absolute;
+            font-size: 1.5rem;
+            bottom: 0;
+            width: 90%;
+            padding: .5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+            color: white;
+            text-align: center;
+        }
+
+        .launch-effect {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6rem;
+            color: #ff6b35;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .launch-effect.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        .launch-message {
+            display: none;
+            position: absolute;
+            top: 75%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #ffffff;
+            background-color: #ff6b35;
+            padding: 0.4rem 1rem;
+            border-radius: 7px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .tap-icon {
+            position: absolute;
+            bottom:  2rem;
+            right:  2rem;
+            font-size:  1.5rem;
+            color: #31092f;
+            z-index: 3;
+        }
+        
+        .scroll-arrow {
+            position: absolute;
+            right: 10px;
+            top: 90px;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: #0000006b;
+            z-index: 3;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">
+        Fireworks Launcher
+    </div>
+    <div class="subtitle">
+        Tap a firework to launch it
+    </div>
+    <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
+        <i class="fas fa-times-circle"></i>
+    </button>
+    <div class="carousel">
+        <div class="poster" onclick="handleCardClick(event, 'freedom-250')">
+            <div class="front">
+                <img src="./assets/img/freedom-250.png">
+                <h2>Freedom 250</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <i class="fas fa-rocket launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+            </div>
+        </div>
+        <div class="poster" onclick="handleCardClick(event, 'american-flag')">
+            <div class="front">
+                <img src="./assets/img/american-flag.png">
+                <h2>American Flag</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <i class="fas fa-rocket launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+            </div>
+        </div>
+        <div class="poster" onclick="handleCardClick(event, 'the-atom')">
+            <div class="front">
+                <img src="./assets/img/the-atom.png">
+                <h2>The Atom</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <i class="fas fa-rocket launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+            </div>
+        </div>
+        <div class="poster" onclick="handleCardClick(event, 'the-sixth-planet')">
+            <div class="front">
+                <img src="./assets/img/the-sixth-planet.png">
+                <h2>The 6th Planet</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <i class="fas fa-rocket launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+            </div>
+        </div>
+        <div class="poster" onclick="handleCardClick(event, 'double-trouble')">
+            <div class="front">
+                <img src="./assets/img/double-trouble.png">
+                <h2>Double Trouble</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <i class="fas fa-rocket launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+            </div>
+        </div>
+        <div class="poster" onclick="handleCardClick(event, 'the-big-bang')">
+            <div class="front">
+                <img src="./assets/img/the-big-bang.png">
+                <h2>The Big Bang</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <i class="fas fa-rocket launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+            </div>
+        </div>
+        <div class="scroll-arrow">
+            <i class="fas fa-arrow-right"></i>
+        </div>
+    </div>
+    <script>
+        // Set the size of the font based on the width of the webview
+        document.addEventListener("DOMContentLoaded", function() {
+            var webviewHeight = window.innerHeight; // Gets the height of the webview
+            var baseFontSize = webviewHeight / 70; 
+            document.documentElement.style.fontSize = baseFontSize + 'px';
+        });
+
+        function handleCardClick(event, fireworkName) {
+            const poster = event.currentTarget;
+            const launchEffect = poster.querySelector('.launch-effect');
+            const launchMessage = poster.querySelector('.launch-message');
+
+            // Show launch effect
+            launchEffect.style.display = 'block';
+            launchEffect.style.opacity = '1';
+            launchMessage.style.display = 'block';
+            launchMessage.style.opacity = '1';
+
+            // Send event to launch firework
+            location.href = `space://do?action=send_event&event_message=${fireworkName}`;
+
+            // Hide effect after animation
+            setTimeout(() => {
+                launchEffect.style.opacity = '0';
+                launchMessage.style.opacity = '0';
+                setTimeout(() => {
+                    launchEffect.style.display = 'none';
+                    launchMessage.style.display = 'none';
+                }, 500);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
