@@ -114,6 +114,40 @@
             text-align: center;
         }
 
+        .countdown {
+            display: none;
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10rem;
+            font-weight: bold;
+            color: #ff6b35;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.8);
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .countdown.show {
+            display: block;
+            animation: countdownPulse 0.8s ease-out;
+        }
+
+        @keyframes countdownPulse {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+        }
+
         .launch-effect {
             display: none;
             position: absolute;
@@ -185,6 +219,7 @@
                 <img src="./assets/img/freedom-250.png">
                 <h2>Freedom 250</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
             </div>
@@ -194,6 +229,7 @@
                 <img src="./assets/img/american-flag.png">
                 <h2>American Flag</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
             </div>
@@ -203,6 +239,7 @@
                 <img src="./assets/img/the-atom.png">
                 <h2>The Atom</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
             </div>
@@ -212,6 +249,7 @@
                 <img src="./assets/img/the-sixth-planet.png">
                 <h2>The 6th Planet</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
             </div>
@@ -221,6 +259,7 @@
                 <img src="./assets/img/double-trouble.png">
                 <h2>Double Trouble</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
             </div>
@@ -230,6 +269,7 @@
                 <img src="./assets/img/the-big-bang.png">
                 <h2>The Big Bang</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
             </div>
@@ -248,27 +288,49 @@
 
         function handleCardClick(event, fireworkName) {
             const poster = event.currentTarget;
+            const countdown = poster.querySelector('.countdown');
             const launchEffect = poster.querySelector('.launch-effect');
             const launchMessage = poster.querySelector('.launch-message');
 
-            // Show launch effect
-            launchEffect.style.display = 'block';
-            launchEffect.style.opacity = '1';
-            launchMessage.style.display = 'block';
-            launchMessage.style.opacity = '1';
+            // Start countdown: 3, 2, 1
+            let count = 3;
 
-            // Send event to launch firework
-            location.href = `space://do?action=send_event&event_message=${fireworkName}`;
+            function showCountdown() {
+                countdown.textContent = count;
+                countdown.classList.add('show');
 
-            // Hide effect after animation
-            setTimeout(() => {
-                launchEffect.style.opacity = '0';
-                launchMessage.style.opacity = '0';
                 setTimeout(() => {
-                    launchEffect.style.display = 'none';
-                    launchMessage.style.display = 'none';
-                }, 500);
-            }, 1000);
+                    countdown.classList.remove('show');
+                    count--;
+
+                    if (count > 0) {
+                        setTimeout(showCountdown, 100);
+                    } else {
+                        // After countdown, show launch effect
+                        setTimeout(() => {
+                            launchEffect.style.display = 'block';
+                            launchEffect.style.opacity = '1';
+                            launchMessage.style.display = 'block';
+                            launchMessage.style.opacity = '1';
+
+                            // Send event to launch firework
+                            location.href = `space://do?action=send_event&event_message=${fireworkName}`;
+
+                            // Hide effect after animation
+                            setTimeout(() => {
+                                launchEffect.style.opacity = '0';
+                                launchMessage.style.opacity = '0';
+                                setTimeout(() => {
+                                    launchEffect.style.display = 'none';
+                                    launchMessage.style.display = 'none';
+                                }, 500);
+                            }, 1000);
+                        }, 200);
+                    }
+                }, 800);
+            }
+
+            showCountdown();
         }
     </script>
 </body>
