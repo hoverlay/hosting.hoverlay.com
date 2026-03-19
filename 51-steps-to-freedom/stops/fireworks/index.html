@@ -201,6 +201,67 @@
             z-index: 3;
             cursor: pointer;
         }
+
+        .cooldown-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 15;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .cooldown-overlay.active {
+            display: flex;
+        }
+
+        .progress-ring-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.1s linear;
+            stroke: #ff6b35;
+            stroke-width: 8;
+            fill: transparent;
+        }
+
+        .cooldown-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 107, 53, 0.8);
+        }
+
+        .cooldown-message {
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        .poster.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
@@ -219,6 +280,15 @@
                 <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Firework in progress...</div>
+                </div>
             </div>
         </div>
         <div class="poster" onclick="handleCardClick(event, 'american-flag')">
@@ -229,6 +299,15 @@
                 <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Firework in progress...</div>
+                </div>
             </div>
         </div>
         <div class="poster" onclick="handleCardClick(event, 'the-atom')">
@@ -239,6 +318,15 @@
                 <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Firework in progress...</div>
+                </div>
             </div>
         </div>
         <div class="poster" onclick="handleCardClick(event, 'the-sixth-planet')">
@@ -249,6 +337,15 @@
                 <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Firework in progress...</div>
+                </div>
             </div>
         </div>
         <div class="poster" onclick="handleCardClick(event, 'double-trouble')">
@@ -259,6 +356,15 @@
                 <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Firework in progress...</div>
+                </div>
             </div>
         </div>
         <div class="poster" onclick="handleCardClick(event, 'the-big-bang')">
@@ -269,6 +375,15 @@
                 <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Firework in progress...</div>
+                </div>
             </div>
         </div>
         <div class="scroll-arrow">
@@ -276,58 +391,96 @@
         </div>
     </div>
     <script>
+        // Configuration
+        const COUNTDOWN_SECONDS = 0; // Set to 0 to disable countdown, or any number of seconds
+        const COOLDOWN_SECONDS = 10; // Cooldown period after launching firework
+
         // Set the size of the font based on the width of the webview
         document.addEventListener("DOMContentLoaded", function() {
             var webviewHeight = window.innerHeight; // Gets the height of the webview
-            var baseFontSize = webviewHeight / 70; 
+            var baseFontSize = webviewHeight / 70;
             document.documentElement.style.fontSize = baseFontSize + 'px';
         });
 
         function handleCardClick(event, fireworkName) {
             const poster = event.currentTarget;
+
+            // Prevent multiple clicks during cooldown
+            if (poster.classList.contains('disabled')) {
+                return;
+            }
+
             const countdown = poster.querySelector('.countdown');
             const launchEffect = poster.querySelector('.launch-effect');
             const launchMessage = poster.querySelector('.launch-message');
+            const cooldownOverlay = poster.querySelector('.cooldown-overlay');
+            const cooldownText = poster.querySelector('.cooldown-text');
+            const progressCircle = poster.querySelector('.progress-ring-circle');
 
-            // Start countdown: 3, 2, 1
-            let count = 3;
+            function launchFirework() {
+                // Send event to launch firework immediately
+                location.href = `space://do?action=send_event&event_message=${fireworkName}`;
 
-            function showCountdown() {
-                countdown.textContent = count;
-                countdown.classList.add('show');
-
-                setTimeout(() => {
-                    countdown.classList.remove('show');
-                    count--;
-
-                    if (count > 0) {
-                        setTimeout(showCountdown, 100);
-                    } else {
-                        // After countdown, show launch effect
-                        setTimeout(() => {
-                            launchEffect.style.display = 'block';
-                            launchEffect.style.opacity = '1';
-                            launchMessage.style.display = 'block';
-                            launchMessage.style.opacity = '1';
-
-                            // Send event to launch firework
-                            location.href = `space://do?action=send_event&event_message=${fireworkName}`;
-
-                            // Hide effect after animation
-                            setTimeout(() => {
-                                launchEffect.style.opacity = '0';
-                                launchMessage.style.opacity = '0';
-                                setTimeout(() => {
-                                    launchEffect.style.display = 'none';
-                                    launchMessage.style.display = 'none';
-                                }, 500);
-                            }, 1000);
-                        }, 200);
-                    }
-                }, 800);
+                // Start cooldown immediately
+                startCooldown();
             }
 
-            showCountdown();
+            function startCooldown() {
+                // Disable only this poster
+                poster.classList.add('disabled');
+
+                // Show cooldown overlay
+                cooldownOverlay.classList.add('active');
+
+                const circumference = 2 * Math.PI * 50; // 2πr where r=50
+                let remainingTime = COOLDOWN_SECONDS;
+
+                // Update countdown every 100ms for smooth progress
+                const interval = setInterval(() => {
+                    remainingTime -= 0.1;
+
+                    if (remainingTime <= 0) {
+                        clearInterval(interval);
+                        cooldownOverlay.classList.remove('active');
+                        poster.classList.remove('disabled');
+                        return;
+                    }
+
+                    // Update text
+                    cooldownText.textContent = Math.ceil(remainingTime);
+
+                    // Update circular progress
+                    const progress = remainingTime / COOLDOWN_SECONDS;
+                    const offset = circumference * (1 - progress);
+                    progressCircle.style.strokeDashoffset = offset;
+                }, 100);
+            }
+
+            // Check if countdown is enabled
+            if (COUNTDOWN_SECONDS > 0) {
+                let count = COUNTDOWN_SECONDS;
+
+                function showCountdown() {
+                    countdown.textContent = count;
+                    countdown.classList.add('show');
+
+                    setTimeout(() => {
+                        countdown.classList.remove('show');
+                        count--;
+
+                        if (count > 0) {
+                            setTimeout(showCountdown, 100);
+                        } else {
+                            setTimeout(launchFirework, 200);
+                        }
+                    }, 800);
+                }
+
+                showCountdown();
+            } else {
+                // No countdown, launch immediately
+                launchFirework();
+            }
         }
     </script>
 </body>
