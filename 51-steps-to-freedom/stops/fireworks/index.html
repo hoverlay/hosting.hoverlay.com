@@ -21,10 +21,10 @@
         body {
             font-family: 'Georgia', serif;
             margin: 0;
-            padding: 0; 
+            padding: 0;
             height: 180px;
             overflow: hidden; /* Prevents scrolling if the content exceeds the viewport */
-            background-color: #ecf0f9;
+            background-color: #fff;
             background-attachment: fixed;
         }
         /* Center the title */
@@ -61,6 +61,7 @@
             overflow-x: scroll;
             scroll-snap-type: x mandatory;
             overflow-y: hidden;
+            background-color: #000000;
         }
 
         /* Individual poster */
@@ -69,7 +70,7 @@
             width: 53%;
             height: 100%;
             scroll-snap-align: start;
-            background-color: #f2f2f2;
+            background-color: transparent;
             text-align: center;
             margin: 1rem;
             perspective: 1000px;
@@ -80,7 +81,7 @@
             width: 100%;
             height: 100%;
             display: flex;
-            background-color:white;
+            background-color: transparent;
             justify-content: center;
             align-items: center;
             overflow: hidden;
@@ -184,10 +185,11 @@
 
         .tap-icon {
             position: absolute;
-            bottom:  2rem;
-            right:  2rem;
+            bottom:  30%;
+            left: 50%;
+            transform: translateX(-50%);
             font-size:  1.5rem;
-            color: #31092f;
+            color: #ffffff;
             z-index: 3;
         }
         
@@ -274,7 +276,7 @@
     <div class="carousel">
         <div class="poster" onclick="handleCardClick(event, 'freedom-250')">
             <div class="front">
-                <img src="./assets/img/freedom-250.png">
+                <img src="./assets/img/FIRE-Freedom250-Thumbnail.jpg">
                 <h2>Freedom 250</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <div class="countdown"></div>
@@ -293,65 +295,8 @@
         </div>
         <div class="poster" onclick="handleCardClick(event, 'american-flag')">
             <div class="front">
-                <img src="./assets/img/american-flag.png">
+                <img src="./assets/img/FIRE-Flag-Thumbnail.jpg">
                 <h2>American Flag</h2>
-                <i class="fas fa-hand-point-up tap-icon"></i>
-                <div class="countdown"></div>
-                <i class="fas fa-rocket launch-effect"></i>
-                <div class="launch-message">Launching!</div>
-                <div class="cooldown-overlay">
-                    <div class="progress-ring-container">
-                        <svg class="progress-ring" width="120" height="120">
-                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
-                        </svg>
-                        <div class="cooldown-text"></div>
-                    </div>
-                    <div class="cooldown-message">Firework in progress...</div>
-                </div>
-            </div>
-        </div>
-        <div class="poster" onclick="handleCardClick(event, 'the-atom')">
-            <div class="front">
-                <img src="./assets/img/the-atom.png">
-                <h2>The Atom</h2>
-                <i class="fas fa-hand-point-up tap-icon"></i>
-                <div class="countdown"></div>
-                <i class="fas fa-rocket launch-effect"></i>
-                <div class="launch-message">Launching!</div>
-                <div class="cooldown-overlay">
-                    <div class="progress-ring-container">
-                        <svg class="progress-ring" width="120" height="120">
-                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
-                        </svg>
-                        <div class="cooldown-text"></div>
-                    </div>
-                    <div class="cooldown-message">Firework in progress...</div>
-                </div>
-            </div>
-        </div>
-        <div class="poster" onclick="handleCardClick(event, 'the-sixth-planet')">
-            <div class="front">
-                <img src="./assets/img/the-sixth-planet.png">
-                <h2>The 6th Planet</h2>
-                <i class="fas fa-hand-point-up tap-icon"></i>
-                <div class="countdown"></div>
-                <i class="fas fa-rocket launch-effect"></i>
-                <div class="launch-message">Launching!</div>
-                <div class="cooldown-overlay">
-                    <div class="progress-ring-container">
-                        <svg class="progress-ring" width="120" height="120">
-                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
-                        </svg>
-                        <div class="cooldown-text"></div>
-                    </div>
-                    <div class="cooldown-message">Firework in progress...</div>
-                </div>
-            </div>
-        </div>
-        <div class="poster" onclick="handleCardClick(event, 'double-trouble')">
-            <div class="front">
-                <img src="./assets/img/double-trouble.png">
-                <h2>Double Trouble</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
@@ -369,8 +314,46 @@
         </div>
         <div class="poster" onclick="handleCardClick(event, 'the-big-bang')">
             <div class="front">
-                <img src="./assets/img/the-big-bang.png">
+                <img src="./assets/img/FIRE-BigBang-Thumbnail.jpg">
                 <h2>The Big Bang</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
+                <i class="fas fa-rocket launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Firework in progress...</div>
+                </div>
+            </div>
+        </div>
+        <div class="poster" onclick="handleCardClick(event, 'the-atom')">
+            <div class="front">
+                <img src="./assets/img/FIRE-Atom-Thumbnail.jpg">
+                <h2>Atom</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
+                <i class="fas fa-rocket launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Firework in progress...</div>
+                </div>
+            </div>
+        </div>
+        <div class="poster" onclick="handleCardClick(event, 'grand-finale')">
+            <div class="front">
+                <img src="./assets/img/FIRE-GrandFinale-Thumbnail.jpg">
+                <h2>The Grand Finale</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <div class="countdown"></div>
                 <i class="fas fa-rocket launch-effect"></i>
