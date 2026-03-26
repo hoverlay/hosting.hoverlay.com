@@ -3,6 +3,7 @@
 <head>
     <title>Tall Ships Cards</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <style>
         * {
             margin: 0;
@@ -47,7 +48,7 @@
         .carousel-container {
             flex: 1;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             overflow-x: scroll;
             overflow-y: hidden;
             scroll-snap-type: x mandatory;
@@ -111,34 +112,30 @@
             transform: rotateY(180deg);
         }
 
-        .tap-hint {
+        .tap-icon {
             position: absolute;
             bottom: 1rem;
-            left: 50%;
-            bottom: 20%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            right: 1rem;
+            font-size: 2rem;
+            color: #486d95;
             animation: pulse 2s infinite;
             pointer-events: none;
             z-index: 10;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .card.flipped .tap-hint {
+        .card.flipped .tap-icon {
             display: none;
         }
 
         @keyframes pulse {
             0%, 100% {
                 opacity: 1;
-                transform: translateX(-50%) scale(1);
+                transform: scale(1);
             }
             50% {
                 opacity: 0.7;
-                transform: translateX(-50%) scale(1.05);
+                transform: scale(1.1);
             }
         }
 
@@ -236,14 +233,13 @@
                 backFace.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 1.2rem; color: #666; padding: 2rem; text-align: center;">More information coming soon</div>';
             }
 
-            // Tap hint
-            const tapHint = document.createElement('div');
-            tapHint.className = 'tap-hint';
-            tapHint.textContent = 'Tap to flip';
+            // Tap icon
+            const tapIcon = document.createElement('i');
+            tapIcon.className = 'fas fa-hand-point-up tap-icon';
 
             cardElement.appendChild(frontFace);
             cardElement.appendChild(backFace);
-            cardElement.appendChild(tapHint);
+            cardElement.appendChild(tapIcon);
 
             // Add click handler to flip card
             cardElement.addEventListener('click', function(e) {
