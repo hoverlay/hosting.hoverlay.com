@@ -191,8 +191,9 @@
     <script>
         // Card data - extracted from image filenames
         const cards = [
+            {name: 'SAIL-ShipFacts-MeetFleet', hasBack: true},
             { name: 'USCGC-Eagle-United-States', hasBack: true },
-            { name: 'Amerigo-Vespucci-Italy', hasBack: false },
+            { name: 'Amerigo-Vespucci-Italy', hasBack: true },
             { name: 'Arc-Gloria-Colombia', hasBack: true },
             { name: 'Gorch-Fock-Germany', hasBack: true },
             { name: 'Mircea-Romania', hasBack: true },
@@ -204,7 +205,7 @@
         const carousel = document.getElementById('carousel');
 
         // Generate cards dynamically
-        cards.forEach(card => {
+        cards.forEach((card, index) => {
             const cardWrapper = document.createElement('div');
             cardWrapper.className = 'card-wrapper';
 
@@ -244,6 +245,12 @@
             // Add click handler to flip card
             cardElement.addEventListener('click', function(e) {
                 e.stopPropagation();
+
+                // If it's the first card and not flipped (tapping front), send message to Unity
+                if (index === 0 && !this.classList.contains('flipped')) {
+                    location.href = `space://do?action=send_event&event_message=meet-the-fleet`;
+                }
+
                 this.classList.toggle('flipped');
             });
 
