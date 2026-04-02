@@ -41,7 +41,7 @@
         }
 
         .header p {
-            font-size: 0.9rem;
+            font-size: 0.98rem;
             color: #3a7bc8;
         }
 
@@ -54,24 +54,22 @@
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
             padding: 2rem 1rem;
-            position: relative;
-        }
-
-        .carousel-container::before {
-            content: 'Tap to flip • Swipe to explore';
-            position: absolute;
-            top: 0.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(26, 83, 144, 0.628);
-            font-size: 0.9rem;
-            white-space: nowrap;
-            pointer-events: none;
-            z-index: 0;
         }
 
         .carousel-container::-webkit-scrollbar {
             display: none;
+        }
+
+        .instructions-overlay {
+            position: fixed;
+            top: calc(1rem + 78px);
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(26, 84, 144, 0.4);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 5;
         }
 
         .card-wrapper {
@@ -196,6 +194,8 @@
         <div class="carousel-container" id="carousel">
             <!-- Cards will be dynamically inserted here -->
         </div>
+
+        <div class="instructions-overlay">Tap to flip • Swipe to explore</div>
 
         <div class="scroll-indicator">›</div>
 
