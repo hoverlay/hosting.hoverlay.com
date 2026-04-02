@@ -210,6 +210,50 @@
             }
         }
 
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .celebration i {
+            position: absolute;
+            font-size: 3rem;
+            animation: celebrate 1.5s ease-out forwards;
+        }
+
+        @keyframes celebrate {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rotate));
+            }
+        }
+
+        @keyframes badgePop {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.3) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .card.found .found-badge {
+            animation: badgePop 0.6s ease-out;
+        }
+
         .scroll-indicator {
             position: absolute;
             right: 1rem;
@@ -364,6 +408,9 @@
                     if (isFound) {
                         foundToggle.textContent = 'Mark as Not Found';
                         foundToggle.classList.add('found');
+
+                        // Trigger celebration effect
+                        showCelebration();
                     } else {
                         foundToggle.textContent = 'Mark as Found';
                         foundToggle.classList.remove('found');
@@ -388,6 +435,44 @@
             cardWrapper.appendChild(cardElement);
             carousel.appendChild(cardWrapper);
         });
+
+        // Celebration effect when marking as found
+        function showCelebration() {
+            const celebration = document.createElement('div');
+            celebration.className = 'celebration';
+            document.body.appendChild(celebration);
+
+            // Create multiple celebration icons
+            const icons = ['🎉', '⭐', '✨', '🎊', '⚓', '🚢'];
+            const colors = ['#FFD700', '#FF6B35', '#28a745', '#1a5490', '#FF1493'];
+
+            for (let i = 0; i < 12; i++) {
+                const icon = document.createElement('i');
+                const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                icon.textContent = randomIcon;
+                icon.style.color = randomColor;
+
+                // Random direction - burst upward (upper half of circle)
+                const angle = Math.PI + (i / 12) * Math.PI; // Range from π to 2π (upper directions)
+                const distance = 150 + Math.random() * 100;
+                const tx = Math.cos(angle) * distance + 'px';
+                const ty = Math.sin(angle) * distance + 'px';
+                const rotate = Math.random() * 720 - 360 + 'deg';
+
+                icon.style.setProperty('--tx', tx);
+                icon.style.setProperty('--ty', ty);
+                icon.style.setProperty('--rotate', rotate);
+
+                celebration.appendChild(icon);
+            }
+
+            // Remove celebration after animation
+            setTimeout(() => {
+                celebration.remove();
+            }, 1500);
+        }
 
         // Hide scroll indicator after first interaction
         let hasScrolled = false;
