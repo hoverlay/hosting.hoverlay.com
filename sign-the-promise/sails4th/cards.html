@@ -65,7 +65,7 @@
             top: calc(1rem + 78px);
             left: 50%;
             transform: translateX(-50%);
-            color: rgba(26, 84, 144, 0.4);
+            color: rgba(26, 84, 144, 1);
             font-size: 0.95rem;
             white-space: nowrap;
             pointer-events: none;
@@ -131,7 +131,7 @@
             bottom: 1rem;
             right: 1rem;
             font-size: 2rem;
-            color: #486d95;
+            color: #becada;
             animation: pulse 2s infinite;
             pointer-events: none;
             z-index: 10;
@@ -139,6 +139,63 @@
         }
 
         .card.flipped .tap-icon {
+            display: none;
+        }
+
+        .found-toggle {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%) rotateY(180deg);
+            background: #1a5490;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease;
+            display: none;
+            white-space: nowrap;
+        }
+
+        .card.flipped .found-toggle {
+            display: block;
+        }
+
+        .found-toggle:active {
+            transform: translateX(-50%) rotateY(180deg) scale(0.95);
+        }
+
+        .found-toggle.found {
+            background: #28a745;
+        }
+
+        .found-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: none;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+            z-index: 10;
+        }
+
+        .card.found .found-badge {
+            display: flex;
+        }
+
+        .card.flipped .found-badge {
             display: none;
         }
 
@@ -205,6 +262,23 @@
     </div>
 
     <script>
+        // Local storage helper functions
+        function getFoundCards() {
+            const found = localStorage.getItem('tallShipsFound');
+            return found ? JSON.parse(found) : {};
+        }
+
+        function setCardFound(cardName, isFound) {
+            const foundCards = getFoundCards();
+            foundCards[cardName] = isFound;
+            localStorage.setItem('tallShipsFound', JSON.stringify(foundCards));
+        }
+
+        function isCardFound(cardName) {
+            const foundCards = getFoundCards();
+            return foundCards[cardName] === true;
+        }
+
         // Card data - extracted from image filenames
         const cards = [
             {name: 'SAIL-ShipFacts-MeetFleet', hasBack: true},
@@ -257,6 +331,47 @@
             cardElement.appendChild(frontFace);
             cardElement.appendChild(backFace);
             cardElement.appendChild(tapIcon);
+
+            // Add "Found" badge on front (for ship cards only)
+            if (index > 0) {
+                const foundBadge = document.createElement('div');
+                foundBadge.className = 'found-badge';
+                foundBadge.innerHTML = '<i class="fas fa-check-circle"></i> Found';
+                cardElement.appendChild(foundBadge);
+
+                // Check if card is already marked as found
+                if (isCardFound(card.name)) {
+                    cardElement.classList.add('found');
+                }
+            }
+
+            // Add "Found" toggle button on back (for ship cards only)
+            if (index > 0) {
+                const foundToggle = document.createElement('button');
+                foundToggle.className = 'found-toggle';
+                foundToggle.textContent = isCardFound(card.name) ? 'Mark as Not Found' : 'Mark as Found';
+
+                if (isCardFound(card.name)) {
+                    foundToggle.classList.add('found');
+                }
+
+                foundToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isFound = cardElement.classList.toggle('found');
+                    setCardFound(card.name, isFound);
+
+                    // Update button text and style
+                    if (isFound) {
+                        foundToggle.textContent = 'Mark as Not Found';
+                        foundToggle.classList.add('found');
+                    } else {
+                        foundToggle.textContent = 'Mark as Found';
+                        foundToggle.classList.remove('found');
+                    }
+                });
+
+                cardElement.appendChild(foundToggle);
+            }
 
             // Add click handler to flip card
             cardElement.addEventListener('click', function(e) {
