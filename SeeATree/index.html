@@ -150,6 +150,26 @@
             margin-bottom: var(--spacing-md);
         }
 
+        .disclaimer {
+            display: none;
+            position: absolute;
+            top: 88%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.65rem;
+            font-family: 'Nunito Sans', sans-serif;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            background-color: var(--color-icon-primary);
+            padding: 6px var(--spacing-md);
+            border-radius: 7px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            max-width: 85%;
+            white-space: nowrap;
+        }
+
         .carousel {
             flex: 0 0 auto;
             display: grid;
@@ -493,6 +513,7 @@
                             <p onclick="flipBackToFront()" style="cursor: pointer;">${tree.description}</p>
                             <i class="fas fa-check-circle checkmark"></i>
                             <div class="checkmark-message">Tree planted!</div>
+                            <div class="disclaimer">Sizes vary with maintenance & water</div>
                         </div>
                     </div>
                 `;
@@ -580,18 +601,25 @@
             const back = event.target.closest('.back');
             const checkmark = back.querySelector('.checkmark');
             const checkmarkMessage = back.querySelector('.checkmark-message');
+            const disclaimer = back.querySelector('.disclaimer');
+
             checkmark.style.display = 'block';
             checkmark.style.opacity = '1';
             checkmarkMessage.style.display = 'block';
             checkmarkMessage.style.opacity = '1';
+            disclaimer.style.display = 'block';
+            disclaimer.style.opacity = '1';
+
             setTimeout(() => {
                 checkmark.style.opacity = '0';
                 checkmarkMessage.style.opacity = '0';
+                disclaimer.style.opacity = '0';
                 setTimeout(() => {
                     checkmark.style.display = 'none';
                     checkmarkMessage.style.display = 'none';
+                    disclaimer.style.display = 'none';
                 }, 500);
-            }, 1000);
+            }, 2500);
         }
     </script>
 </body>
