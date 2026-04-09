@@ -411,6 +411,11 @@
 
                         // Trigger celebration effect
                         showCelebration();
+
+                        // Flip card back to front after celebration
+                        setTimeout(() => {
+                            cardElement.classList.remove('flipped');
+                        }, 1500);
                     } else {
                         foundToggle.textContent = 'Mark as Found';
                         foundToggle.classList.remove('found');
