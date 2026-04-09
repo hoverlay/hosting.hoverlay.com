@@ -62,7 +62,6 @@
             scroll-snap-type: x mandatory;
             overflow-y: hidden;
             background-color: #000000;
-            scroll-behavior: smooth;
         }
 
         /* Individual poster */
@@ -406,18 +405,64 @@
 
             // Start carousel offset to the right and animate back to show users they can swipe
             const carousel = document.querySelector('.carousel');
-            const offsetAmount = 800; // pixels to offset
+            const posters = document.querySelectorAll('.poster');
 
-            // Temporarily disable smooth scrolling for instant jump
-            carousel.style.scrollBehavior = 'auto';
+            // Disable snap immediately on carousel and posters
+            carousel.style.scrollSnapType = 'none';
+            posters.forEach(poster => {
+                poster.style.scrollSnapAlign = 'none';
+            });
 
-            // Set initial scroll position to the right
-            carousel.scrollLeft = offsetAmount;
-
-            // Re-enable smooth scrolling and animate back to the start
+            // Wait for layout to complete
             setTimeout(() => {
-                carousel.style.scrollBehavior = 'smooth';
-                carousel.scrollLeft = 0;
+                const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+                const offsetAmount = Math.min(1600, maxScroll); // Use max available or 1600px
+                const duration = 1500; // animation duration in ms
+
+                // Force scroll position
+                carousel.scrollLeft = offsetAmount;
+
+                // Force a reflow to ensure scrollLeft is set
+                void carousel.offsetHeight;
+
+                // Wait a bit longer before starting animation
+                setTimeout(() => {
+                    const startTime = performance.now();
+                    const startPos = offsetAmount; // Use the intended offset, not the actual scrollLeft
+
+                    function easeInOutCubic(t) {
+                        return t < 0.5
+                            ? 4 * t * t * t
+                            : 1 - Math.pow(-2 * t + 2, 3) / 2;
+                    }
+
+                    function animate(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = easeInOutCubic(progress);
+
+                        // Calculate target position and clamp to prevent overshoot
+                        const targetScroll = Math.max(0, startPos - (startPos * eased));
+                        carousel.scrollLeft = targetScroll;
+
+                        if (progress < 1) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            // Ensure we're exactly at 0
+                            carousel.scrollLeft = 0;
+
+                            // Re-enable snap after a small delay
+                            setTimeout(() => {
+                                carousel.style.scrollSnapType = 'x mandatory';
+                                posters.forEach(poster => {
+                                    poster.style.scrollSnapAlign = 'start';
+                                });
+                            }, 100);
+                        }
+                    }
+
+                    requestAnimationFrame(animate);
+                }, 200);
             }, 100);
         });
 
