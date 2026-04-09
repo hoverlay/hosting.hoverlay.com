@@ -62,6 +62,7 @@
             scroll-snap-type: x mandatory;
             overflow-y: hidden;
             background-color: #000000;
+            scroll-behavior: smooth;
         }
 
         /* Individual poster */
@@ -293,6 +294,25 @@
                 </div>
             </div>
         </div>
+        <div class="poster" onclick="handleCardClick(event, 'sail')">
+            <div class="front">
+                <img src="./assets/img/FIRE-sail4th.jpg">
+                <h2>Sail4th</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
+                <i class="fas fa-rocket launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Firework in progress...</div>
+                </div>
+            </div>
+        </div>
         <div class="poster" onclick="handleCardClick(event, 'american-flag')">
             <div class="front">
                 <img src="./assets/img/FIRE-Flag-Thumbnail.jpg">
@@ -383,6 +403,22 @@
             var webviewHeight = window.innerHeight; // Gets the height of the webview
             var baseFontSize = webviewHeight / 70;
             document.documentElement.style.fontSize = baseFontSize + 'px';
+
+            // Start carousel offset to the right and animate back to show users they can swipe
+            const carousel = document.querySelector('.carousel');
+            const offsetAmount = 800; // pixels to offset
+
+            // Temporarily disable smooth scrolling for instant jump
+            carousel.style.scrollBehavior = 'auto';
+
+            // Set initial scroll position to the right
+            carousel.scrollLeft = offsetAmount;
+
+            // Re-enable smooth scrolling and animate back to the start
+            setTimeout(() => {
+                carousel.style.scrollBehavior = 'smooth';
+                carousel.scrollLeft = 0;
+            }, 100);
         });
 
         function handleCardClick(event, fireworkName) {
