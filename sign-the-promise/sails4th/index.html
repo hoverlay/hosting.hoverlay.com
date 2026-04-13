@@ -176,14 +176,17 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
+            background-image: url('./assets/images/Background-STP DYK Dashboard.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             z-index: 1000;
             padding: 20px;
             overflow-y: auto;
         }
 
         .overlay-content {
-            background: white;
+            background: rgba(255, 255, 255, 0.80);
             max-width: 600px;
             margin: 40px auto;
             padding: 32px 24px;
@@ -306,20 +309,19 @@
             <button class="close-btn" onclick="closeOverlay()">&times;</button>
             <h2 class="overlay-title">Did You Know?</h2>
             <p class="overlay-text">
-                Signing The Promise is part of a larger augmented reality experience in our nation’s capital —<i>51 Steps To Freedom</i>, the largest outdoor—museum in the world™.
+                By signing the Promise, you've taken your first step on the 51 Steps to Freedom® trail the largest outdoor museum — in the world®.
             </p>
             <p class="overlay-text">
-                Visit Washington, DC to experience more … and continue your journey through music, animation, immersive storytelling, and interactive history.
+                Your next step is waiting—visit Washington, DC and continue the journey, where history comes to life right in your hands.
             </p>
-            <p class="overlay-text">
-                Get your free ticket at 51stepstofreedom.org
         </div>
+        <audio id="didYouKnowAudio" src="./assets/audio/VO-STP DYK Dashboard.mp3" preload="auto"></audio>
     </div>
 
     <script>
         // Load AR Tips (Hoverlay deeplink)
         function loadARTips() {
-            loadSpace('s0f'); // Tutorial space ID from original
+            loadSpace('ys6ti'); // Tutorial space ID from original
         }
 
         // Load Sign Declaration (Hoverlay deeplink)
@@ -330,11 +332,17 @@
         // Show Did You Know overlay
         function showDidYouKnow() {
             document.getElementById('didYouKnowOverlay').style.display = 'block';
+            const audio = document.getElementById('didYouKnowAudio');
+            audio.currentTime = 0;
+            audio.play();
         }
 
         // Close overlay
         function closeOverlay() {
             document.getElementById('didYouKnowOverlay').style.display = 'none';
+            const audio = document.getElementById('didYouKnowAudio');
+            audio.pause();
+            audio.currentTime = 0;
         }
 
         // Hoverlay deeplink function
