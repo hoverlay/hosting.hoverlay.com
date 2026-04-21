@@ -38,6 +38,25 @@
             font-size: 1.5rem;
             font-weight: 200;
             font-family: 'Georgia', serif;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .subtitle.highlight {
+            opacity: 1;
+            animation: pulseGlow 2s ease-in-out 3;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                text-shadow: 0 0 5px rgba(255, 107, 53, 0.3);
+                transform: scale(1);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(255, 107, 53, 0.8),
+                             0 0 30px rgba(255, 107, 53, 0.6);
+                transform: scale(1.05);
+            }
         }
 
         .close-button {
@@ -457,6 +476,12 @@
                                 posters.forEach(poster => {
                                     poster.style.scrollSnapAlign = 'start';
                                 });
+
+                                // Trigger subtitle animation after carousel animation completes
+                                setTimeout(() => {
+                                    const subtitle = document.querySelector('.subtitle');
+                                    subtitle.classList.add('highlight');
+                                }, 300);
                             }, 100);
                         }
                     }
