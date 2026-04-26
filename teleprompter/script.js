@@ -4,6 +4,7 @@
 const playPauseButton = document.getElementById('playPauseButton');
 const playIcon = document.getElementById('playIcon');
 const pauseIcon = document.getElementById('pauseIcon');
+const restartButton = document.getElementById('restartButton');
 const scriptContent = document.getElementById('scriptContent');
 const loadScriptButton = document.getElementById('loadScriptButton');
 const saveScriptButton = document.getElementById('saveScriptButton');
@@ -48,6 +49,7 @@ let recordingTimer = null;
 
 // Event Listeners
 playPauseButton.addEventListener('click', togglePlayPause);
+restartButton.addEventListener('click', restartScroll);
 loadScriptButton.addEventListener('click', () => fileInput.click());
 fileInput.addEventListener('change', loadScript);
 saveScriptButton.addEventListener('click', saveSession);
@@ -155,18 +157,28 @@ function pauseScroll() {
         countdownInterval = null;
         countdownOverlay.style.display = 'none';
     }
-    
+
     // Clear scroll if it's running
     if (scrollInterval) {
         clearInterval(scrollInterval);
     }
-    
+
     // Reset UI
     playIcon.style.display = 'block';
     pauseIcon.style.display = 'none';
     scriptContent.contentEditable = 'true';
     isPlaying = false;
     controlPanel.classList.remove('playing');
+}
+
+function restartScroll() {
+    // Pause if playing
+    if (isPlaying || countdownOverlay.style.display === 'flex') {
+        pauseScroll();
+    }
+
+    // Scroll to top
+    scriptContent.scrollTop = 0;
 }
 
 function loadScript(event) {

@@ -389,3 +389,24 @@ body.camera-active nav {
     border-radius: 50%;
     animation: recordPulse 2s infinite;
 }
+
+/* Center line markers */
+.center-marker {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 8px;
+    background-color: red;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.left-marker {
+    left: 0;
+}
+
+.right-marker {
+    right: 0;
+}

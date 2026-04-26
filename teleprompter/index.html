@@ -12,6 +12,10 @@
             <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" height="40" width="40"><path d="M13.333 31.583V8.25l18.334 11.667Zm2.792-11.666Zm0 6.625L26.5 19.917l-10.375-6.625Z"/></svg>
             <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" height="40" width="40" style="display: none;"><path d="M23.458 31.667V8.333H30v23.334Zm-13.458 0V8.333h6.542v23.334Z"/></svg>
         </button>
+
+        <button id="restartButton" title="Restart (Rewind to Beginning)">
+            <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+        </button>
         
         <div class="slider-container">
             <label>Size</label>
@@ -83,6 +87,10 @@
     <div class="recording-indicator" id="recordingIndicator">REC <span id="recordingTime">0:00</span></div>
 
     <video id="cameraVideo" autoplay playsinline muted></video>
+
+    <!-- Center line markers -->
+    <div class="center-marker left-marker"></div>
+    <div class="center-marker right-marker"></div>
 
     <div class="content" spellcheck="false" contenteditable="true" id="scriptContent">Paste your script here...</div>
 
