@@ -323,17 +323,29 @@
             return foundCards[cardName] === true;
         }
 
-        // Card data - extracted from image filenames
+        // Card data - front/back filenames specified explicitly due to inconsistent naming
         const cards = [
-            {name: 'SAIL-ShipFacts-MeetFleet', hasBack: true},
-            { name: 'USCGC-Eagle-United-States', hasBack: true },
-            { name: 'Amerigo-Vespucci-Italy', hasBack: true },
-            { name: 'Arc-Gloria-Colombia', hasBack: true },
-            { name: 'Gorch-Fock-Germany', hasBack: true },
-            { name: 'Mircea-Romania', hasBack: true },
-            { name: 'Ins-Sudarshini-India', hasBack: true },
-            { name: 'NRP-Sagres-Portugal', hasBack: true },
-            { name: 'Juan-Bautista-Cambiaso-Dominican-Republic', hasBack: true }
+            { name: 'SAIL-ShipFacts-MeetFleet', front: 'SAIL-ShipFacts-MeetFleet-Front.jpg', back: 'SAIL-ShipFacts-MeetFleet-Back.jpg', isIntro: true },
+            { name: '1.Argentina-Ara-Libertad',         front: '1.Argentina-Ara Libertad-Front.jpg',                          back: '1.Argentina-Ara-Libertad-Back.jpg' },
+            { name: '2.British-Virgin-Islands-STV',     front: '2.British-Virgin-Islands-STV-Stela-Front.jpg',                 back: '2.British-Virgin-Islands-STV-Vela-Back.jpg' },
+            { name: '3.Chile-Esmeralda',                front: '3.Chile-Esmeralda-Front.jpg',                                  back: '3.Chile-Esmeralda-Back.jpg' },
+            { name: '4.Colombia-Arc-Gloria',            front: '4.Colombia-Arc-Gloria-Front.jpg',                              back: '4.Colombia-ARC-GLORIA-Back.jpg' },
+            { name: '5.Germany-Gorch-Fock',             front: '5.Germany-Gorch-Fock-Front.jpg',                               back: '5.Germany-Gorch-Fock-Back.jpg' },
+            { name: '6.Dominican-Republic-Juan-Bautista-Cambiaso', front: '6.Dominican-Republic-Juan-Bautista-Cambiaso-Front.jpg', back: '6.Dominican-Republic-Juan-Bautista-Cambiaso-Back.jpg' },
+            { name: '7.Ecuador-Bae-Guayas',             front: '7.Ecuador-Bae-Guayas-Front.jpg',                               back: '7.Ecuador-Bae-Guayas-Back.jpg' },
+            { name: '8.France-Belle-Poule',             front: '8.France-Belle-Poule-Front.jpg',                               back: '8.France-Belle-Poule-Back.jpg' },
+            { name: '9.India-Ins-Sudarshini',           front: '9.India-Ins-Sudarshini-Front.jpg',                             back: '9.India-Ins-Sudarshini-Back.jpg' },
+            { name: '10.Italy-Amerigo-Vespucci',        front: '10.Italy-Amerigo-Vespucci-Front.jpg',                          back: '10.Italy-Amerigo-Vespucci-Back.jpg' },
+            { name: '11.Monaco-Tuiga',                  front: '11.Monaco-Tuiga-Front.jpg',                                    back: '11.Monaco-Tuiga-Back.jpg' },
+            { name: '12.Netherlands-Oosterschelde',     front: '12.Netherlands-Oosterschelde-Front.jpg',                       back: '12.Netherlands-Oosterschelde-Back.jpg' },
+            { name: '13.Peru-Bap-Union',                front: '13.Peru-Bap-Union-Front.jpg',                                  back: '13.Peru-Bap-Union-Back.jpg' },
+            { name: '14.Portugal-NRP-Sagres',           front: '14.Portugal-NRP-Sagres-Front.jpg',                             back: '14.Portugal-NRP-Sagres-Back.jpg' },
+            { name: '15.Romania-Mircea',                front: '15.Romania-Mircea-Front.jpg',                                  back: '15.Romania-Mircea-Back.jpg' },
+            { name: '16.Spain-Juan-Sebastian-de-Elcano', front: '16.Spain-Juan-Sebastian-de-Elcano-Front.jpg',                 back: '16.Spain-Juan-Sebastian-de-Elcano-Back.jpg' },
+            { name: '17.Sweden-HMS-Gladan',             front: '17.Sweden-HMS-Gladan-Front.jpg',                               back: '17.Sweden-HMS-Gladan-Back.jpg' },
+            { name: '18.Uruguay-Capitan-Miranda',       front: '18.Uraguay-Capitan-Miranda-Front.jpg',                         back: '18.Uruguay-Capitan-Miranda-Back.jpg' },
+            { name: '19.Poland-Dar-Mlodziezy',          front: '19.Poland-Dar-Mlodziezy-Front.jpg',                            back: '19.Poland-Dar-Mlodziezy-Back.jpg' },
+            { name: '20.US-USCGC-Eagle',                front: '20.US-USCGC-Eagle-Front.jpg',                                  back: '20.US-USCGC-Eagle-Back.jpg' },
         ];
 
         const carousel = document.getElementById('carousel');
@@ -350,23 +362,17 @@
             const frontFace = document.createElement('div');
             frontFace.className = 'card-face card-front';
             const frontImg = document.createElement('img');
-            frontImg.src = `./assets/images/cards/${card.name}-Front.jpg`;
+            frontImg.src = `./assets/images/cards/${card.front}`;
             frontImg.alt = `${card.name} front`;
             frontFace.appendChild(frontImg);
 
             // Back face
             const backFace = document.createElement('div');
             backFace.className = 'card-face card-back';
-
-            if (card.hasBack) {
-                const backImg = document.createElement('img');
-                backImg.src = `./assets/images/cards/${card.name}-Back.jpg`;
-                backImg.alt = `${card.name} back`;
-                backFace.appendChild(backImg);
-            } else {
-                // If no back image, show a placeholder
-                backFace.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 1.2rem; color: #666; padding: 2rem; text-align: center;">More information coming soon</div>';
-            }
+            const backImg = document.createElement('img');
+            backImg.src = `./assets/images/cards/${card.back}`;
+            backImg.alt = `${card.name} back`;
+            backFace.appendChild(backImg);
 
             // Tap icon
             const tapIcon = document.createElement('i');
@@ -376,21 +382,17 @@
             cardElement.appendChild(backFace);
             cardElement.appendChild(tapIcon);
 
-            // Add "Found" badge on front (for ship cards only)
-            if (index > 0) {
+            // Add "Found" badge and toggle on ship cards only
+            if (!card.isIntro) {
                 const foundBadge = document.createElement('div');
                 foundBadge.className = 'found-badge';
                 foundBadge.innerHTML = '<i class="fas fa-check-circle"></i> Found';
                 cardElement.appendChild(foundBadge);
 
-                // Check if card is already marked as found
                 if (isCardFound(card.name)) {
                     cardElement.classList.add('found');
                 }
-            }
 
-            // Add "Found" toggle button on back (for ship cards only)
-            if (index > 0) {
                 const foundToggle = document.createElement('button');
                 foundToggle.className = 'found-toggle';
                 foundToggle.textContent = isCardFound(card.name) ? 'Mark as Not Found' : 'Mark as Found';
@@ -404,15 +406,10 @@
                     const isFound = cardElement.classList.toggle('found');
                     setCardFound(card.name, isFound);
 
-                    // Update button text and style
                     if (isFound) {
                         foundToggle.textContent = 'Mark as Not Found';
                         foundToggle.classList.add('found');
-
-                        // Trigger celebration effect
                         showCelebration();
-
-                        // Flip card back to front after celebration
                         setTimeout(() => {
                             cardElement.classList.remove('flipped');
                         }, 1500);
@@ -429,8 +426,7 @@
             cardElement.addEventListener('click', function(e) {
                 e.stopPropagation();
 
-                // If it's the first card and not flipped (tapping front), send message to Unity
-                if (index === 0 && !this.classList.contains('flipped')) {
+                if (card.isIntro && !this.classList.contains('flipped')) {
                     location.href = `space://do?action=send_event&event_message=meet-the-fleet`;
                 }
 
