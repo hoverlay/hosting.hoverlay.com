@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tall Ships Cards</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 1rem;
+            text-align: center;
+            color: #1a5490;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .header p {
+            font-size: 0.98rem;
+            color: #3a7bc8;
+        }
+
+        .carousel-container {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 2rem 1rem;
+        }
+
+        .carousel-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .instructions-overlay {
+            position: fixed;
+            top: calc(1rem + 78px);
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(26, 84, 144, 1);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .card-wrapper {
+            flex: 0 0 auto;
+            max-height: 100%;
+            scroll-snap-align: center;
+            padding: 0 0.5rem;
+            perspective: 1000px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .card-face img {
+            display: block;
+            max-height: calc(100vh - 12rem);
+            max-width: calc(100vw - 4rem);
+            width: auto;
+            height: auto;
+        }
+
+        .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-front {
+            transform: rotateY(0deg);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .tap-icon {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            color: #becada;
+            animation: pulse 2s infinite;
+            pointer-events: none;
+            z-index: 10;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.flipped .tap-icon {
+            display: none;
+        }
+
+        .found-toggle {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%) rotateY(180deg);
+            background: #1a5490;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease;
+            display: none;
+            white-space: nowrap;
+        }
+
+        .card.flipped .found-toggle {
+            display: block;
+        }
+
+        .found-toggle:active {
+            transform: translateX(-50%) rotateY(180deg) scale(0.95);
+        }
+
+        .found-toggle.found {
+            background: #28a745;
+        }
+
+        .found-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: none;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+            z-index: 10;
+        }
+
+        .card.found .found-badge {
+            display: flex;
+        }
+
+        .card.flipped .found-badge {
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .celebration i {
+            position: absolute;
+            font-size: 3rem;
+            animation: celebrate 1.5s ease-out forwards;
+        }
+
+        @keyframes celebrate {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rotate));
+            }
+        }
+
+        @keyframes badgePop {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.3) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .card.found .found-badge {
+            animation: badgePop 0.6s ease-out;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(26, 84, 144, 0.5);
+            font-size: 2rem;
+            animation: slideHint 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes slideHint {
+            0%, 100% {
+                opacity: 0.3;
+                transform: translateY(-50%) translateX(0);
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateY(-50%) translateX(-10px);
+            }
+        }
+
+        .footer {
+            padding: 1rem;
+            text-align: center;
+            color: #1a5490;
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Meet The Fleet</h1>
+            <p>Find the matching ship on the water</p>
+        </div>
+
+        <div class="carousel-container" id="carousel">
+            <!-- Cards will be dynamically inserted here -->
+        </div>
+
+        <div class="instructions-overlay">Tap to flip • Swipe to explore</div>
+
+        <div class="scroll-indicator">›</div>
+
+        <div class="footer">
+            
+        </div>
+    </div>
+
+    <script>
+        // Local storage helper functions
+        function getFoundCards() {
+            const found = localStorage.getItem('tallShipsFound');
+            return found ? JSON.parse(found) : {};
+        }
+
+        function setCardFound(cardName, isFound) {
+            const foundCards = getFoundCards();
+            foundCards[cardName] = isFound;
+            localStorage.setItem('tallShipsFound', JSON.stringify(foundCards));
+        }
+
+        function isCardFound(cardName) {
+            const foundCards = getFoundCards();
+            return foundCards[cardName] === true;
+        }
+
+        // Card data - extracted from image filenames
+        const cards = [
+            {name: 'SAIL-ShipFacts-MeetFleet', hasBack: true},
+            { name: 'USCGC-Eagle-United-States', hasBack: true },
+            { name: 'Amerigo-Vespucci-Italy', hasBack: true },
+            { name: 'Arc-Gloria-Colombia', hasBack: true },
+            { name: 'Gorch-Fock-Germany', hasBack: true },
+            { name: 'Mircea-Romania', hasBack: true },
+            { name: 'Ins-Sudarshini-India', hasBack: true },
+            { name: 'NRP-Sagres-Portugal', hasBack: true },
+            { name: 'Juan-Bautista-Cambiaso-Dominican-Republic', hasBack: true }
+        ];
+
+        const carousel = document.getElementById('carousel');
+
+        // Generate cards dynamically
+        cards.forEach((card, index) => {
+            const cardWrapper = document.createElement('div');
+            cardWrapper.className = 'card-wrapper';
+
+            const cardElement = document.createElement('div');
+            cardElement.className = 'card';
+
+            // Front face
+            const frontFace = document.createElement('div');
+            frontFace.className = 'card-face card-front';
+            const frontImg = document.createElement('img');
+            frontImg.src = `./assets/images/cards/${card.name}-Front.jpg`;
+            frontImg.alt = `${card.name} front`;
+            frontFace.appendChild(frontImg);
+
+            // Back face
+            const backFace = document.createElement('div');
+            backFace.className = 'card-face card-back';
+
+            if (card.hasBack) {
+                const backImg = document.createElement('img');
+                backImg.src = `./assets/images/cards/${card.name}-Back.jpg`;
+                backImg.alt = `${card.name} back`;
+                backFace.appendChild(backImg);
+            } else {
+                // If no back image, show a placeholder
+                backFace.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 1.2rem; color: #666; padding: 2rem; text-align: center;">More information coming soon</div>';
+            }
+
+            // Tap icon
+            const tapIcon = document.createElement('i');
+            tapIcon.className = 'fas fa-hand-point-up tap-icon';
+
+            cardElement.appendChild(frontFace);
+            cardElement.appendChild(backFace);
+            cardElement.appendChild(tapIcon);
+
+            // Add "Found" badge on front (for ship cards only)
+            if (index > 0) {
+                const foundBadge = document.createElement('div');
+                foundBadge.className = 'found-badge';
+                foundBadge.innerHTML = '<i class="fas fa-check-circle"></i> Found';
+                cardElement.appendChild(foundBadge);
+
+                // Check if card is already marked as found
+                if (isCardFound(card.name)) {
+                    cardElement.classList.add('found');
+                }
+            }
+
+            // Add "Found" toggle button on back (for ship cards only)
+            if (index > 0) {
+                const foundToggle = document.createElement('button');
+                foundToggle.className = 'found-toggle';
+                foundToggle.textContent = isCardFound(card.name) ? 'Mark as Not Found' : 'Mark as Found';
+
+                if (isCardFound(card.name)) {
+                    foundToggle.classList.add('found');
+                }
+
+                foundToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isFound = cardElement.classList.toggle('found');
+                    setCardFound(card.name, isFound);
+
+                    // Update button text and style
+                    if (isFound) {
+                        foundToggle.textContent = 'Mark as Not Found';
+                        foundToggle.classList.add('found');
+
+                        // Trigger celebration effect
+                        showCelebration();
+
+                        // Flip card back to front after celebration
+                        setTimeout(() => {
+                            cardElement.classList.remove('flipped');
+                        }, 1500);
+                    } else {
+                        foundToggle.textContent = 'Mark as Found';
+                        foundToggle.classList.remove('found');
+                    }
+                });
+
+                cardElement.appendChild(foundToggle);
+            }
+
+            // Add click handler to flip card
+            cardElement.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                // If it's the first card and not flipped (tapping front), send message to Unity
+                if (index === 0 && !this.classList.contains('flipped')) {
+                    location.href = `space://do?action=send_event&event_message=meet-the-fleet`;
+                }
+
+                this.classList.toggle('flipped');
+            });
+
+            cardWrapper.appendChild(cardElement);
+            carousel.appendChild(cardWrapper);
+        });
+
+        // Celebration effect when marking as found
+        function showCelebration() {
+            const celebration = document.createElement('div');
+            celebration.className = 'celebration';
+            document.body.appendChild(celebration);
+
+            // Create multiple celebration icons
+            const icons = ['🎉', '⭐', '✨', '🎊', '⚓', '🚢'];
+            const colors = ['#FFD700', '#FF6B35', '#28a745', '#1a5490', '#FF1493'];
+
+            for (let i = 0; i < 12; i++) {
+                const icon = document.createElement('i');
+                const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                icon.textContent = randomIcon;
+                icon.style.color = randomColor;
+
+                // Random direction - burst upward (upper half of circle)
+                const angle = Math.PI + (i / 12) * Math.PI; // Range from π to 2π (upper directions)
+                const distance = 150 + Math.random() * 100;
+                const tx = Math.cos(angle) * distance + 'px';
+                const ty = Math.sin(angle) * distance + 'px';
+                const rotate = Math.random() * 720 - 360 + 'deg';
+
+                icon.style.setProperty('--tx', tx);
+                icon.style.setProperty('--ty', ty);
+                icon.style.setProperty('--rotate', rotate);
+
+                celebration.appendChild(icon);
+            }
+
+            // Remove celebration after animation
+            setTimeout(() => {
+                celebration.remove();
+            }, 1500);
+        }
+
+        // Hide scroll indicator after first interaction
+        let hasScrolled = false;
+        carousel.addEventListener('scroll', function() {
+            if (!hasScrolled) {
+                hasScrolled = true;
+                document.querySelector('.scroll-indicator').style.display = 'none';
+            }
+        });
+
+        // Also hide on first tap
+        document.addEventListener('click', function() {
+            if (!hasScrolled) {
+                document.querySelector('.scroll-indicator').style.display = 'none';
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
