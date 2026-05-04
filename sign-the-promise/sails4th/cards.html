@@ -350,10 +350,15 @@
 
         const carousel = document.getElementById('carousel');
 
+        // Lazy loading configuration - load first 3 cards immediately
+        const INITIAL_LOAD_COUNT = 3;
+        const PRELOAD_DISTANCE = 2; // Preload 2 cards ahead
+
         // Generate cards dynamically
         cards.forEach((card, index) => {
             const cardWrapper = document.createElement('div');
             cardWrapper.className = 'card-wrapper';
+            cardWrapper.dataset.index = index;
 
             const cardElement = document.createElement('div');
             cardElement.className = 'card';
@@ -362,7 +367,14 @@
             const frontFace = document.createElement('div');
             frontFace.className = 'card-face card-front';
             const frontImg = document.createElement('img');
-            frontImg.src = `./assets/images/cards/${card.front}`;
+
+            // Lazy load images except for first few cards
+            if (index < INITIAL_LOAD_COUNT) {
+                frontImg.src = `./assets/images/cards/${card.front}`;
+            } else {
+                frontImg.dataset.src = `./assets/images/cards/${card.front}`;
+                frontImg.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600"%3E%3Crect fill="%23f0f0f0" width="400" height="600"/%3E%3C/svg%3E';
+            }
             frontImg.alt = `${card.name} front`;
             frontFace.appendChild(frontImg);
 
@@ -370,7 +382,14 @@
             const backFace = document.createElement('div');
             backFace.className = 'card-face card-back';
             const backImg = document.createElement('img');
-            backImg.src = `./assets/images/cards/${card.back}`;
+
+            // Lazy load images except for first few cards
+            if (index < INITIAL_LOAD_COUNT) {
+                backImg.src = `./assets/images/cards/${card.back}`;
+            } else {
+                backImg.dataset.src = `./assets/images/cards/${card.back}`;
+                backImg.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600"%3E%3Crect fill="%23f0f0f0" width="400" height="600"/%3E%3C/svg%3E';
+            }
             backImg.alt = `${card.name} back`;
             backFace.appendChild(backImg);
 
@@ -482,6 +501,7 @@
                 hasScrolled = true;
                 document.querySelector('.scroll-indicator').style.display = 'none';
             }
+            checkAndLoadImages();
         });
 
         // Also hide on first tap
@@ -490,6 +510,46 @@
                 document.querySelector('.scroll-indicator').style.display = 'none';
             }
         }, { once: true });
+
+        // Lazy loading implementation
+        function loadImage(img) {
+            if (img.dataset.src && !img.dataset.loaded) {
+                img.src = img.dataset.src;
+                img.dataset.loaded = 'true';
+            }
+        }
+
+        function checkAndLoadImages() {
+            const scrollLeft = carousel.scrollLeft;
+            const containerWidth = carousel.clientWidth;
+            const cardWrappers = document.querySelectorAll('.card-wrapper');
+
+            cardWrappers.forEach((wrapper, index) => {
+                const cardLeft = wrapper.offsetLeft;
+                const cardRight = cardLeft + wrapper.offsetWidth;
+
+                // Load if card is visible or within PRELOAD_DISTANCE cards
+                const isVisible = cardRight > scrollLeft - containerWidth && cardLeft < scrollLeft + containerWidth * 2;
+
+                if (isVisible || index < INITIAL_LOAD_COUNT + PRELOAD_DISTANCE) {
+                    const frontImg = wrapper.querySelector('.card-front img');
+                    const backImg = wrapper.querySelector('.card-back img');
+
+                    loadImage(frontImg);
+                    loadImage(backImg);
+                }
+            });
+        }
+
+        // Initial check to preload nearby cards
+        setTimeout(checkAndLoadImages, 100);
+
+        // Throttle scroll events for performance
+        let scrollTimeout;
+        carousel.addEventListener('scroll', function() {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(checkAndLoadImages, 150);
+        });
     </script>
 </body>
 </html>
