@@ -494,6 +494,70 @@
             }, 1500);
         }
 
+        // Carousel initial animation - slide right then back to show users they can swipe
+        document.addEventListener("DOMContentLoaded", function() {
+            const carousel = document.querySelector('.carousel-container');
+            const cardWrappers = document.querySelectorAll('.card-wrapper');
+
+            // Disable snap immediately on carousel and cards
+            carousel.style.scrollSnapType = 'none';
+            cardWrappers.forEach(wrapper => {
+                wrapper.style.scrollSnapAlign = 'none';
+            });
+
+            // Wait for layout to complete
+            setTimeout(() => {
+                const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+                const offsetAmount = Math.min(1800, maxScroll); // Use max available or 1600px
+                const duration = 1500; // animation duration in ms
+
+                // Force scroll position
+                carousel.scrollLeft = offsetAmount;
+
+                // Force a reflow to ensure scrollLeft is set
+                void carousel.offsetHeight;
+
+                // Wait a bit longer before starting animation
+                setTimeout(() => {
+                    const startTime = performance.now();
+                    const startPos = offsetAmount; // Use the intended offset, not the actual scrollLeft
+
+                    function easeInOutCubic(t) {
+                        return t < 0.5
+                            ? 4 * t * t * t
+                            : 1 - Math.pow(-2 * t + 2, 3) / 2;
+                    }
+
+                    function animate(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = easeInOutCubic(progress);
+
+                        // Calculate target position and clamp to prevent overshoot
+                        const targetScroll = Math.max(0, startPos - (startPos * eased));
+                        carousel.scrollLeft = targetScroll;
+
+                        if (progress < 1) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            // Ensure we're exactly at 0
+                            carousel.scrollLeft = 0;
+
+                            // Re-enable snap after a small delay
+                            setTimeout(() => {
+                                carousel.style.scrollSnapType = 'x mandatory';
+                                cardWrappers.forEach(wrapper => {
+                                    wrapper.style.scrollSnapAlign = 'center';
+                                });
+                            }, 100);
+                        }
+                    }
+
+                    requestAnimationFrame(animate);
+                }, 200);
+            }, 100);
+        });
+
         // Hide scroll indicator after first interaction
         let hasScrolled = false;
         carousel.addEventListener('scroll', function() {
