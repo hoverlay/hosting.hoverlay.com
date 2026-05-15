@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <title>Parallel Companion Quiz</title>
+    <style>
+        html, body {
+            font-family: Georgia, serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #87CEEB 0%, #F4A460 50%, #CD853F 100%);
+            color: #333;
+            overflow-y: auto;
+        }
+
+        body {
+            display: block;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #quiz-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #2c3e50;
+            border-radius: 12px;
+            padding: 15px;
+            width: calc(100% - 20px);
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.3);
+            position: relative;
+            height: auto;
+            border: 3px solid #8B4513;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #8B4513;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #8B4513;
+            cursor: pointer;
+        }
+
+        .close-button i {
+            pointer-events: none;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            color: #2c3e50;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .intro:hover {
+            color: #E67E22;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .choice {
+            border-radius: 20px;
+            padding: 12px;
+            background: linear-gradient(135deg, #E67E22 0%, #D35400 100%);
+            color: #fff;
+            border: 2px solid #8B4513;
+            cursor: pointer;
+            text-align: left;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .choice:hover {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            transform: scale(1.05);
+        }
+
+        #message {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .start-button {
+            margin-top: 20px;
+            padding: 12px 24px;
+            font-size: 1.2em;
+            background: linear-gradient(135deg, #E67E22 0%, #D35400 100%);
+            color: #fff;
+            border: 2px solid #8B4513;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .start-button:hover {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            transform: scale(1.05);
+        }
+
+        .highlighted {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            border-color: #1e8449;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
+            <i class="fas fa-times-circle"></i>
+        </button>
+        <h1>Discover Parallel Companion!</h1>
+        <div class="intro" id="intro">Explore the beauty of Arizona through Kristine Kollasch's stunning mural! Can you spot all the natural wonders?<br><button id="start-button" class="start-button" onclick="startQuiz()">Let's Explore!</button></div>
+        <div id="message"></div>
+        <div id="question-container" style="display: none;">
+            <div class="question" id="question">Question will appear here</div>
+            <div class="choices" id="choices"></div>
+        </div>
+    </div>
+
+    <script>
+        // Questions about Parallel Companion mural elements
+        const questions = [
+            {
+                layout: "list",
+                question: "What is Arizona's official state mammal featured in this mural?",
+                choices: ["A. Coyote", "B. Ringtail", "C. Bobcat", "D. Desert Bighorn Sheep"],
+                correct: [1],
+                successMessage: "Yes! The ringtail is Arizona's official state mammal. Look closely to find it in the mural!",
+                successMessageDuration: 4000,
+                exitAfterAttempt: false
+            },
+            {
+                layout: "list",
+                question: "Which bird is Arizona's official state bird shown in the artwork?",
+                choices: ["A. Roadrunner", "B. Cactus Wren", "C. Hummingbird", "D. Red-tailed Hawk"],
+                correct: [1],
+                successMessage: "Correct! The Cactus Wren is Arizona's state bird. Can you spot it perched in the mural?",
+                successMessageDuration: 4000,
+                exitAfterAttempt: false
+            },
+            {
+                layout: "list",
+                question: "What is Arizona's official state butterfly featured here?",
+                choices: ["A. Monarch", "B. Painted Lady", "C. Two-tailed Swallowtail", "D. Western Tiger Swallowtail"],
+                correct: [2],
+                successMessage: "Perfect! The Two-tailed Swallowtail flutters through this Arizona landscape!",
+                successMessageDuration: 4000,
+                exitAfterAttempt: false
+            },
+            {
+                layout: "grid",
+                question: "Which natural elements can you find in 'Parallel Companion'?",
+                choices: ["A. Mountains", "B. Clouds", "C. Cacti", "D. Rainstorms", "E. Sunshine", "F. All of these!"],
+                correct: [5],
+                successMessage: "Amazing! This mural celebrates ALL of Arizona's natural beauty - from mountains to sunshine, cacti to rainstorms!",
+                successMessageDuration: 4500,
+                exitAfterAttempt: false
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = Array(questions.length).fill(null);
+
+        // Start the quiz
+        function startQuiz() {
+            document.getElementById("intro").style.display = "none";
+            document.getElementById("question-container").style.display = "block";
+            loadQuestion();
+        }
+
+        // Load a question from the questions array
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            const questionElement = document.getElementById("question");
+            const choicesElement = document.getElementById("choices");
+            const messageElement = document.getElementById("message");
+            
+            // Reset message, question text and answer highlights
+            messageElement.textContent = "";
+            questionElement.textContent = currentQuestion.question;
+            choicesElement.innerHTML = "";
+            document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));            
+            
+            // Apply layout based on question configuration
+            if (currentQuestion.layout === "list") {
+                choicesElement.style.gridTemplateColumns = "1fr";
+            } else {
+                choicesElement.style.gridTemplateColumns = "1fr 1fr";
+            }
+
+            currentQuestion.choices.forEach((choice, index) => {
+                const button = document.createElement("button");
+                button.textContent = choice;
+                button.classList.add("choice");
+                button.addEventListener("click", function() {
+                    document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
+                    button.classList.add('highlighted');
+                    selectAnswer(index);
+                });
+                choicesElement.appendChild(button);
+            });
+        }
+
+        // Select an answer and proceed accordingly
+        function selectAnswer(choiceIndex) {
+            const currentQuestion = questions[currentQuestionIndex];
+            const messageElement = document.getElementById("message");
+            // If a duration is set for displaying success message, use it, otherwise use a default
+            const successMessageDuration = currentQuestion.successMessageDuration || 3500;
+
+            if (currentQuestion.correct.includes(choiceIndex)) {
+                messageElement.innerHTML = `<div id='correct-message' style='display: flex; justify-content: center; align-items: center; color: green;'><i class='fas fa-check-circle'></i> ${currentQuestion.successMessage}</div>`;
+            } else {
+                messageElement.innerHTML = `<div style='color: crimson;'>Oops, try again.</div>`;
+            }
+
+            if (currentQuestion.exitAfterAttempt || currentQuestion.correct.includes(choiceIndex)) {
+                setTimeout(() => {
+                    document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        loadQuestion();
+                    } else {
+                        displayCongratulations();
+                    }
+                }, successMessageDuration || 3500);
+            }
+        }
+
+        // Display the congratulations message at the end of the quiz
+        function displayCongratulations() {
+            const messageElement = document.getElementById("message");
+            messageElement.innerHTML = "<div style='color: #27ae60; font-size: 1.3em;'><i class='fas fa-star'></i> Fantastic! You've discovered all the wonders of Parallel Companion! <i class='fas fa-star'></i></div>";
+            document.getElementById("question-container").style.display = "none";
+            location.href = `space://do?action=send_event&event_message=quiz-completed`;
+        }
+    </script>
+</body>
+</html>
