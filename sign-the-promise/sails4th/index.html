@@ -321,7 +321,64 @@
         <audio id="didYouKnowAudio" src="./assets/audio/VO-STP DYK Dashboard.mp3" preload="auto"></audio>
     </div>
 
+    <!-- Main Page Audio -->
+    <audio id="mainAudio" src="./assets/audio/No.1 VO-Dashboard Intro-STP.MP3" preload="auto"></audio>
+
     <script>
+        const MAIN_AUDIO_PLAYED_KEY = 'sails4th_main_audio_played';
+
+        // Play main page audio when page loads (only once)
+        window.addEventListener('load', function() {
+            const mainAudio = document.getElementById('mainAudio');
+            const hasPlayed = localStorage.getItem(MAIN_AUDIO_PLAYED_KEY);
+
+            if (!hasPlayed) {
+                mainAudio.play().catch(function(error) {
+                    console.log('Auto-play prevented:', error);
+                });
+
+                // Mark as played when audio finishes
+                mainAudio.addEventListener('ended', function() {
+                    localStorage.setItem(MAIN_AUDIO_PLAYED_KEY, 'true');
+                });
+            }
+
+            // Long press on header section to reset audio flag
+            const headerSection = document.querySelector('.header-section');
+            let pressTimer;
+
+            headerSection.addEventListener('touchstart', function(e) {
+                pressTimer = setTimeout(function() {
+                    localStorage.removeItem(MAIN_AUDIO_PLAYED_KEY);
+                    alert('Audio flag reset! Reload the page to play the intro audio again.');
+                }, 2000); // 2 second long press
+            });
+
+            headerSection.addEventListener('touchend', function(e) {
+                clearTimeout(pressTimer);
+            });
+
+            headerSection.addEventListener('touchmove', function(e) {
+                clearTimeout(pressTimer);
+            });
+
+            // For desktop testing
+            headerSection.addEventListener('mousedown', function(e) {
+                pressTimer = setTimeout(function() {
+                    localStorage.removeItem(MAIN_AUDIO_PLAYED_KEY);
+                    alert('Audio flag reset! Reload the page to play the intro audio again.');
+                }, 2000); // 2 second long press
+            });
+
+            headerSection.addEventListener('mouseup', function(e) {
+                clearTimeout(pressTimer);
+            });
+
+            headerSection.addEventListener('mouseleave', function(e) {
+                clearTimeout(pressTimer);
+            });
+        });
+
         // Load AR Tips (Hoverlay deeplink)
         function loadARTips() {
             loadSpace('isn'); // Tutorial space ID from original
@@ -334,6 +391,11 @@
 
         // Show Did You Know overlay
         function showDidYouKnow() {
+            // Pause main page audio
+            const mainAudio = document.getElementById('mainAudio');
+            mainAudio.pause();
+
+            // Show overlay and play Did You Know audio
             document.getElementById('didYouKnowOverlay').style.display = 'block';
             const audio = document.getElementById('didYouKnowAudio');
             audio.currentTime = 0;
@@ -342,10 +404,21 @@
 
         // Close overlay
         function closeOverlay() {
+            // Hide overlay and pause Did You Know audio
             document.getElementById('didYouKnowOverlay').style.display = 'none';
-            const audio = document.getElementById('didYouKnowAudio');
-            audio.pause();
-            audio.currentTime = 0;
+            const didYouKnowAudio = document.getElementById('didYouKnowAudio');
+            didYouKnowAudio.pause();
+            didYouKnowAudio.currentTime = 0;
+
+            // Resume main page audio only if it hasn't finished playing yet
+            const mainAudio = document.getElementById('mainAudio');
+            const hasPlayed = localStorage.getItem(MAIN_AUDIO_PLAYED_KEY);
+
+            if (!hasPlayed && mainAudio.currentTime > 0 && !mainAudio.ended) {
+                mainAudio.play().catch(function(error) {
+                    console.log('Resume play prevented:', error);
+                });
+            }
         }
 
         // Hoverlay deeplink function
