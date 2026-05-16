@@ -321,88 +321,37 @@
         <audio id="didYouKnowAudio" src="./assets/audio/VO-STP DYK Dashboard.mp3" preload="auto"></audio>
     </div>
 
-    <!-- Main Page Audio -->
-    <audio id="mainAudio" src="./assets/audio/No1-VO-Dashboard-Intro-STP.mp3" preload="auto" muted autoplay></audio>
-
     <script>
         const MAIN_AUDIO_PLAYED_KEY = 'sails4th_main_audio_played';
 
-        // Play main page audio when page loads (only once)
-        window.addEventListener('DOMContentLoaded', function() {
-            const mainAudio = document.getElementById('mainAudio');
+        // Send audio control events to Hoverlay
+        window.addEventListener('load', function() {
             const hasPlayed = localStorage.getItem(MAIN_AUDIO_PLAYED_KEY);
 
-            if (!mainAudio) return;
-
-            // If already played, stop and remove autoplay
-            if (hasPlayed) {
-                mainAudio.pause();
-                mainAudio.removeAttribute('autoplay');
-                return;
-            }
-
-            // Mark as played when audio finishes
-            mainAudio.addEventListener('ended', function() {
+            // If not played yet, send start event to Hoverlay
+            if (!hasPlayed) {
+                location.href = 'space://do?action=send_event&event_message=start_main_audio';
                 localStorage.setItem(MAIN_AUDIO_PLAYED_KEY, 'true');
-            });
-
-            // Unmute the audio after it starts playing
-            mainAudio.addEventListener('playing', function() {
-                setTimeout(function() {
-                    mainAudio.muted = false;
-                }, 100);
-            }, { once: true });
-
-            // If autoplay fails, play on first user interaction
-            function playOnInteraction() {
-                if (!hasPlayed && mainAudio.paused) {
-                    mainAudio.play().catch(function(error) {
-                        console.log('Play on interaction failed:', error);
-                    });
-                }
-                // Remove listeners after first attempt
-                document.removeEventListener('click', playOnInteraction);
-                document.removeEventListener('touchstart', playOnInteraction);
             }
 
-            // Add interaction listeners
-            document.addEventListener('click', playOnInteraction, { once: true });
-            document.addEventListener('touchstart', playOnInteraction, { once: true });
-
-            // Long press on header section to reset audio flag
+            // Double tap on header to reset the flag
             const headerSection = document.querySelector('.header-section');
-            let pressTimer;
+            let lastTap = 0;
 
-            headerSection.addEventListener('touchstart', function(e) {
-                pressTimer = setTimeout(function() {
+            function handleDoubleTap(e) {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+
+                if (tapLength < 300 && tapLength > 0) {
                     localStorage.removeItem(MAIN_AUDIO_PLAYED_KEY);
                     alert('Audio flag reset! Reload the page to play the intro audio again.');
-                }, 2000); // 2 second long press
-            });
+                    e.preventDefault();
+                }
+                lastTap = currentTime;
+            }
 
-            headerSection.addEventListener('touchend', function(e) {
-                clearTimeout(pressTimer);
-            });
-
-            headerSection.addEventListener('touchmove', function(e) {
-                clearTimeout(pressTimer);
-            });
-
-            // For desktop testing
-            headerSection.addEventListener('mousedown', function(e) {
-                pressTimer = setTimeout(function() {
-                    localStorage.removeItem(MAIN_AUDIO_PLAYED_KEY);
-                    alert('Audio flag reset! Reload the page to play the intro audio again.');
-                }, 2000); // 2 second long press
-            });
-
-            headerSection.addEventListener('mouseup', function(e) {
-                clearTimeout(pressTimer);
-            });
-
-            headerSection.addEventListener('mouseleave', function(e) {
-                clearTimeout(pressTimer);
-            });
+            headerSection.addEventListener('touchend', handleDoubleTap);
+            headerSection.addEventListener('click', handleDoubleTap);
         });
 
         // Load AR Tips (Hoverlay deeplink)
@@ -417,9 +366,8 @@
 
         // Show Did You Know overlay
         function showDidYouKnow() {
-            // Pause main page audio
-            const mainAudio = document.getElementById('mainAudio');
-            mainAudio.pause();
+            // Send pause event to Hoverlay for main audio
+            location.href = 'space://do?action=send_event&event_message=pause_main_audio';
 
             // Show overlay and play Did You Know audio
             document.getElementById('didYouKnowOverlay').style.display = 'block';
@@ -436,15 +384,8 @@
             didYouKnowAudio.pause();
             didYouKnowAudio.currentTime = 0;
 
-            // Resume main page audio only if it hasn't finished playing yet
-            const mainAudio = document.getElementById('mainAudio');
-            const hasPlayed = localStorage.getItem(MAIN_AUDIO_PLAYED_KEY);
-
-            if (!hasPlayed && mainAudio.currentTime > 0 && !mainAudio.ended) {
-                mainAudio.play().catch(function(error) {
-                    console.log('Resume play prevented:', error);
-                });
-            }
+            // Send resume event to Hoverlay for main audio
+            location.href = 'space://do?action=send_event&event_message=resume_main_audio';
         }
 
         // Hoverlay deeplink function
