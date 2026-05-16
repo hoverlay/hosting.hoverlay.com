@@ -326,22 +326,46 @@
 
     <script>
         const MAIN_AUDIO_PLAYED_KEY = 'sails4th_main_audio_played';
+        let audioPlayAttempted = false;
 
         // Play main page audio when page loads (only once)
         window.addEventListener('load', function() {
             const mainAudio = document.getElementById('mainAudio');
             const hasPlayed = localStorage.getItem(MAIN_AUDIO_PLAYED_KEY);
 
-            if (!hasPlayed) {
-                mainAudio.play().catch(function(error) {
-                    console.log('Auto-play prevented:', error);
-                });
+            // Mark as played when audio finishes
+            mainAudio.addEventListener('ended', function() {
+                localStorage.setItem(MAIN_AUDIO_PLAYED_KEY, 'true');
+            });
 
-                // Mark as played when audio finishes
-                mainAudio.addEventListener('ended', function() {
-                    localStorage.setItem(MAIN_AUDIO_PLAYED_KEY, 'true');
-                });
+            // Try to autoplay
+            function tryPlayAudio() {
+                if (!hasPlayed && !audioPlayAttempted) {
+                    audioPlayAttempted = true;
+                    mainAudio.play().catch(function(error) {
+                        console.log('Auto-play prevented, waiting for user interaction:', error);
+                    });
+                }
             }
+
+            // Attempt autoplay on load
+            tryPlayAudio();
+
+            // If autoplay fails, play on first user interaction
+            function playOnInteraction() {
+                if (!hasPlayed && mainAudio.paused) {
+                    mainAudio.play().catch(function(error) {
+                        console.log('Play on interaction failed:', error);
+                    });
+                }
+                // Remove listeners after first attempt
+                document.removeEventListener('click', playOnInteraction);
+                document.removeEventListener('touchstart', playOnInteraction);
+            }
+
+            // Add interaction listeners
+            document.addEventListener('click', playOnInteraction, { once: true });
+            document.addEventListener('touchstart', playOnInteraction, { once: true });
 
             // Long press on header section to reset audio flag
             const headerSection = document.querySelector('.header-section');
