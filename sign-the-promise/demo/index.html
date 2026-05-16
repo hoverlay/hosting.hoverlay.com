@@ -322,24 +322,33 @@
     </div>
 
     <!-- Main page audio -->
-    <audio id="mainPageAudio" src="./assets/audio/No1-VO-Dashboard-Intro-STP.mp3" preload="auto"></audio>
+    <audio id="mainPageAudio" src="./assets/audio/No1-VO-Dashboard-Intro-STP.mp3" preload="auto" muted autoplay></audio>
 
     <script>
         const MAIN_AUDIO_PLAYED_KEY = 'demo_main_audio_played';
         let audioPlayAttempted = false;
 
         // Play main page audio when page loads (only once)
-        window.addEventListener('load', function() {
+        window.addEventListener('DOMContentLoaded', function() {
             const mainAudio = document.getElementById('mainPageAudio');
             const hasPlayed = localStorage.getItem(MAIN_AUDIO_PLAYED_KEY);
 
             console.log('Demo - Audio element found:', !!mainAudio);
             console.log('Demo - Audio src:', mainAudio ? mainAudio.src : 'N/A');
             console.log('Demo - Has played flag:', hasPlayed);
-            console.log('Demo - Audio ready state:', mainAudio ? mainAudio.readyState : 'N/A');
+            console.log('Demo - Audio muted:', mainAudio ? mainAudio.muted : 'N/A');
+            console.log('Demo - Audio paused:', mainAudio ? mainAudio.paused : 'N/A');
 
             if (!mainAudio) {
                 console.error('Demo - Main audio element not found!');
+                return;
+            }
+
+            // If already played, stop and remove autoplay
+            if (hasPlayed) {
+                console.log('Demo - Audio already played, pausing');
+                mainAudio.pause();
+                mainAudio.removeAttribute('autoplay');
                 return;
             }
 
@@ -354,32 +363,15 @@
                 console.error('Demo - Audio error:', e, mainAudio.error);
             });
 
-            // Try to autoplay with muted trick
-            function tryPlayAudio() {
-                if (!hasPlayed && !audioPlayAttempted) {
-                    audioPlayAttempted = true;
-                    console.log('Demo - Attempting autoplay with muted trick...');
-
-                    // Start muted to bypass autoplay policy
-                    mainAudio.muted = true;
-                    mainAudio.play().then(function() {
-                        console.log('Demo - Muted autoplay succeeded, unmuting in 100ms...');
-                        // Unmute after a short delay
-                        setTimeout(function() {
-                            mainAudio.muted = false;
-                            console.log('Demo - Audio unmuted!');
-                        }, 100);
-                    }).catch(function(error) {
-                        console.log('Demo - Muted autoplay failed, waiting for user interaction:', error);
-                        mainAudio.muted = false;
-                    });
-                } else {
-                    console.log('Demo - Skipping play (hasPlayed:', hasPlayed, ', audioPlayAttempted:', audioPlayAttempted, ')');
-                }
-            }
-
-            // Attempt autoplay on load
-            tryPlayAudio();
+            // Unmute the audio after it starts playing
+            console.log('Demo - Setting up unmute listener...');
+            mainAudio.addEventListener('playing', function() {
+                console.log('Demo - Audio started playing, unmuting in 100ms...');
+                setTimeout(function() {
+                    mainAudio.muted = false;
+                    console.log('Demo - Audio unmuted!');
+                }, 100);
+            }, { once: true });
 
             // If autoplay fails, play on first user interaction
             function playOnInteraction() {

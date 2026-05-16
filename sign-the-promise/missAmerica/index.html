@@ -322,42 +322,36 @@
     </div>
 
     <!-- Main page audio -->
-    <audio id="mainPageAudio" src="./assets/audio/No1-VO-Dashboard-Intro-STP.mp3" preload="auto"></audio>
+    <audio id="mainPageAudio" src="./assets/audio/No1-VO-Dashboard-Intro-STP.mp3" preload="auto" muted autoplay></audio>
 
     <script>
         const MAIN_AUDIO_PLAYED_KEY = 'missAmerica_main_audio_played';
-        let audioPlayAttempted = false;
 
         // Play main page audio when page loads (only once)
-        window.addEventListener('load', function() {
+        window.addEventListener('DOMContentLoaded', function() {
             const mainAudio = document.getElementById('mainPageAudio');
             const hasPlayed = localStorage.getItem(MAIN_AUDIO_PLAYED_KEY);
+
+            if (!mainAudio) return;
+
+            // If already played, stop and remove autoplay
+            if (hasPlayed) {
+                mainAudio.pause();
+                mainAudio.removeAttribute('autoplay');
+                return;
+            }
 
             // Mark as played when audio finishes
             mainAudio.addEventListener('ended', function() {
                 localStorage.setItem(MAIN_AUDIO_PLAYED_KEY, 'true');
             });
 
-            // Try to autoplay with muted trick
-            function tryPlayAudio() {
-                if (!hasPlayed && !audioPlayAttempted) {
-                    audioPlayAttempted = true;
-                    // Start muted to bypass autoplay policy
-                    mainAudio.muted = true;
-                    mainAudio.play().then(function() {
-                        // Unmute after a short delay
-                        setTimeout(function() {
-                            mainAudio.muted = false;
-                        }, 100);
-                    }).catch(function(error) {
-                        console.log('Auto-play prevented, waiting for user interaction:', error);
-                        mainAudio.muted = false;
-                    });
-                }
-            }
-
-            // Attempt autoplay on load
-            tryPlayAudio();
+            // Unmute the audio after it starts playing
+            mainAudio.addEventListener('playing', function() {
+                setTimeout(function() {
+                    mainAudio.muted = false;
+                }, 100);
+            }, { once: true });
 
             // If autoplay fails, play on first user interaction
             function playOnInteraction() {
