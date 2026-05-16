@@ -338,12 +338,20 @@
                 localStorage.setItem(MAIN_AUDIO_PLAYED_KEY, 'true');
             });
 
-            // Try to autoplay
+            // Try to autoplay with muted trick
             function tryPlayAudio() {
                 if (!hasPlayed && !audioPlayAttempted) {
                     audioPlayAttempted = true;
-                    mainAudio.play().catch(function(error) {
+                    // Start muted to bypass autoplay policy
+                    mainAudio.muted = true;
+                    mainAudio.play().then(function() {
+                        // Unmute after a short delay
+                        setTimeout(function() {
+                            mainAudio.muted = false;
+                        }, 100);
+                    }).catch(function(error) {
                         console.log('Auto-play prevented, waiting for user interaction:', error);
+                        mainAudio.muted = false;
                     });
                 }
             }

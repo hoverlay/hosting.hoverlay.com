@@ -333,18 +333,48 @@
             const mainAudio = document.getElementById('mainPageAudio');
             const hasPlayed = localStorage.getItem(MAIN_AUDIO_PLAYED_KEY);
 
+            console.log('Demo - Audio element found:', !!mainAudio);
+            console.log('Demo - Audio src:', mainAudio ? mainAudio.src : 'N/A');
+            console.log('Demo - Has played flag:', hasPlayed);
+            console.log('Demo - Audio ready state:', mainAudio ? mainAudio.readyState : 'N/A');
+
+            if (!mainAudio) {
+                console.error('Demo - Main audio element not found!');
+                return;
+            }
+
             // Mark as played when audio finishes
             mainAudio.addEventListener('ended', function() {
+                console.log('Demo - Audio finished playing, setting flag');
                 localStorage.setItem(MAIN_AUDIO_PLAYED_KEY, 'true');
             });
 
-            // Try to autoplay
+            // Error handling
+            mainAudio.addEventListener('error', function(e) {
+                console.error('Demo - Audio error:', e, mainAudio.error);
+            });
+
+            // Try to autoplay with muted trick
             function tryPlayAudio() {
                 if (!hasPlayed && !audioPlayAttempted) {
                     audioPlayAttempted = true;
-                    mainAudio.play().catch(function(error) {
-                        console.log('Auto-play prevented, waiting for user interaction:', error);
+                    console.log('Demo - Attempting autoplay with muted trick...');
+
+                    // Start muted to bypass autoplay policy
+                    mainAudio.muted = true;
+                    mainAudio.play().then(function() {
+                        console.log('Demo - Muted autoplay succeeded, unmuting in 100ms...');
+                        // Unmute after a short delay
+                        setTimeout(function() {
+                            mainAudio.muted = false;
+                            console.log('Demo - Audio unmuted!');
+                        }, 100);
+                    }).catch(function(error) {
+                        console.log('Demo - Muted autoplay failed, waiting for user interaction:', error);
+                        mainAudio.muted = false;
                     });
+                } else {
+                    console.log('Demo - Skipping play (hasPlayed:', hasPlayed, ', audioPlayAttempted:', audioPlayAttempted, ')');
                 }
             }
 
@@ -353,9 +383,13 @@
 
             // If autoplay fails, play on first user interaction
             function playOnInteraction() {
+                console.log('Demo - User interaction detected, paused:', mainAudio.paused, 'hasPlayed:', hasPlayed);
                 if (!hasPlayed && mainAudio.paused) {
-                    mainAudio.play().catch(function(error) {
-                        console.log('Play on interaction failed:', error);
+                    console.log('Demo - Playing audio on interaction...');
+                    mainAudio.play().then(function() {
+                        console.log('Demo - Play on interaction succeeded!');
+                    }).catch(function(error) {
+                        console.error('Demo - Play on interaction failed:', error);
                     });
                 }
                 // Remove listeners after first attempt
