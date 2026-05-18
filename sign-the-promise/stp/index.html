@@ -366,6 +366,15 @@
 
         // Show Did You Know overlay
         function showDidYouKnow() {
+            // Track analytics once per session
+            const ANALYTICS_KEY = 'stp_dyk_tracked';
+            if (!sessionStorage.getItem(ANALYTICS_KEY)) {
+                // Fire pixel tracking
+                const img = new Image();
+                img.src = 'https://tour.51stepstofreedom.org/track/STP_DYK';
+                sessionStorage.setItem(ANALYTICS_KEY, 'true');
+            }
+
             // Send pause event to Hoverlay for main audio
             location.href = 'space://do?action=send_event&event_message=pause_main_audio';
 
