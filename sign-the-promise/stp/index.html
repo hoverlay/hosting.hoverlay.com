@@ -52,67 +52,59 @@
             margin-bottom: 24px;
         }
 
-        /* Button Grid - Portrait layout: 2 left buttons, 1 large right */
+        /* Button Grid - Horizontal layout: 1 top spanning button + 3 bottom buttons */
         .button-grid {
             display: grid;
-            grid-template-columns: 1fr 1.3fr;
-            grid-template-rows: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 2fr;
+            grid-template-rows: auto auto;
             gap: 12px;
             max-width: 900px;
             margin: 0 auto;
-            height: 400px;
         }
 
         .btn {
             border: none;
-            border-radius: 20px;
+            border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
             position: relative;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             font-size: 1.5rem;
             font-weight: bold;
             color: white;
-            text-align: center;
+            text-align: left;
             padding: 20px;
+            min-height: 120px;
         }
 
         .btn:active {
             transform: scale(0.98);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                        inset 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        /* AR Tips Button - Top Left */
-        .btn-ar-tips {
-            background: linear-gradient(135deg, #8B1538 0%, #C41E3A 100%);
-            grid-column: 1;
-            grid-row: 1;
-        }
-
-        /* Did You Know Button - Bottom Left */
-        .btn-did-you-know {
-            background: linear-gradient(135deg, #1B3A6B 0%, #2E5090 100%);
-            grid-column: 1;
-            grid-row: 2;
-        }
-
-        /* Sign Declaration Button - Right Side (Spans 2 rows) */
+        /* Sign Declaration Button - Top Row (Spans 3 columns) */
         .btn-sign-declaration {
             background-size: cover;
-            background-position: left center;
+            background-position: center center;
             background-repeat: no-repeat;
-            grid-column: 2;
-            grid-row: 1 / 3;
-            align-items: flex-end;
-            justify-content: center;
+            grid-column: 1 / 4;
+            grid-row: 1;
+            min-height: 160px;
         }
 
         .btn-sign-declaration::before {
@@ -122,15 +114,75 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
+            background: linear-gradient(90deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 100%);
         }
 
         .btn-sign-declaration .btn-text {
             position: relative;
             z-index: 1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            font-family: Georgia, serif;
+            font-size: 1.4rem;
+            font-weight: 100;
+            color: #222;
+            text-shadow: none;
             line-height: 1.3;
-            padding-bottom: 20px;
+            width: 100%;
+            text-align: right;
+        }
+
+        /* AR Tips Button */
+        .btn-ar-tips {
+            background: linear-gradient(135deg, #2E3B6B 0%, #1B2850 100%);
+            grid-column: 1;
+            grid-row: 2;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: normal;
+            text-shadow: none;
+        }
+
+        /* 51 Steps Button */
+        .btn-51-steps {
+            background: linear-gradient(135deg, #8B1538 0%, #C41E3A 100%);
+            grid-column: 2;
+            grid-row: 2;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: normal;
+            text-shadow: none;
+        }
+
+        /* Celebrate Button */
+        .btn-celebrate {
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        .btn-celebrate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        .btn-celebrate .btn-text {
+            position: relative;
+            z-index: 1;
+            font-family: Georgia, serif;
+            font-size: 1.6rem;
+            font-weight: 100;
+            color: white;
+            text-shadow: none;
+            width: 100%;
+            text-align: right;
         }
 
         /* Partners Section */
@@ -227,12 +279,27 @@
 
         /* Responsive Design */
         @media (max-width: 480px) {
-            .button-grid {
-                height: 260px;
+            .btn {
+                font-size: 1rem;
+                padding: 12px;
+                min-height: 80px;
             }
 
-            .btn {
-                font-size: 1.2rem;
+            .btn-sign-declaration {
+                min-height: 100px;
+            }
+
+            .btn-sign-declaration .btn-text {
+                font-size: 1.6rem;
+            }
+
+            .btn-celebrate .btn-text {
+                font-size: 1rem;
+            }
+
+            .btn-ar-tips,
+            .btn-51-steps {
+                font-size: 0.8rem;
             }
 
             .tap-instruction {
@@ -245,22 +312,50 @@
         }
 
         @media (min-width: 481px) and (max-width: 767px) {
-            .button-grid {
-                height: 450px;
+            .btn {
+                font-size: 1.2rem;
+                min-height: 100px;
             }
 
-            .btn {
-                font-size: 1.4rem;
+            .btn-sign-declaration {
+                min-height: 130px;
+            }
+
+            .btn-sign-declaration .btn-text {
+                font-size: 1.3rem;
+            }
+
+            .btn-celebrate .btn-text {
+                font-size: 1.3rem;
+            }
+
+            .btn-ar-tips,
+            .btn-51-steps {
+                font-size: 0.9rem;
             }
         }
 
         @media (min-width: 768px) {
-            .button-grid {
-                height: 500px;
+            .btn {
+                font-size: 1.6rem;
+                min-height: 140px;
             }
 
-            .btn {
-                font-size: 1.8rem;
+            .btn-sign-declaration {
+                min-height: 180px;
+            }
+
+            .btn-sign-declaration .btn-text {
+                font-size: 1.4rem;
+            }
+
+            .btn-celebrate .btn-text {
+                font-size: 1.6rem;
+            }
+
+            .btn-ar-tips,
+            .btn-51-steps {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -276,20 +371,27 @@
         <div class="tap-instruction">Tap a button to begin</div>
 
         <div class="button-grid">
-            <!-- AR Tips & Tricks Button -->
-            <button class="btn btn-ar-tips" onclick="loadARTips()">
-                AR Tips & Tricks
-            </button>
-
-            <!-- Did You Know Button -->
-            <button class="btn btn-did-you-know" onclick="showDidYouKnow()">
-                Explore 51 Steps
-            </button>
-
-            <!-- Sign Declaration Button -->
-            <button class="btn btn-sign-declaration" style="background-image: url('./assets/images/sign-the-promise.jpeg');" onclick="loadSignDeclaration()">
+            <!-- Sign The Declaration Button - Top Row -->
+            <button class="btn btn-sign-declaration" style="background-image: url('./assets/images/sign-the-promise-horizontal.jpg');" onclick="loadSignDeclaration()">
                 <div class="btn-text">
-                    Sign The Declaration<br>& Celebrate America
+                    Sign The Declaration
+                </div>
+            </button>
+
+            <!-- AR Tips Button -->
+            <button class="btn btn-ar-tips" onclick="loadARTips()">
+                How it Works
+            </button>
+
+            <!-- 51 Steps To Freedom Button -->
+            <button class="btn btn-51-steps" onclick="showDidYouKnow()">
+                51 Steps<br>To Freedom
+            </button>
+
+            <!-- Celebrate Button -->
+            <button class="btn btn-celebrate" style="background-image: url('./assets/images/celebrate-background.jpg');" onclick="loadCelebrate()">
+                <div class="btn-text">
+                    ...Even More Fun!
                 </div>
             </button>
         </div>
@@ -361,7 +463,12 @@
 
         // Load Sign Declaration (Hoverlay deeplink)
         function loadSignDeclaration() {
-            loadSpace('r50x'); // Sign The Promise space ID from original
+            loadSpace('20846');
+        }
+
+        // Load Celebrate (Hoverlay deeplink)
+        function loadCelebrate() {
+            loadSpace('r50x');
         }
 
         // Show Did You Know overlay
