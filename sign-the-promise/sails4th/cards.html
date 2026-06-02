@@ -108,6 +108,61 @@
             max-width: calc(100vw - 4rem);
             width: auto;
             height: auto;
+            object-fit: contain;
+        }
+
+        /* Landscape mode optimizations */
+        @media (orientation: landscape) {
+            .card-face img {
+                max-height: calc(100vh - 8rem);
+                max-width: calc(50vw - 2rem);
+            }
+
+            .carousel-container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+                margin-bottom: 0.2rem;
+            }
+
+            .header p {
+                font-size: 0.85rem;
+            }
+
+            .header {
+                padding: 0.7rem;
+            }
+
+            .instructions-overlay {
+                top: calc(0.7rem + 60px);
+                font-size: 0.85rem;
+            }
+
+            .found-toggle {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.9rem;
+                bottom: 0.7rem;
+            }
+
+            .tap-icon {
+                font-size: 1.5rem;
+                bottom: 0.7rem;
+                right: 0.7rem;
+            }
+
+            .found-badge {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+                top: 0.7rem;
+                right: 0.7rem;
+            }
+
+            .footer {
+                padding: 0.7rem;
+                font-size: 0.75rem;
+            }
         }
 
         .card-back {
@@ -150,14 +205,14 @@
             background: #1a5490;
             color: white;
             border: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 25px;
-            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
             z-index: 10;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, transform 0.3s ease;
             display: none;
             white-space: nowrap;
         }
@@ -283,6 +338,61 @@
             background: rgba(255, 255, 255, 0.8);
             font-size: 0.85rem;
         }
+
+        .landscape-warning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 84, 144, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .landscape-warning-content {
+            max-width: 500px;
+        }
+
+        .landscape-warning-content i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+            animation: rotatePhone 2s ease-in-out infinite;
+        }
+
+        .landscape-warning-content h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .landscape-warning-content p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        @keyframes rotatePhone {
+            0% {
+                transform: rotate(90deg);
+            }
+            50% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(90deg);
+            }
+        }
+
+        @media (orientation: landscape) {
+            .landscape-warning {
+                display: flex;
+            }
+        }
     </style>
 </head>
 <body>
@@ -301,7 +411,15 @@
         <div class="scroll-indicator">›</div>
 
         <div class="footer">
-            
+
+        </div>
+    </div>
+
+    <div class="landscape-warning">
+        <div class="landscape-warning-content">
+            <i class="fas fa-mobile-alt"></i>
+            <h2>Please Rotate Your Device</h2>
+            <p>For the best experience, please view this app in portrait mode</p>
         </div>
     </div>
 
