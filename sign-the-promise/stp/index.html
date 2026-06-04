@@ -53,16 +53,17 @@
         }
 
         .tap-instruction {
+            font-family: Georgia, serif;
             text-align: center;
-            font-size: 1.25rem;
-            color: #666;
-            margin-bottom: 24px;
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 12px;
         }
 
-        /* Button Grid - Horizontal layout: 1 top spanning button + 3 bottom buttons */
+        /* Button Grid - Horizontal layout: 1 top button + 2 bottom buttons */
         .button-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 2fr;
+            grid-template-columns: 1fr 3fr;
             grid-template-rows: auto auto;
             gap: 12px;
             max-width: 900px;
@@ -104,12 +105,12 @@
                         inset 0 -3px 6px rgba(0, 0, 0, 0.3);
         }
 
-        /* Sign Declaration Button - Top Row (Spans 3 columns) */
+        /* Sign Declaration Button - Top Row (Spans 2 columns) */
         .btn-sign-declaration {
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
-            grid-column: 1 / 4;
+            grid-column: 1 / 3;
             grid-row: 1;
             min-height: 160px;
         }
@@ -129,10 +130,11 @@
             z-index: 1;
             font-family: Georgia, serif;
             font-size: 1.4rem;
-            font-weight: 600;
-            color: #222;
+            font-weight: 400;
+            color: #000000c4;
             text-shadow: none;
-            line-height: 1.3;
+            line-height: 2;
+            letter-spacing: -0.01em;
             width: 100%;
             text-align: right;
         }
@@ -147,18 +149,7 @@
             font-size: 0.75rem;
             font-weight: normal;
             text-shadow: none;
-        }
-
-        /* 51 Steps Button */
-        .btn-51-steps {
-            background: linear-gradient(135deg, #8B1538 0%, #C41E3A 100%);
-            grid-column: 2;
-            grid-row: 2;
-            justify-content: center;
-            text-align: center;
-            font-size: 0.75rem;
-            font-weight: normal;
-            text-shadow: none;
+            font-family: Georgia, serif;
         }
 
         /* Celebrate Button */
@@ -166,7 +157,7 @@
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
-            grid-column: 3;
+            grid-column: 2;
             grid-row: 2;
         }
 
@@ -186,6 +177,7 @@
             font-family: Georgia, serif;
             font-size: 1.6rem;
             font-weight: 400;
+            letter-spacing: -0.01em;
             color: white;
             text-shadow: none;
             width: 100%;
@@ -195,13 +187,48 @@
         /* Partners Section */
         .partners-section {
             background: white;
-            padding: 10px 16px;
-            padding-bottom: max(32px, env(safe-area-inset-bottom));
+            padding: 10px 16px 16px;
             margin-top: auto;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+        }
+
+        /* 51 Steps Footer Section */
+        .steps-footer {
+            background: #FFD024;
+            padding: 20px 16px;
+            padding-bottom: max(32px, env(safe-area-inset-bottom));
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .steps-footer:hover {
+            background: #FFC700;
+        }
+
+        .steps-footer:active {
+            background: #F0C000;
+        }
+
+        .steps-footer-logo {
+            max-width: 360px;
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .steps-footer-text {
+            font-family: Georgia, serif;
+            font-size: 0.9rem;
+            color: #333;
+            text-align: center;
         }
 
         .partners-title {
@@ -225,6 +252,84 @@
             height: auto;
             display: block;
             margin: 0 auto;
+        }
+
+        /* Celebrate Overlay */
+        .celebrate-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .celebrate-overlay-content {
+            background: rgba(255, 255, 255, 0.95);
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 48px 24px 32px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .celebrate-btn {
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15),
+                        inset 0 2px 1px rgba(255, 255, 255, 0.5),
+                        inset 0 -3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            font-size: 1.3rem;
+            font-weight: 100;
+            color: white;
+            text-align: right;
+            padding: 20px;
+            min-height: 100px;
+            margin-bottom: 16px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background: linear-gradient(135deg, #8B1538 0%, #C41E3A 100%);
+        }
+
+        .celebrate-btn:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .celebrate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2),
+                        inset 0 2px 1px rgba(255, 255, 255, 0.5),
+                        inset 0 -3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .celebrate-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+                        inset 0 -1px 1px rgba(255, 255, 255, 0.3),
+                        inset 0 3px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        .celebrate-btn-text {
+            position: relative;
+            z-index: 1;
+            font-family: Georgia, serif;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7),
+                         0px 0px 8px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            text-align: right;
         }
 
         /* Overlay for Did You Know */
@@ -378,28 +483,35 @@
             .btn {
                 font-size: 1rem;
                 padding: 12px;
-                min-height: 80px;
+                min-height: 60px;
             }
 
             .btn-sign-declaration {
-                min-height: 100px;
+                min-height: 84px;
             }
 
             .btn-sign-declaration .btn-text {
-                font-size: 1.45rem;
+                font-size: 1.7rem;
             }
 
             .btn-celebrate .btn-text {
-                font-size: 1rem;
+                font-size: 1.15rem;
             }
 
-            .btn-ar-tips,
-            .btn-51-steps {
+            .btn-ar-tips {
+                font-size: 0.8rem;
+            }
+
+            .steps-footer-logo {
+                max-width: 240px;
+            }
+
+            .steps-footer-text {
                 font-size: 0.8rem;
             }
 
             .tap-instruction {
-                font-size: 1.2rem;
+                font-size: 1rem;
             }
 
             .partners-title {
@@ -425,9 +537,16 @@
                 font-size: 1.3rem;
             }
 
-            .btn-ar-tips,
-            .btn-51-steps {
+            .btn-ar-tips {
                 font-size: 0.9rem;
+            }
+
+            .steps-footer-logo {
+                max-width: 300px;
+            }
+
+            .steps-footer-text {
+                font-size: 0.85rem;
             }
         }
 
@@ -449,9 +568,16 @@
                 font-size: 2.2rem;
             }
 
-            .btn-ar-tips,
-            .btn-51-steps {
-                font-size: 1.6rem;
+            .btn-ar-tips {
+                font-size: 0.75rem;
+            }
+
+            .steps-footer-logo {
+                max-width: 360px;
+            }
+
+            .steps-footer-text {
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -479,15 +605,10 @@
                 How it Works
             </button>
 
-            <!-- 51 Steps To Freedom Button -->
-            <button class="btn btn-51-steps" onclick="showDidYouKnow()">
-                51 Steps<br>To Freedom
-            </button>
-
             <!-- Celebrate Button -->
-            <button class="btn btn-celebrate" style="background-image: url('./assets/images/celebrate-background.jpg');" onclick="loadCelebrate()">
+            <button class="btn btn-celebrate" style="background-image: url('./assets/images/celebrate-background-fireworks.jpeg');" onclick="showCelebrateOverlay()">
                 <div class="btn-text">
-                    ...Even More Fun!
+                    Fireworks & Fun!
                 </div>
             </button>
         </div>
@@ -499,6 +620,34 @@
     </div>
     <div class="partners-section">
         <img src="./assets/images/partners-logo.png" alt="Our Partners" class="partners-logo">
+    </div>
+
+    <!-- 51 Steps To Freedom Footer -->
+    <div class="steps-footer" onclick="showDidYouKnow()">
+        <img src="./assets/images/51_tracing_TAG_K_reg Small.png" alt="51 Steps To Freedom" class="steps-footer-logo">
+        <div class="steps-footer-text">Tap to learn more</div>
+    </div>
+
+    <!-- Celebrate Overlay -->
+    <div class="celebrate-overlay" id="celebrateOverlay">
+        <div class="celebrate-overlay-content">
+            <button class="close-btn" onclick="closeCelebrateOverlay()">&times;</button>
+
+            <!-- Celebrate Option 1 -->
+            <button class="celebrate-btn" style="background-size: cover; background-image: url('./assets/images/celebrate-background-fireworks.jpeg');" onclick="loadCelebrateSpace('etyo')">
+                <div class="celebrate-btn-text">Launch Your Fireworks</div>
+            </button>
+
+            <!-- Celebrate Option 2 -->
+            <button class="celebrate-btn" style="background-size: cover; background-image: url('./assets/images/sign-the-promise-horizontal.jpg');" onclick="loadCelebrateSpace('coi')">
+                <div class="celebrate-btn-text">American Patriots</div>
+            </button>
+
+            <!-- Celebrate Option 3 -->
+            <!-- <button class="celebrate-btn" style="background-size: cover; background-image: url('./assets/images/more-fun.jpeg');" onclick="loadCelebrateSpace('r50x')">
+                <div class="celebrate-btn-text">More Fun</div>
+            </button> -->
+        </div>
     </div>
 
     <!-- Did You Know Overlay -->
@@ -577,9 +726,20 @@
             loadSpace('20846');
         }
 
-        // Load Celebrate (Hoverlay deeplink)
-        function loadCelebrate() {
-            loadSpace('r50x');
+        // Show Celebrate overlay
+        function showCelebrateOverlay() {
+            document.getElementById('celebrateOverlay').style.display = 'block';
+        }
+
+        // Close Celebrate overlay
+        function closeCelebrateOverlay() {
+            document.getElementById('celebrateOverlay').style.display = 'none';
+        }
+
+        // Load Celebrate Space (Hoverlay deeplink)
+        function loadCelebrateSpace(pid) {
+            closeCelebrateOverlay();
+            loadSpace(pid);
         }
 
         // Show Did You Know overlay
@@ -679,6 +839,13 @@
         document.getElementById('didYouKnowOverlay').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeOverlay();
+            }
+        });
+
+        // Close celebrate overlay when clicking outside content
+        document.getElementById('celebrateOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCelebrateOverlay();
             }
         });
     </script>
