@@ -1001,7 +1001,7 @@ const TRACKS = {
 
 const SESSIONS = [
   {
-    id:"1a", num:"1a", tag:"1a", topic:"Image & Video Models", focus:"Creative Focus",
+    id:"1a", num:"01", tag:"1a", topic:"Image & Video Models", focus:"Creative Focus",
     date:"Mon · Jun 22", time:"8:00 – 9:30 AM EST", dur:"90 min", lead:"",
     track:"Creative",
     audience:"Reserved for Creative and Marketing team members who do creative / image production work.",
@@ -1018,7 +1018,7 @@ const SESSIONS = [
     agenda:["Landscape of image & video generation models", "Current capabilities and limitations", "Practical use within TG creative process and workflows", "Techniques for best results and avoiding common pitfalls"],
   },
   {
-    id:"1b", num:"1b", tag:"1b", topic:"Image & Video Models", focus:"Light Use",
+    id:"1b", num:"01", tag:"1b", topic:"Image & Video Models", focus:"Light Use",
     date:"Tue · Jun 23", time:"8:00 – 9:00 AM EST", dur:"60 min", lead:"",
     track:"Everyone",
     audience:"Everyone — a lighter, no-prior-experience version of the creative session.",
@@ -1028,7 +1028,7 @@ const SESSIONS = [
     agenda:["From illustrations to diagrams: What image generation models can do for everyday work, ", "Landscape of image & video generation models", "Strength and limitations of current models", "Prompting techniques for best results"],
   },
   {
-    id:"2", num:"2", tag:"2", topic:"Using AI with Excel", focus:"Data & Modeling",
+    id:"2", num:"02", tag:"2", topic:"Using AI with Excel", focus:"Data & Modeling",
     date:"Wed · Jun 24", time:"8:00 – 9:30 AM EST", dur:"90 min", lead:"",
     track:"Data",
     audience:"Supply Chain, Finance & other data-centric roles — financial modeling, forecasting, dashboarding.",
@@ -1038,7 +1038,7 @@ const SESSIONS = [
     agenda:["How to prep data for AI", "Plan/Edit/Chat modes: how to use Excel AI assistants effectively", "Building dashboards", "AI-assisted financial modeling & forecasting"],
   },
   {
-    id:"3", num:"3", tag:"3", topic:"Using AI with PowerPoint", focus:"",
+    id:"3", num:"03", tag:"3", topic:"Using AI with PowerPoint", focus:"",
     date:"Thu · Jun 25", time:"8:00 – 9:00 AM EST", dur:"60 min", lead:"",
     track:"Everyone",
     audience:"General population — anyone who builds decks.",
@@ -1048,7 +1048,7 @@ const SESSIONS = [
     agenda:["Editing slides with AI: latest options", "Creating on-brand slides with AI", "Practical tips to adapt, update, improve, translate entire decks", "Speaker notes & rehearsal prep"],
   },
   {
-    id:"4", num:"4", tag:"4", topic:"Microapps", focus:"",
+    id:"4", num:"04", tag:"4", topic:"Microapps", focus:"",
     date:"Fri · Jun 26", time:"8:00 – 9:00 AM EST", dur:"60 min", lead:"",
     track:"Everyone",
     audience:"Everyone — anyone who needs small automation help for repetitive tasks.",
@@ -1058,7 +1058,7 @@ const SESSIONS = [
     agenda:["What microapps are & when to reach for one","Spotting automatable, repetitive tasks","Building your first microapp live","Best practices for sharing and maintaining microapps" ],
   },
   {
-    id:"5", num:"5", tag:"5", topic:"Cowork: Intro to Agentic AI", focus:"",
+    id:"5", num:"05", tag:"5", topic:"Cowork: Intro to Agentic AI", focus:"",
     date:"Mon · Jun 29", time:"8:00 – 9:00 AM EST", dur:"60 min", lead:"",
     track:"Everyone",
     audience:"General population — curious about where AI is heading.",
@@ -1156,7 +1156,7 @@ function SessionCard({ s, open, onToggle, registered, onRegister, onOpenSession 
               <label className="check">
                 <input type="checkbox" checked={confirmed} onChange={e => setConfirmed(e.target.checked)} />
                 <span className="box">{I.check}</span>
-                I have a paid, licensed seat
+                I have a paid, licensed seat for Copilot, ChatGPT, or Claude
               </label>
             </div>
           ) : (
@@ -1263,8 +1263,8 @@ function App() {
         <div className="hero-scrim-layer"></div>
         <div className="wrap">
           <div className="hero-lead">
-            <div className="hero-lead-cap"><strong>Semra</strong><span>Corporate AI Transformation Lead</span></div>
-            <div className="hero-lead-img hero-lead-anim" role="img" aria-label="Semra — Corporate AI Transformation Lead"></div>
+            <div className="hero-lead-cap"><strong>Semra Fearless</strong><span>Corporate AI Transformation Lead</span></div>
+            <div className="hero-lead-img hero-lead-anim" role="img" aria-label="Semra Fearless — Corporate AI Transformation Lead"></div>
           </div>
           <div className="brand-row">
             <img className="brand-logo" src={__IMG.logo} alt="Timex Group" />
