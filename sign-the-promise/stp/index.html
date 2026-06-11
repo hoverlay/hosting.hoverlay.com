@@ -65,16 +65,17 @@
         .tap-instruction {
             font-family: Georgia, serif;
             text-align: center;
+            font-weight: 400;
             font-size: 1rem;
-            color: #888;
+            color: #1c1c1c;
             margin-bottom: 12px;
         }
 
-        /* Button Grid - Horizontal layout: 1 top button + 2 bottom buttons */
+        /* Button Grid - Horizontal layout: 2 top buttons + 2 bottom buttons */
         .button-grid {
             display: grid;
             grid-template-columns: 1fr 3fr;
-            grid-template-rows: auto auto;
+            grid-template-rows: auto auto auto;
             gap: 12px;
             max-width: 900px;
             margin: 0 auto;
@@ -86,7 +87,7 @@
             overflow: hidden;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15),
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35),
                         inset 0 2px 1px rgba(255, 255, 255, 0.5),
                         inset 0 -6px 10px rgba(0, 0, 0, 0.5);
             position: relative;
@@ -125,6 +126,40 @@
             min-height: 160px;
         }
 
+        /* Meet The Fleet Button - Second Row (Spans 2 columns) */
+        .btn-meet-fleet {
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+            grid-column: 1 / 3;
+            grid-row: 2;
+            min-height: 160px;
+        }
+
+        .btn-meet-fleet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.4) 100%);
+        }
+
+        .btn-meet-fleet .btn-text {
+            position: relative;
+            z-index: 1;
+            font-family: Georgia, serif;
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: #000000c4;
+            text-shadow: none;
+            line-height: 2;
+            letter-spacing: -0.01em;
+            width: 100%;
+            text-align: right;
+        }
+
         .btn-sign-declaration::before {
             content: '';
             position: absolute;
@@ -153,7 +188,7 @@
         .btn-ar-tips {
             background: linear-gradient(135deg, #2E3B6B 0%, #1B2850 100%);
             grid-column: 1;
-            grid-row: 2;
+            grid-row: 3;
             justify-content: center;
             text-align: center;
             font-size: 0.75rem;
@@ -168,7 +203,7 @@
             background-position: center center;
             background-repeat: no-repeat;
             grid-column: 2;
-            grid-row: 2;
+            grid-row: 3;
         }
 
         .btn-celebrate::before {
@@ -244,7 +279,6 @@
         }
 
         .partners-title {
-            background: #c43542;
             text-align: center;
             padding: 4px 0px;
             margin-bottom: 0px;
@@ -257,6 +291,7 @@
             height: auto;
             display: block;
             margin: 0 auto;
+            opacity: 0.8;
         }
 
         .partners-logo {
@@ -506,12 +541,20 @@
                 font-size: 1.7rem;
             }
 
+            .btn-meet-fleet {
+                min-height: 84px;
+            }
+
+            .btn-meet-fleet .btn-text {
+                font-size: 1.7rem;
+            }
+
             .btn-celebrate .btn-text {
-                font-size: 1.15rem;
+                font-size: 1.44rem;
             }
 
             .btn-ar-tips {
-                font-size: 0.8rem;
+                font-size: 0.92rem;
             }
 
             .steps-footer-logo {
@@ -545,12 +588,20 @@
                 font-size: 1.3rem;
             }
 
-            .btn-celebrate .btn-text {
+            .btn-meet-fleet {
+                min-height: 130px;
+            }
+
+            .btn-meet-fleet .btn-text {
                 font-size: 1.3rem;
             }
 
+            .btn-celebrate .btn-text {
+                font-size: 1.2rem;
+            }
+
             .btn-ar-tips {
-                font-size: 0.9rem;
+                font-size: 1.1rem;
             }
 
             .steps-footer-logo {
@@ -576,12 +627,20 @@
                 font-size: 3rem;
             }
 
+            .btn-meet-fleet {
+                min-height: 180px;
+            }
+
+            .btn-meet-fleet .btn-text {
+                font-size: 3rem;
+            }
+
             .btn-celebrate .btn-text {
-                font-size: 2.2rem;
+                font-size: 2.6rem;
             }
 
             .btn-ar-tips {
-                font-size: 0.75rem;
+                font-size: 1.6rem;
             }
 
             .steps-footer-logo {
