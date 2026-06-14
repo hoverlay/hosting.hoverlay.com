@@ -758,6 +758,13 @@
                 subtitle: '',
                 image: './assets/images/teddy.jpeg',
                 spacePid: 'thrs'
+            },
+            {
+                id: "MWAA",
+                title: "MWAA",
+                subtitle: 'Airport',
+                image: './assets/images/Amelia-Card.jpg',
+                spacePid: 'ojebs'
             }
         ];
 
@@ -769,6 +776,7 @@
 				<img src="${data.image}" alt="${data.title}">
                 <div class="card-content">
                     <h2 class="card-title">${data.title}</h2>
+                    ${data.subtitle ? `<p class="card-subtitle">${data.subtitle}</p>` : ''}
                 </div>
             `;
             card.onclick = () => {
