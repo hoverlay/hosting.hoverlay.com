@@ -140,7 +140,7 @@
         <button onclick="location.href='hobject://do?when_done=hide'" class="close-button">
             <i class="fas fa-times-circle"></i>
         </button>
-        <h1>Discover Parallel Companion!</h1>
+        <h1>Discover Parallel Companion and take the Quiz for a Fun Surprise!</h1>
         <div class="intro" id="intro">Explore the beauty of Arizona through Kristine Kollasch's stunning mural! Can you spot all the natural wonders?<br><button id="start-button" class="start-button" onclick="startQuiz()">Let's Explore!</button></div>
         <div id="message"></div>
         <div id="question-container" style="display: none;">
@@ -155,8 +155,8 @@
             {
                 layout: "list",
                 question: "If you can find the Rainbow, it will teach you the words for colors in Spanish. What is the word for yellow in Spanish?",
-                choices: ["A. Amarillo", "B. Rojo", "C. Verde", "D. Azul"],
-                correct: [0],
+                choices: ["A. Verde", "B. Rojo", "C. Azul", "D. Amarillo"],
+                correct: [3],
                 successMessage: "¡Correcto! Amarillo is yellow in Spanish!",
                 successMessageDuration: 4000,
                 exitAfterAttempt: false
@@ -264,7 +264,17 @@
             const messageElement = document.getElementById("message");
             messageElement.innerHTML = "<div style='color: #27ae60; font-size: 1.3em;'><i class='fas fa-star'></i> Fantastic! You've discovered all the wonders of Parallel Companion! <i class='fas fa-star'></i></div>";
             document.getElementById("question-container").style.display = "none";
-            location.href = `space://do?action=send_event&event_message=quiz-completed`;
+
+            // Add Fun Surprise button
+            const surpriseButton = document.createElement("button");
+            surpriseButton.textContent = "Fun Surprise";
+            surpriseButton.className = "start-button";
+            surpriseButton.style.display = "block";
+            surpriseButton.style.margin = "20px auto 0";
+            surpriseButton.onclick = function() {
+                location.href = `space://do?action=send_event&event_message=quiz-completed&when_done='hide'`;
+            };
+            messageElement.appendChild(surpriseButton);
         }
     </script>
 </body>
