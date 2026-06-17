@@ -47,6 +47,7 @@
         }
 
         .close-button {
+            display: none;
             position: absolute;
             top: 10px;
             right: 10px;
@@ -206,12 +207,13 @@
             const questionElement = document.getElementById("question");
             const choicesElement = document.getElementById("choices");
             const messageElement = document.getElementById("message");
-            
+
             // Reset message, question text and answer highlights
             messageElement.textContent = "";
             questionElement.textContent = currentQuestion.question;
-            choicesElement.innerHTML = "";
-            document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));            
+
+            // Clear all existing choices and their highlights
+            choicesElement.innerHTML = "";            
             
             // Apply layout based on question configuration
             if (currentQuestion.layout === "list") {
@@ -248,7 +250,6 @@
 
             if (currentQuestion.exitAfterAttempt || currentQuestion.correct.includes(choiceIndex)) {
                 setTimeout(() => {
-                    document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
                     currentQuestionIndex++;
                     if (currentQuestionIndex < questions.length) {
                         loadQuestion();
