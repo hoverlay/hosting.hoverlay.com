@@ -715,9 +715,9 @@
             </button>
 
             <!-- Celebrate Option 3 -->
-            <!-- <button class="celebrate-btn" style="background-size: cover; background-image: url('./assets/images/more-fun.jpeg');" onclick="loadCelebrateSpace('r50x')">
-                <div class="celebrate-btn-text">More Fun</div>
-            </button> -->
+            <button class="celebrate-btn" style="background-size: cover; background-position: center; background-image: url('./assets/images/lantern-background.jpeg');" onclick="loadCelebrateSpace('r50x')">
+                <div class="celebrate-btn-text">Light a Lantern & More</div>
+            </button>
         </div>
     </div>
 
@@ -763,7 +763,15 @@
 
             // If not played yet, send start event to Hoverlay
             if (!hasPlayed) {
-                location.href = 'space://do?action=send_event&event_message=start_main_audio';
+
+                // Track analytics once per user
+                const DASH_ANALYTICS_KEY = 'stp_dash_tracked';
+                if (!localStorage.getItem(DASH_ANALYTICS_KEY)) {
+                    // Fire pixel tracking
+                    const img = new Image();
+                    img.src = 'https://tour.51stepstofreedom.org/track/STP_DASH';
+                    localStorage.setItem(DASH_ANALYTICS_KEY, 'true');
+                }                location.href = 'space://do?action=send_event&event_message=start_main_audio';
                 localStorage.setItem(MAIN_AUDIO_PLAYED_KEY, 'true');
             }
 
@@ -777,6 +785,8 @@
 
                 if (tapLength < 300 && tapLength > 0) {
                     localStorage.removeItem(MAIN_AUDIO_PLAYED_KEY);
+                    localStorage.removeItem(DASH_ANALYTICS_KEY);
+                    localStorage.removeItem(DYK_ANALYTICS_KEY);
                     alert('Audio flag reset! Reload the page to play the intro audio again.');
                     e.preventDefault();
                 }
@@ -816,12 +826,12 @@
         // Show Did You Know overlay
         function showDidYouKnow() {
             // Track analytics once per session
-            const ANALYTICS_KEY = 'stp_dyk_tracked';
-            if (!sessionStorage.getItem(ANALYTICS_KEY)) {
+            const DYK_ANALYTICS_KEY = 'stp_dyk_tracked';
+            if (!localStorage.getItem(DYK_ANALYTICS_KEY)) {
                 // Fire pixel tracking
                 const img = new Image();
                 img.src = 'https://tour.51stepstofreedom.org/track/STP_DYK';
-                sessionStorage.setItem(ANALYTICS_KEY, 'true');
+                localStorage.setItem(DYK_ANALYTICS_KEY, 'true');
             }
 
             // Send pause event to Hoverlay for main audio
