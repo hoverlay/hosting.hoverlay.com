@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Famous Girl Scout Alumnae</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #00843D 0%, #c8e6c9 100%);
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 1rem;
+            text-align: center;
+            color: #00843D;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .header p {
+            font-size: 0.98rem;
+            color: #00843D;
+            font-weight: 600;
+        }
+
+        .carousel-container {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 2rem 1rem;
+        }
+
+        .carousel-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .instructions-overlay {
+            position: fixed;
+            top: calc(1rem + 78px);
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(0, 90, 43, 1);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 5;
+            font-weight: 600;
+        }
+
+        .card-wrapper {
+            flex: 0 0 auto;
+            max-height: 100%;
+            scroll-snap-align: center;
+            padding: 0 0.5rem;
+            perspective: 1000px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .card-face img {
+            display: block;
+            max-height: calc(100vh - 12rem);
+            max-width: calc(100vw - 4rem);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Landscape mode optimizations */
+        @media (orientation: landscape) {
+            .card-face img {
+                max-height: calc(100vh - 8rem);
+                max-width: calc(50vw - 2rem);
+            }
+
+            .carousel-container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+                margin-bottom: 0.2rem;
+            }
+
+            .header p {
+                font-size: 0.85rem;
+            }
+
+            .header {
+                padding: 0.7rem;
+            }
+
+            .instructions-overlay {
+                top: calc(0.7rem + 60px);
+                font-size: 0.85rem;
+            }
+
+            .found-toggle {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .tap-icon {
+                font-size: 1.5rem;
+                bottom: 0.7rem;
+                right: 0.7rem;
+            }
+
+            .found-badge {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+                top: 0.7rem;
+                right: 0.7rem;
+            }
+
+            .footer {
+                padding: 0.7rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-front {
+            transform: rotateY(0deg);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .tap-icon {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            color: #FFB81C;
+            animation: pulse 2s infinite;
+            pointer-events: none;
+            z-index: 10;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.flipped .tap-icon {
+            display: none;
+        }
+
+        .found-toggle {
+            background: #00843D;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+            transition: background 0.3s ease;
+            display: none;
+            white-space: nowrap;
+            margin-top: 0.5rem;
+        }
+
+        .card-wrapper.is-flipped .found-toggle {
+            display: block;
+        }
+
+        .found-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .found-toggle.found {
+            background: #FFB81C;
+            color: #005A2B;
+        }
+
+        .found-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #FFB81C;
+            color: #005A2B;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: none;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 4px 12px rgba(255, 184, 28, 0.5);
+            z-index: 10;
+        }
+
+        .card.found .found-badge {
+            display: flex;
+        }
+
+        .card.flipped .found-badge {
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .celebration i {
+            position: absolute;
+            font-size: 3rem;
+            animation: celebrate 1.5s ease-out forwards;
+        }
+
+        @keyframes celebrate {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rotate));
+            }
+        }
+
+        @keyframes badgePop {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.3) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .card.found .found-badge {
+            animation: badgePop 0.6s ease-out;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(0, 90, 43, 0.5);
+            font-size: 2rem;
+            animation: slideHint 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes slideHint {
+            0%, 100% {
+                opacity: 0.3;
+                transform: translateY(-50%) translateX(0);
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateY(-50%) translateX(-10px);
+            }
+        }
+
+        .footer {
+            padding: 1rem;
+            text-align: center;
+            color: #00843D;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 0.85rem;
+        }
+
+        .landscape-warning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 90, 43, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .landscape-warning-content {
+            max-width: 500px;
+        }
+
+        .landscape-warning-content i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+            animation: rotatePhone 2s ease-in-out infinite;
+        }
+
+        .landscape-warning-content h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .landscape-warning-content p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        @keyframes rotatePhone {
+            0% {
+                transform: rotate(90deg);
+            }
+            50% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(90deg);
+            }
+        }
+
+        @media (orientation: landscape) {
+            .landscape-warning {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>...Always A Girl Scout!</h1>
+            <p>Learn about notable Girl Scouts</p>
+        </div>
+
+        <div class="carousel-container" id="carousel">
+            <!-- Cards will be dynamically inserted here -->
+        </div>
+
+        <div class="instructions-overlay">Tap to flip • Swipe to explore</div>
+
+        <div class="scroll-indicator">›</div>
+
+        <div class="footer"></div>
+    </div>
+
+    <div class="landscape-warning">
+        <div class="landscape-warning-content">
+            <i class="fas fa-mobile-alt"></i>
+            <h2>Please Rotate Your Device</h2>
+            <p>For the best experience, please view this app in portrait mode</p>
+        </div>
+    </div>
+
+    <script>
+        function getFoundCards() {
+            const found = localStorage.getItem('girlScoutsFound');
+            return found ? JSON.parse(found) : {};
+        }
+
+        function setCardFound(cardName, isFound) {
+            const foundCards = getFoundCards();
+            foundCards[cardName] = isFound;
+            localStorage.setItem('girlScoutsFound', JSON.stringify(foundCards));
+        }
+
+        function isCardFound(cardName) {
+            const foundCards = getFoundCards();
+            return foundCards[cardName] === true;
+        }
+
+        const cards = [
+            { name: 'Bush',    front: 'GSSN-Bush-Front-01.png',    back: 'GSNC-Bush-Back-03.png' },
+            { name: 'Clinton', front: 'GSSN-Clinton-Front-01.png',  back: 'GSNC-Clinton-Back-03.png' },
+            { name: 'Couric',  front: 'GSSN-Couric-Front-01.png',   back: 'GSNC-Couric-Back-03.png' },
+            { name: 'Goodall', front: 'GSSN-Jane-Front-01.png',     back: 'GSNC-Goodall-Back-03.png' },
+            { name: 'Nixon',   front: 'GSSN-Nixon-Front-01.png',    back: 'GSNC-Nixon-Back-03.png' },
+            { name: 'Obama',   front: 'GSSN-Obama-Front-01.png',    back: 'GSNC-Obama-Back-03.png' },
+            { name: 'Reese',   front: 'GSSN-Reese-Front-01.png',   back: 'GSNC-Reese-Back-03.png' },
+            { name: 'Ride',    front: 'GSSN-Sally-Front-01.png',    back: 'GSNC-Ride-Back-03.png' },
+            { name: 'Serena',  front: 'GSSN-Serena-Front-02.png',   back: 'GSNC-Serena-Back-03.png' },
+            { name: 'Simone',  front: 'GSSN-Simone-Front-01.png',   back: 'GSNC-Simone-Back-03.png' },
+            { name: 'Stewart', front: 'GSSN-Stewart-Front-01.png',  back: 'GSNC-Stewart-Back-03.png' },
+            { name: 'Swift',   front: 'GSSN-Swift-Front-01.png',    back: 'GSNC-Swift-Back-03.png' },
+            { name: 'Venus',   front: 'GSSN-Venus-Front-02.png',    back: 'GSNC-Venus-Back-03.png' },
+        ];
+
+        const carousel = document.getElementById('carousel');
+
+        const INITIAL_LOAD_COUNT = 3;
+        const PRELOAD_DISTANCE = 2;
+
+        cards.forEach((card, index) => {
+            const cardWrapper = document.createElement('div');
+            cardWrapper.className = 'card-wrapper';
+            cardWrapper.dataset.index = index;
+
+            const cardElement = document.createElement('div');
+            cardElement.className = 'card';
+
+            const frontFace = document.createElement('div');
+            frontFace.className = 'card-face card-front';
+            const frontImg = document.createElement('img');
+
+            if (index < INITIAL_LOAD_COUNT) {
+                frontImg.src = `./assets/${card.front}`;
+            } else {
+                frontImg.dataset.src = `./assets/${card.front}`;
+                frontImg.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600"%3E%3Crect fill="%23c8e6c9" width="400" height="600"/%3E%3C/svg%3E';
+            }
+            frontImg.alt = `${card.name} front`;
+            frontFace.appendChild(frontImg);
+
+            const backFace = document.createElement('div');
+            backFace.className = 'card-face card-back';
+            const backImg = document.createElement('img');
+
+            if (index < INITIAL_LOAD_COUNT) {
+                backImg.src = `./assets/${card.back}`;
+            } else {
+                backImg.dataset.src = `./assets/${card.back}`;
+                backImg.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600"%3E%3Crect fill="%23c8e6c9" width="400" height="600"/%3E%3C/svg%3E';
+            }
+            backImg.alt = `${card.name} back`;
+            backFace.appendChild(backImg);
+
+            const tapIcon = document.createElement('i');
+            tapIcon.className = 'fas fa-hand-point-up tap-icon';
+
+            cardElement.appendChild(frontFace);
+            cardElement.appendChild(backFace);
+            cardElement.appendChild(tapIcon);
+
+            const foundBadge = document.createElement('div');
+            foundBadge.className = 'found-badge';
+            foundBadge.innerHTML = '<i class="fas fa-star"></i> I Know Her!';
+            cardElement.appendChild(foundBadge);
+
+            if (isCardFound(card.name)) {
+                cardElement.classList.add('found');
+            }
+
+            const foundToggle = document.createElement('button');
+            foundToggle.className = 'found-toggle';
+            foundToggle.textContent = isCardFound(card.name) ? 'Mark as Not Learned' : 'I Know Her!';
+
+            if (isCardFound(card.name)) {
+                foundToggle.classList.add('found');
+            }
+
+            foundToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isFound = cardElement.classList.toggle('found');
+                setCardFound(card.name, isFound);
+
+                if (isFound) {
+                    foundToggle.textContent = 'Mark as Not Learned';
+                    foundToggle.classList.add('found');
+                    showCelebration();
+                    setTimeout(() => {
+                        cardElement.classList.remove('flipped');
+                        cardWrapper.classList.remove('is-flipped');
+                    }, 1500);
+                } else {
+                    foundToggle.textContent = 'I Know Her!';
+                    foundToggle.classList.remove('found');
+                }
+            });
+
+            cardElement.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('flipped');
+                cardWrapper.classList.toggle('is-flipped');
+            });
+
+            cardWrapper.appendChild(cardElement);
+            cardWrapper.appendChild(foundToggle);
+            carousel.appendChild(cardWrapper);
+        });
+
+        function showCelebration() {
+            const celebration = document.createElement('div');
+            celebration.className = 'celebration';
+            document.body.appendChild(celebration);
+
+            const icons = ['🍪', '⭐', '✨', '🌿', '🎀', '🏅'];
+            const colors = ['#FFB81C', '#00843D', '#8DC63F', '#005A2B', '#FFD700'];
+
+            for (let i = 0; i < 12; i++) {
+                const icon = document.createElement('i');
+                const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                icon.textContent = randomIcon;
+                icon.style.color = randomColor;
+
+                const angle = Math.PI + (i / 12) * Math.PI;
+                const distance = 150 + Math.random() * 100;
+                const tx = Math.cos(angle) * distance + 'px';
+                const ty = Math.sin(angle) * distance + 'px';
+                const rotate = Math.random() * 720 - 360 + 'deg';
+
+                icon.style.setProperty('--tx', tx);
+                icon.style.setProperty('--ty', ty);
+                icon.style.setProperty('--rotate', rotate);
+
+                celebration.appendChild(icon);
+            }
+
+            setTimeout(() => {
+                celebration.remove();
+            }, 1500);
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const carousel = document.querySelector('.carousel-container');
+            const cardWrappers = document.querySelectorAll('.card-wrapper');
+
+            carousel.style.scrollSnapType = 'none';
+            cardWrappers.forEach(wrapper => {
+                wrapper.style.scrollSnapAlign = 'none';
+            });
+
+            setTimeout(() => {
+                const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+                const offsetAmount = Math.min(1800, maxScroll);
+                const duration = 1500;
+
+                carousel.scrollLeft = offsetAmount;
+                void carousel.offsetHeight;
+
+                setTimeout(() => {
+                    const startTime = performance.now();
+                    const startPos = offsetAmount;
+
+                    function easeInOutCubic(t) {
+                        return t < 0.5
+                            ? 4 * t * t * t
+                            : 1 - Math.pow(-2 * t + 2, 3) / 2;
+                    }
+
+                    function animate(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = easeInOutCubic(progress);
+
+                        const targetScroll = Math.max(0, startPos - (startPos * eased));
+                        carousel.scrollLeft = targetScroll;
+
+                        if (progress < 1) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            carousel.scrollLeft = 0;
+                            setTimeout(() => {
+                                carousel.style.scrollSnapType = 'x mandatory';
+                                cardWrappers.forEach(wrapper => {
+                                    wrapper.style.scrollSnapAlign = 'center';
+                                });
+                            }, 100);
+                        }
+                    }
+
+                    requestAnimationFrame(animate);
+                }, 200);
+            }, 100);
+        });
+
+        let hasScrolled = false;
+        carousel.addEventListener('scroll', function() {
+            if (!hasScrolled) {
+                hasScrolled = true;
+                document.querySelector('.scroll-indicator').style.display = 'none';
+            }
+            checkAndLoadImages();
+        });
+
+        document.addEventListener('click', function() {
+            if (!hasScrolled) {
+                document.querySelector('.scroll-indicator').style.display = 'none';
+            }
+        }, { once: true });
+
+        function loadImage(img) {
+            if (img.dataset.src && !img.dataset.loaded) {
+                img.src = img.dataset.src;
+                img.dataset.loaded = 'true';
+            }
+        }
+
+        function checkAndLoadImages() {
+            const scrollLeft = carousel.scrollLeft;
+            const containerWidth = carousel.clientWidth;
+            const cardWrappers = document.querySelectorAll('.card-wrapper');
+
+            cardWrappers.forEach((wrapper, index) => {
+                const cardLeft = wrapper.offsetLeft;
+                const cardRight = cardLeft + wrapper.offsetWidth;
+
+                const isVisible = cardRight > scrollLeft - containerWidth && cardLeft < scrollLeft + containerWidth * 2;
+
+                if (isVisible || index < INITIAL_LOAD_COUNT + PRELOAD_DISTANCE) {
+                    const frontImg = wrapper.querySelector('.card-front img');
+                    const backImg = wrapper.querySelector('.card-back img');
+
+                    loadImage(frontImg);
+                    loadImage(backImg);
+                }
+            });
+        }
+
+        setTimeout(checkAndLoadImages, 100);
+
+        let scrollTimeout;
+        carousel.addEventListener('scroll', function() {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(checkAndLoadImages, 150);
+        });
+    </script>
+</body>
+</html>

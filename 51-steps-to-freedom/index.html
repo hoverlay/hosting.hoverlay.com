@@ -87,7 +87,7 @@
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .card img {
+.card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -779,6 +779,14 @@
                 subtitle: 'Airport',
                 image: './assets/images/Amelia-Card.jpg',
                 spacePid: 'ojebs'
+            },
+            {
+                id: "Girl Scouts",
+                title: "Girl Scouts",
+                subtitle: '',
+                image: './assets/images/girl-scouts.png',
+                imageClass: .8,
+                spacePid: 'y8he'
             }
         ];
 
@@ -787,7 +795,7 @@
             const card = document.createElement('div');
             card.className = `card unlocked ${data.fullWidth ? 'full-width' : ''}`;
             card.innerHTML = `
-				<img src="${data.image}" alt="${data.title}">
+				<img src="${data.image}" alt="${data.title}" style="${data.imageClass != null ? `transform: scale(${data.imageClass}); object-fit: contain;` : ''}">
                 <div class="card-content">
                     <h2 class="card-title">${data.title}</h2>
                     ${data.subtitle ? `<p class="card-subtitle">${data.subtitle}</p>` : ''}
