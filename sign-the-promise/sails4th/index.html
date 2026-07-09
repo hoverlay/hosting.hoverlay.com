@@ -771,11 +771,11 @@
             // If not played yet, send start event to Hoverlay
             if (!hasPlayed) {
                 // Track analytics once per user
-                const DASH_ANALYTICS_KEY = 'stp_dash_tracked';
+                const DASH_ANALYTICS_KEY = 'sail_dash_tracked';
                 if (!localStorage.getItem(DASH_ANALYTICS_KEY)) {
                     // Fire pixel tracking
                     const img = new Image();
-                    img.src = 'https://tour.51stepstofreedom.org/track/STP_DASH';
+                    img.src = 'https://tour.51stepstofreedom.org/track/SAIL_DASH';
                     localStorage.setItem(DASH_ANALYTICS_KEY, 'true');
                 }
 
@@ -840,11 +840,11 @@
         // Show Did You Know overlay
         function showDidYouKnow() {
             // Track analytics once per session
-            const DYK_ANALYTICS_KEY = 'stp_dyk_tracked';
+            const DYK_ANALYTICS_KEY = 'sail_dyk_tracked';
             if (!localStorage.getItem(DYK_ANALYTICS_KEY)) {
                 // Fire pixel tracking
                 const img = new Image();
-                img.src = 'https://tour.51stepstofreedom.org/track/STP_DYK';
+                img.src = 'https://tour.51stepstofreedom.org/track/SAIL_DYK';
                 localStorage.setItem(DYK_ANALYTICS_KEY, 'true');
             }
 
