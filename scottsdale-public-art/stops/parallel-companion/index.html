@@ -268,12 +268,12 @@
 
             // Add Fun Surprise button
             const surpriseButton = document.createElement("button");
-            surpriseButton.textContent = "Fun Surprise";
+            surpriseButton.textContent = "Tap for a Fun Surprise";
             surpriseButton.className = "start-button";
             surpriseButton.style.display = "block";
             surpriseButton.style.margin = "20px auto 0";
             surpriseButton.onclick = function() {
-                location.href = `space://do?action=send_event&event_message=quiz-completed&when_done='hide'`;
+                location.href = `space://do?action=send_event&event_message=quiz-completed&when_done=hide`;
             };
             messageElement.appendChild(surpriseButton);
         }
