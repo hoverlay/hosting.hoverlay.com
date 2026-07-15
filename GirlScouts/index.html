@@ -101,6 +101,7 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
+      overflow: hidden;
     }
 
     textarea {
@@ -178,6 +179,78 @@
       color: var(--text-muted);
       margin-top: 2px;
     }
+
+    /* Celebration overlay */
+    .celebration-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(44, 133, 88, 0.15), rgba(123, 201, 157, 0.08));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 400ms ease-out;
+      border-radius: 18px;
+    }
+
+    .celebration-overlay.show {
+      opacity: 1;
+    }
+
+    .awesome-text {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--accent);
+      text-shadow: 0 4px 20px rgba(44, 133, 88, 0.4);
+      letter-spacing: 0.1em;
+      animation: popIn 700ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.15);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Confetti particles */
+    .confetti {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .confetti.animate {
+      animation: confettiFall 1200ms ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translate(0, 0) scale(0);
+        opacity: 1;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(1);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -227,12 +300,66 @@ What will you explore...?"
       sendButton.addEventListener('click', function () {
         const text = (reflectionInput.value || '').trim();
 
+        // Show celebration effect
+        showCelebration();
+
         // Clear the text and send event to Unity
         setTimeout(() => {
           reflectionInput.value = '';
           location.href = `space://do?action=send_event&event_message=sent&when_done=hide`;
         }, 1200);
       });
+
+      function showCelebration() {
+        // Find the textarea shell to position overlay over it
+        const textareaShell = document.querySelector('.textarea-shell');
+
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'celebration-overlay';
+
+        // Create AWESOME text
+        const awesomeText = document.createElement('div');
+        awesomeText.className = 'awesome-text';
+        awesomeText.textContent = 'AWESOME!';
+        overlay.appendChild(awesomeText);
+
+        // Create confetti particles that pop all around
+        const colors = ['#2c8558', '#7bc99d', '#f0f8f4', '#e3f2ec', '#5a7a6b'];
+        for (let i = 0; i < 30; i++) {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.left = '50%';
+          confetti.style.top = '50%';
+
+          // Random direction from center
+          const angle = Math.random() * Math.PI * 2;
+          const distance = 150 + Math.random() * 250;
+          const tx = Math.cos(angle) * distance;
+          const ty = Math.sin(angle) * distance;
+
+          confetti.style.setProperty('--tx', tx + 'px');
+          confetti.style.setProperty('--ty', ty + 'px');
+          confetti.style.animationDelay = Math.random() * 100 + 'ms';
+          confetti.style.animationDuration = 800 + Math.random() * 400 + 'ms';
+          overlay.appendChild(confetti);
+        }
+
+        textareaShell.appendChild(overlay);
+
+        // Trigger animations
+        setTimeout(() => {
+          overlay.classList.add('show');
+          overlay.querySelectorAll('.confetti').forEach(c => c.classList.add('animate'));
+        }, 10);
+
+        // Remove overlay after animation
+        setTimeout(() => {
+          overlay.classList.remove('show');
+          setTimeout(() => overlay.remove(), 400);
+        }, 3000);
+      }
 
     })();
   </script>
