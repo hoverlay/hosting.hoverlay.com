@@ -309,6 +309,24 @@
       border-radius: 50%;
       box-shadow: 0 8px 24px rgba(44, 133, 88, 0.3);
       animation: badgeSpin 800ms ease-out;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .badge-image-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .save-instruction {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+      font-style: italic;
+      max-width: 280px;
     }
 
     @keyframes badgeSpin {
@@ -494,12 +512,24 @@ What will you explore...?"
         title.textContent = 'You Earned a Badge!';
         badgeContainer.appendChild(title);
 
+        // Badge image wrapper
+        const imageWrapper = document.createElement('div');
+        imageWrapper.className = 'badge-image-wrapper';
+
         // Badge image
         const badgeImg = document.createElement('img');
         badgeImg.className = 'badge-image';
         badgeImg.src = './assets/GIRL SCOUTS patch.jpg';
         badgeImg.alt = 'Girl Scouts 51 Steps to Freedom Badge';
-        badgeContainer.appendChild(badgeImg);
+        imageWrapper.appendChild(badgeImg);
+
+        // Save instruction
+        const instruction = document.createElement('div');
+        instruction.className = 'save-instruction';
+        instruction.textContent = 'Tap and hold the badge to save to your photos';
+        imageWrapper.appendChild(instruction);
+
+        badgeContainer.appendChild(imageWrapper);
 
         // Description text
         const text = document.createElement('div');
@@ -511,15 +541,9 @@ What will you explore...?"
         const buttonContainer = document.createElement('div');
         buttonContainer.className = 'badge-buttons';
 
-        const downloadBtn = document.createElement('button');
-        downloadBtn.className = 'btn btn-download';
-        downloadBtn.textContent = 'Save to Photos';
-        downloadBtn.onclick = downloadBadge;
-        buttonContainer.appendChild(downloadBtn);
-
         const closeBtn = document.createElement('button');
-        closeBtn.className = 'btn btn-close';
-        closeBtn.textContent = 'Close';
+        closeBtn.className = 'btn btn-download';
+        closeBtn.textContent = 'Done';
         closeBtn.onclick = () => {
           badgeOverlay.classList.remove('show');
           setTimeout(() => badgeOverlay.remove(), 500);
@@ -534,16 +558,6 @@ What will you explore...?"
         setTimeout(() => {
           badgeOverlay.classList.add('show');
         }, 10);
-      }
-
-      function downloadBadge() {
-        // Create a temporary link to download the badge image
-        const link = document.createElement('a');
-        link.href = './assets/GIRL SCOUTS patch.jpg';
-        link.download = 'GirlScouts-51StepsToFreedom-Badge.jpg';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
       }
 
     })();
