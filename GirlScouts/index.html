@@ -251,6 +251,121 @@
         opacity: 0;
       }
     }
+
+    /* Badge display */
+    .badge-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 500ms ease-out;
+      padding: 20px;
+    }
+
+    .badge-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .badge-container {
+      background: white;
+      border-radius: 24px;
+      padding: 30px 20px;
+      max-width: 400px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transform: scale(0.5) rotateY(180deg);
+      transition: transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .badge-overlay.show .badge-container {
+      transform: scale(1) rotateY(0deg);
+    }
+
+    .badge-title {
+      font-size: 1.8rem;
+      color: var(--accent);
+      text-align: center;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-image {
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: 0 8px 24px rgba(44, 133, 88, 0.3);
+      animation: badgeSpin 800ms ease-out;
+    }
+
+    @keyframes badgeSpin {
+      0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.1) rotate(10deg);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .badge-text {
+      text-align: center;
+      color: var(--text-main);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .badge-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .btn-download {
+      background: var(--accent);
+      color: white;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      box-shadow: 0 8px 18px rgba(44, 133, 88, 0.28);
+    }
+
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(44, 133, 88, 0.35);
+    }
+
+    .btn-close {
+      background: transparent;
+      color: var(--text-muted);
+      border: 2px solid var(--text-muted);
+      padding: 10px 20px;
+    }
+
+    .btn-close:hover {
+      background: var(--bg-alt);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
   </style>
 </head>
 <body>
@@ -354,11 +469,81 @@ What will you explore...?"
           overlay.querySelectorAll('.confetti').forEach(c => c.classList.add('animate'));
         }, 10);
 
-        // Remove overlay after animation
+        // Remove overlay after animation and show badge
         setTimeout(() => {
           overlay.classList.remove('show');
-          setTimeout(() => overlay.remove(), 400);
-        }, 3000);
+          setTimeout(() => {
+            overlay.remove();
+            showBadge();
+          }, 400);
+        }, 1800);
+      }
+
+      function showBadge() {
+        // Create badge overlay
+        const badgeOverlay = document.createElement('div');
+        badgeOverlay.className = 'badge-overlay';
+
+        // Create badge container
+        const badgeContainer = document.createElement('div');
+        badgeContainer.className = 'badge-container';
+
+        // Title
+        const title = document.createElement('div');
+        title.className = 'badge-title';
+        title.textContent = 'You Earned a Badge!';
+        badgeContainer.appendChild(title);
+
+        // Badge image
+        const badgeImg = document.createElement('img');
+        badgeImg.className = 'badge-image';
+        badgeImg.src = './assets/GIRL SCOUTS patch.jpg';
+        badgeImg.alt = 'Girl Scouts 51 Steps to Freedom Badge';
+        badgeContainer.appendChild(badgeImg);
+
+        // Description text
+        const text = document.createElement('div');
+        text.className = 'badge-text';
+        text.innerHTML = '<strong>Congratulations!</strong><br>You\'ve earned the 51 Steps to Freedom badge.';
+        badgeContainer.appendChild(text);
+
+        // Buttons
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'badge-buttons';
+
+        const downloadBtn = document.createElement('button');
+        downloadBtn.className = 'btn btn-download';
+        downloadBtn.textContent = 'Save to Photos';
+        downloadBtn.onclick = downloadBadge;
+        buttonContainer.appendChild(downloadBtn);
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'btn btn-close';
+        closeBtn.textContent = 'Close';
+        closeBtn.onclick = () => {
+          badgeOverlay.classList.remove('show');
+          setTimeout(() => badgeOverlay.remove(), 500);
+        };
+        buttonContainer.appendChild(closeBtn);
+
+        badgeContainer.appendChild(buttonContainer);
+        badgeOverlay.appendChild(badgeContainer);
+        document.body.appendChild(badgeOverlay);
+
+        // Trigger animation
+        setTimeout(() => {
+          badgeOverlay.classList.add('show');
+        }, 10);
+      }
+
+      function downloadBadge() {
+        // Create a temporary link to download the badge image
+        const link = document.createElement('a');
+        link.href = './assets/GIRL SCOUTS patch.jpg';
+        link.download = 'GirlScouts-51StepsToFreedom-Badge.jpg';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
 
     })();
