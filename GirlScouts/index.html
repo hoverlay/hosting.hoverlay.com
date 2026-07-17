@@ -440,10 +440,9 @@ What will you explore...?"
         // Show celebration effect
         showCelebration();
 
-        // Clear the text and send event to Unity
+        // Clear the text
         setTimeout(() => {
           reflectionInput.value = '';
-          location.href = `space://do?action=send_event&event_message=sent&when_done=hide`;
         }, 1200);
       });
 
@@ -550,7 +549,11 @@ What will you explore...?"
         closeBtn.textContent = 'Done';
         closeBtn.onclick = () => {
           badgeOverlay.classList.remove('show');
-          setTimeout(() => badgeOverlay.remove(), 500);
+          setTimeout(() => {
+            badgeOverlay.remove();
+            // Send event to Unity to close the browser
+            location.href = `space://do?action=send_event&event_message=sent&when_done=hide`;
+          }, 500);
         };
         buttonContainer.appendChild(closeBtn);
 
