@@ -447,6 +447,10 @@ What will you explore...?"
       });
 
       function showCelebration() {
+        // Track form submission
+        const img = new Image();
+        img.src = 'https://tour.51stepstofreedom.org/track/GIRL_SCOUTS_BRIDGE';
+
         // Find the textarea shell to position overlay over it
         const textareaShell = document.querySelector('.textarea-shell');
 
@@ -501,6 +505,10 @@ What will you explore...?"
       }
 
       function showBadge() {
+        // Track badge collection
+        const img = new Image();
+        img.src = 'https://tour.51stepstofreedom.org/track/GIRL_SCOUTS_BADGE';
+
         // Create badge overlay
         const badgeOverlay = document.createElement('div');
         badgeOverlay.className = 'badge-overlay';
