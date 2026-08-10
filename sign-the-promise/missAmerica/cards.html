@@ -288,8 +288,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Meet The Fleet</h1>
-            <p>Find the matching ship on the water</p>
+            <h1>Miss America</h1>
+            <p>Tap to flip • Swipe to explore</p>
         </div>
 
         <div class="carousel-container" id="carousel">
@@ -308,14 +308,14 @@
     <script>
         // Local storage helper functions
         function getFoundCards() {
-            const found = localStorage.getItem('tallShipsFound');
+            const found = localStorage.getItem('missAmericaFound');
             return found ? JSON.parse(found) : {};
         }
 
         function setCardFound(cardName, isFound) {
             const foundCards = getFoundCards();
             foundCards[cardName] = isFound;
-            localStorage.setItem('tallShipsFound', JSON.stringify(foundCards));
+            localStorage.setItem('missAmericaFound', JSON.stringify(foundCards));
         }
 
         function isCardFound(cardName) {
@@ -323,17 +323,61 @@
             return foundCards[cardName] === true;
         }
 
-        // Card data - extracted from image filenames
+        // Card data - 53 cards
         const cards = [
-            {name: 'SAIL-ShipFacts-MeetFleet', hasBack: true},
-            { name: 'USCGC-Eagle-United-States', hasBack: true },
-            { name: 'Amerigo-Vespucci-Italy', hasBack: true },
-            { name: 'Arc-Gloria-Colombia', hasBack: true },
-            { name: 'Gorch-Fock-Germany', hasBack: true },
-            { name: 'Mircea-Romania', hasBack: true },
-            { name: 'Ins-Sudarshini-India', hasBack: true },
-            { name: 'NRP-Sagres-Portugal', hasBack: true },
-            { name: 'Juan-Bautista-Cambiaso-Dominican-Republic', hasBack: true }
+            { name: 'card-01', hasBack: true },
+            { name: 'card-02', hasBack: true },
+            { name: 'card-03', hasBack: true },
+            { name: 'card-04', hasBack: true },
+            { name: 'card-05', hasBack: true },
+            { name: 'card-06', hasBack: true },
+            { name: 'card-07', hasBack: true },
+            { name: 'card-08', hasBack: true },
+            { name: 'card-09', hasBack: true },
+            { name: 'card-10', hasBack: true },
+            { name: 'card-11', hasBack: true },
+            { name: 'card-12', hasBack: true },
+            { name: 'card-13', hasBack: true },
+            { name: 'card-14', hasBack: true },
+            { name: 'card-15', hasBack: true },
+            { name: 'card-16', hasBack: true },
+            { name: 'card-17', hasBack: true },
+            { name: 'card-18', hasBack: true },
+            { name: 'card-19', hasBack: true },
+            { name: 'card-20', hasBack: true },
+            { name: 'card-21', hasBack: true },
+            { name: 'card-22', hasBack: true },
+            { name: 'card-23', hasBack: true },
+            { name: 'card-24', hasBack: true },
+            { name: 'card-25', hasBack: true },
+            { name: 'card-26', hasBack: true },
+            { name: 'card-27', hasBack: true },
+            { name: 'card-28', hasBack: true },
+            { name: 'card-29', hasBack: true },
+            { name: 'card-30', hasBack: true },
+            { name: 'card-31', hasBack: true },
+            { name: 'card-32', hasBack: true },
+            { name: 'card-33', hasBack: true },
+            { name: 'card-34', hasBack: true },
+            { name: 'card-35', hasBack: true },
+            { name: 'card-36', hasBack: true },
+            { name: 'card-37', hasBack: true },
+            { name: 'card-38', hasBack: true },
+            { name: 'card-39', hasBack: true },
+            { name: 'card-40', hasBack: true },
+            { name: 'card-41', hasBack: true },
+            { name: 'card-42', hasBack: true },
+            { name: 'card-43', hasBack: true },
+            { name: 'card-44', hasBack: true },
+            { name: 'card-45', hasBack: true },
+            { name: 'card-46', hasBack: true },
+            { name: 'card-47', hasBack: true },
+            { name: 'card-48', hasBack: true },
+            { name: 'card-49', hasBack: true },
+            { name: 'card-50', hasBack: true },
+            { name: 'card-51', hasBack: true },
+            { name: 'card-52', hasBack: true },
+            { name: 'card-53', hasBack: true }
         ];
 
         const carousel = document.getElementById('carousel');
@@ -351,7 +395,7 @@
             frontFace.className = 'card-face card-front';
             const frontImg = document.createElement('img');
             frontImg.src = `./assets/images/cards/${card.name}-Front.jpg`;
-            frontImg.alt = `${card.name} front`;
+            frontImg.alt = `Card ${index + 1} front`;
             frontFace.appendChild(frontImg);
 
             // Back face
@@ -361,7 +405,7 @@
             if (card.hasBack) {
                 const backImg = document.createElement('img');
                 backImg.src = `./assets/images/cards/${card.name}-Back.jpg`;
-                backImg.alt = `${card.name} back`;
+                backImg.alt = `Card ${index + 1} back`;
                 backFace.appendChild(backImg);
             } else {
                 // If no back image, show a placeholder
@@ -376,62 +420,58 @@
             cardElement.appendChild(backFace);
             cardElement.appendChild(tapIcon);
 
-            // Add "Found" badge on front (for ship cards only)
-            if (index > 0) {
-                const foundBadge = document.createElement('div');
-                foundBadge.className = 'found-badge';
-                foundBadge.innerHTML = '<i class="fas fa-check-circle"></i> Found';
-                cardElement.appendChild(foundBadge);
+            // Add "Starred" badge on front
+            const foundBadge = document.createElement('div');
+            foundBadge.className = 'found-badge';
+            foundBadge.innerHTML = '<i class="fas fa-star"></i> Starred';
+            cardElement.appendChild(foundBadge);
 
-                // Check if card is already marked as found
-                if (isCardFound(card.name)) {
-                    cardElement.classList.add('found');
-                }
+            // Check if card is already starred
+            if (isCardFound(card.name)) {
+                cardElement.classList.add('found');
             }
 
-            // Add "Found" toggle button on back (for ship cards only)
-            if (index > 0) {
-                const foundToggle = document.createElement('button');
-                foundToggle.className = 'found-toggle';
-                foundToggle.textContent = isCardFound(card.name) ? 'Mark as Not Found' : 'Mark as Found';
+            // Add "Star" toggle button on back
+            const foundToggle = document.createElement('button');
+            foundToggle.className = 'found-toggle';
+            foundToggle.textContent = isCardFound(card.name) ? 'Remove Star' : 'Add Star';
 
-                if (isCardFound(card.name)) {
+            if (isCardFound(card.name)) {
+                foundToggle.classList.add('found');
+            }
+
+            foundToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isFound = cardElement.classList.toggle('found');
+                setCardFound(card.name, isFound);
+
+                // Update button text and style
+                if (isFound) {
+                    foundToggle.textContent = 'Remove Star';
                     foundToggle.classList.add('found');
+
+                    // Trigger celebration effect
+                    showCelebration();
+
+                    // Flip card back to front after celebration
+                    setTimeout(() => {
+                        cardElement.classList.remove('flipped');
+                    }, 1500);
+                } else {
+                    foundToggle.textContent = 'Add Star';
+                    foundToggle.classList.remove('found');
                 }
+            });
 
-                foundToggle.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const isFound = cardElement.classList.toggle('found');
-                    setCardFound(card.name, isFound);
-
-                    // Update button text and style
-                    if (isFound) {
-                        foundToggle.textContent = 'Mark as Not Found';
-                        foundToggle.classList.add('found');
-
-                        // Trigger celebration effect
-                        showCelebration();
-
-                        // Flip card back to front after celebration
-                        setTimeout(() => {
-                            cardElement.classList.remove('flipped');
-                        }, 1500);
-                    } else {
-                        foundToggle.textContent = 'Mark as Found';
-                        foundToggle.classList.remove('found');
-                    }
-                });
-
-                cardElement.appendChild(foundToggle);
-            }
+            cardElement.appendChild(foundToggle);
 
             // Add click handler to flip card
             cardElement.addEventListener('click', function(e) {
                 e.stopPropagation();
 
-                // If it's the first card and not flipped (tapping front), send message to Unity
-                if (index === 0 && !this.classList.contains('flipped')) {
-                    location.href = `space://do?action=send_event&event_message=meet-the-fleet`;
+                // If not flipped (tapping front), send message to Unity
+                if (!this.classList.contains('flipped')) {
+                    location.href = `space://do?action=send_event&event_message=card-${(index + 1).toString().padStart(2, '0')}-viewed`;
                 }
 
                 this.classList.toggle('flipped');
