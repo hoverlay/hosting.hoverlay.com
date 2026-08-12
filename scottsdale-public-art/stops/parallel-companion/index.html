@@ -212,6 +212,9 @@
             messageElement.textContent = "";
             questionElement.textContent = currentQuestion.question;
 
+            // Remove highlighted class from all existing choices before clearing
+            document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
+
             // Clear all existing choices and their highlights
             choicesElement.innerHTML = "";            
             
