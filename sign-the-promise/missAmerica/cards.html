@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tall Ships Cards</title>
+    <title>Miss America Delegate Cards</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <style>
@@ -325,59 +325,57 @@
 
         // Card data - 53 cards
         const cards = [
-            { name: 'card-01', hasBack: true },
-            { name: 'card-02', hasBack: true },
-            { name: 'card-03', hasBack: true },
-            { name: 'card-04', hasBack: true },
-            { name: 'card-05', hasBack: true },
-            { name: 'card-06', hasBack: true },
-            { name: 'card-07', hasBack: true },
-            { name: 'card-08', hasBack: true },
-            { name: 'card-09', hasBack: true },
-            { name: 'card-10', hasBack: true },
-            { name: 'card-11', hasBack: true },
-            { name: 'card-12', hasBack: true },
-            { name: 'card-13', hasBack: true },
-            { name: 'card-14', hasBack: true },
-            { name: 'card-15', hasBack: true },
-            { name: 'card-16', hasBack: true },
-            { name: 'card-17', hasBack: true },
-            { name: 'card-18', hasBack: true },
-            { name: 'card-19', hasBack: true },
-            { name: 'card-20', hasBack: true },
-            { name: 'card-21', hasBack: true },
-            { name: 'card-22', hasBack: true },
-            { name: 'card-23', hasBack: true },
-            { name: 'card-24', hasBack: true },
-            { name: 'card-25', hasBack: true },
-            { name: 'card-26', hasBack: true },
-            { name: 'card-27', hasBack: true },
-            { name: 'card-28', hasBack: true },
-            { name: 'card-29', hasBack: true },
-            { name: 'card-30', hasBack: true },
-            { name: 'card-31', hasBack: true },
-            { name: 'card-32', hasBack: true },
-            { name: 'card-33', hasBack: true },
-            { name: 'card-34', hasBack: true },
-            { name: 'card-35', hasBack: true },
-            { name: 'card-36', hasBack: true },
-            { name: 'card-37', hasBack: true },
-            { name: 'card-38', hasBack: true },
-            { name: 'card-39', hasBack: true },
-            { name: 'card-40', hasBack: true },
-            { name: 'card-41', hasBack: true },
-            { name: 'card-42', hasBack: true },
-            { name: 'card-43', hasBack: true },
-            { name: 'card-44', hasBack: true },
-            { name: 'card-45', hasBack: true },
-            { name: 'card-46', hasBack: true },
-            { name: 'card-47', hasBack: true },
-            { name: 'card-48', hasBack: true },
-            { name: 'card-49', hasBack: true },
-            { name: 'card-50', hasBack: true },
-            { name: 'card-51', hasBack: true },
-            { name: 'card-52', hasBack: true },
-            { name: 'card-53', hasBack: true }
+            { name: 'Alabama', hasBack: true },
+            { name: 'Alaska', hasBack: true },
+            { name: 'Arizona', hasBack: true },
+            { name: 'Arkansas', hasBack: true },
+            { name: 'California', hasBack: true },
+            { name: 'Colorado', hasBack: true },
+            { name: 'Connecticut', hasBack: true },
+            { name: 'Delaware', hasBack: true },
+            { name: 'Florida', hasBack: true },
+            { name: 'Georgia', hasBack: true },
+            { name: 'Hawaii', hasBack: true },
+            { name: 'Idaho', hasBack: true },
+            { name: 'Illinois', hasBack: true },
+            { name: 'Indiana', hasBack: true },
+            { name: 'Iowa', hasBack: true },
+            { name: 'Kansas', hasBack: true },
+            { name: 'Kentucky', hasBack: true },
+            { name: 'Louisiana', hasBack: true },
+            { name: 'Maine', hasBack: true },
+            { name: 'Maryland', hasBack: true },
+            { name: 'Massachusetts', hasBack: true },
+            { name: 'Michigan', hasBack: true },
+            { name: 'Minnesota', hasBack: true },
+            { name: 'Mississippi', hasBack: true },
+            { name: 'Missouri', hasBack: true },
+            { name: 'Montana', hasBack: true },
+            { name: 'Nebraska', hasBack: true },
+            { name: 'Nevada', hasBack: true },
+            { name: 'New Hampshire', hasBack: true },
+            { name: 'New Jersey', hasBack: true },
+            { name: 'New Mexico', hasBack: true },
+            { name: 'New York', hasBack: true },
+            { name: 'North Carolina', hasBack: true },
+            { name: 'North Dakota', hasBack: true },
+            { name: 'Ohio', hasBack: true },
+            { name: 'Oklahoma', hasBack: true },
+            { name: 'Oregon', hasBack: true },
+            { name: 'Pennsylvania', hasBack: true },
+            { name: 'Puerto Rico', hasBack: true },
+            { name: 'Rhode Island', hasBack: true },
+            { name: 'South Carolina', hasBack: true },
+            { name: 'South Dakota', hasBack: true },
+            { name: 'Tennessee', hasBack: true },
+            { name: 'Texas', hasBack: true },
+            { name: 'Utah', hasBack: true },
+            { name: 'Vermont', hasBack: true },
+            { name: 'Virginia', hasBack: true },
+            { name: 'Washington', hasBack: true },
+            { name: 'West Virginia', hasBack: true },
+            { name: 'Wisconsin', hasBack: true },
+            { name: 'Wyoming', hasBack: true }
         ];
 
         const carousel = document.getElementById('carousel');
@@ -394,7 +392,7 @@
             const frontFace = document.createElement('div');
             frontFace.className = 'card-face card-front';
             const frontImg = document.createElement('img');
-            frontImg.src = `./assets/images/cards/${card.name}-Front.jpg`;
+            frontImg.src = `./assets/images/cards/${card.name} F.jpeg`;
             frontImg.alt = `Card ${index + 1} front`;
             frontFace.appendChild(frontImg);
 
@@ -404,7 +402,7 @@
 
             if (card.hasBack) {
                 const backImg = document.createElement('img');
-                backImg.src = `./assets/images/cards/${card.name}-Back.jpg`;
+                backImg.src = `./assets/images/cards/${card.name} B.png`;
                 backImg.alt = `Card ${index + 1} back`;
                 backFace.appendChild(backImg);
             } else {
@@ -488,7 +486,7 @@
             document.body.appendChild(celebration);
 
             // Create multiple celebration icons
-            const icons = ['🎉', '⭐', '✨', '🎊', '⚓', '🚢'];
+            const icons = ['⭐', '✨', '🎊', '⭐', '✨', '⭐'];
             const colors = ['#FFD700', '#FF6B35', '#28a745', '#1a5490', '#FF1493'];
 
             for (let i = 0; i < 12; i++) {
