@@ -16,7 +16,6 @@
             height: 100%;
             overflow: hidden;
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
         }
 
         .container {
@@ -24,25 +23,39 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            background:
+                radial-gradient(ellipse at 80% 0%, rgba(229, 200, 143, 0.6) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 0%, rgba(251, 236, 209, 0.6) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 0%, rgba(251, 248, 241, 0.5) 0%, transparent 40%),
+                linear-gradient(135deg,
+                    rgba(229, 200, 143, 0.3) 0%,
+                    transparent 30%,
+                    transparent 100%),
+                linear-gradient(to bottom,
+                    #fbecd1 0%,
+                    #fbf8f1 20%,
+                    #e5c88f 30%,
+                    #c5b599 45%,
+                    #565c65 60%,
+                    #25344e 75%,
+                    #021432 90%);
         }
 
         .header {
             padding: 1rem;
             text-align: center;
-            color: #1a5490;
-            background: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            color: #011140;
         }
 
         .header h1 {
             font-size: 1.8rem;
-            font-weight: bold;
+            font-weight: regular;
             margin-bottom: 0.3rem;
         }
 
         .header p {
-            font-size: 0.98rem;
-            color: #3a7bc8;
+            font-size: 0.9rem;
+            font-weight: 300;
         }
 
         .carousel-container {
@@ -88,7 +101,8 @@
             transition: transform 0.6s;
             cursor: pointer;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 20px rgba(229, 200, 143, 0.4),
+                        0 0 40px rgba(251, 236, 209, 0.2);
         }
 
         .card.flipped {
@@ -142,57 +156,94 @@
             display: none;
         }
 
-        .found-toggle {
+        .star-button-container {
             position: absolute;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%) rotateY(180deg);
-            background: #1a5490;
-            color: white;
-            border: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
+            bottom: 1.5rem;
+            left: calc(0% - 10px);
+            transform: rotateY(180deg);
             z-index: 10;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: background 0.3s ease;
             display: none;
-            white-space: nowrap;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
         }
 
-        .card.flipped .found-toggle {
-            display: block;
+        .star-popup {
+            background: rgba(0, 0, 0, 0.95);
+            color: #B49B57;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.595rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .star-popup.visible {
+            opacity: 1;
+        }
+
+        .found-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.2s ease;
+            position: relative;
+        }
+
+        .found-toggle img {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+        }
+
+        .star-checkmark {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: #28a745;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .found-toggle.starred .star-checkmark {
+            display: flex;
+        }
+
+        .card.flipped .star-button-container {
+            display: flex;
         }
 
         .found-toggle:active {
-            transform: translateX(-50%) rotateY(180deg) scale(0.95);
-        }
-
-        .found-toggle.found {
-            background: #28a745;
+            transform: scale(0.9);
         }
 
         .found-badge {
             position: absolute;
-            top: 1rem;
+            top: -15px;
             right: 1rem;
-            background: #28a745;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
             display: none;
-            align-items: center;
-            gap: 0.4rem;
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
             z-index: 10;
         }
 
+        .found-badge img {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 4px 12px rgba(40, 167, 69, 0.6));
+        }
+
         .card.found .found-badge {
-            display: flex;
+            display: block;
         }
 
         .card.flipped .found-badge {
@@ -279,8 +330,8 @@
         .footer {
             padding: 1rem;
             text-align: center;
-            color: #1a5490;
-            background: rgba(255, 255, 255, 0.8);
+            color: #B49B57;
+            background: #021432;
             font-size: 0.85rem;
         }
     </style>
@@ -288,15 +339,13 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Miss America</h1>
-            <p>Tap to flip • Swipe to explore</p>
+            <h1>Meet The Delegates</h1>
+            <p>Tap to flip &nbsp;&nbsp;• &nbsp;Swipe to explore</p>
         </div>
 
         <div class="carousel-container" id="carousel">
             <!-- Cards will be dynamically inserted here -->
         </div>
-
-        <div class="instructions-overlay">Tap to flip • Swipe to explore</div>
 
         <div class="scroll-indicator">›</div>
 
@@ -418,10 +467,13 @@
             cardElement.appendChild(backFace);
             cardElement.appendChild(tapIcon);
 
-            // Add "Starred" badge on front
+            // Add "Starred" badge on front (star image)
             const foundBadge = document.createElement('div');
             foundBadge.className = 'found-badge';
-            foundBadge.innerHTML = '<i class="fas fa-star"></i> Starred';
+            const frontStarImg = document.createElement('img');
+            frontStarImg.src = './assets/images/miss-america-star.png';
+            frontStarImg.alt = 'Starred';
+            foundBadge.appendChild(frontStarImg);
             cardElement.appendChild(foundBadge);
 
             // Check if card is already starred
@@ -429,25 +481,41 @@
                 cardElement.classList.add('found');
             }
 
-            // Add "Star" toggle button on back
+            // Add "Star" toggle button on back with popup
+            const starContainer = document.createElement('div');
+            starContainer.className = 'star-button-container';
+
+            const starPopup = document.createElement('div');
+            starPopup.className = 'star-popup';
+            starPopup.textContent = 'Star this delegate';
+
             const foundToggle = document.createElement('button');
             foundToggle.className = 'found-toggle';
-            foundToggle.textContent = isCardFound(card.name) ? 'Remove Star' : 'Add Star';
-
             if (isCardFound(card.name)) {
-                foundToggle.classList.add('found');
+                foundToggle.classList.add('starred');
             }
+
+            const starImg = document.createElement('img');
+            starImg.src = './assets/images/miss-america-star.png';
+            starImg.alt = 'Star';
+            foundToggle.appendChild(starImg);
+
+            const checkmark = document.createElement('div');
+            checkmark.className = 'star-checkmark';
+            checkmark.innerHTML = '✓';
+            foundToggle.appendChild(checkmark);
 
             foundToggle.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const isFound = cardElement.classList.toggle('found');
                 setCardFound(card.name, isFound);
 
-                // Update button text and style
-                if (isFound) {
-                    foundToggle.textContent = 'Remove Star';
-                    foundToggle.classList.add('found');
+                // Hide popup when clicked
+                starPopup.classList.remove('visible');
 
+                // Toggle checkmark
+                if (isFound) {
+                    foundToggle.classList.add('starred');
                     // Trigger celebration effect
                     showCelebration();
 
@@ -456,23 +524,55 @@
                         cardElement.classList.remove('flipped');
                     }, 1500);
                 } else {
-                    foundToggle.textContent = 'Add Star';
-                    foundToggle.classList.remove('found');
+                    foundToggle.classList.remove('starred');
                 }
             });
 
-            cardElement.appendChild(foundToggle);
+            starContainer.appendChild(starPopup);
+            starContainer.appendChild(foundToggle);
+            cardElement.appendChild(starContainer);
+
+            // Show popup after a few seconds when card is flipped
+            let popupTimeout;
+            let hidePopupTimeout;
 
             // Add click handler to flip card
             cardElement.addEventListener('click', function(e) {
                 e.stopPropagation();
 
+                const wasFlipped = this.classList.contains('flipped');
+
                 // If not flipped (tapping front), send message to Unity
-                if (!this.classList.contains('flipped')) {
+                if (!wasFlipped) {
                     location.href = `space://do?action=send_event&event_message=card-${(index + 1).toString().padStart(2, '0')}-viewed`;
                 }
 
                 this.classList.toggle('flipped');
+
+                // After flipping, check if we're now showing the back
+                setTimeout(() => {
+                    const isNowFlipped = this.classList.contains('flipped');
+
+                    if (isNowFlipped && !wasFlipped) {
+                        // Just flipped to back - show popup after delay
+                        clearTimeout(popupTimeout);
+                        clearTimeout(hidePopupTimeout);
+
+                        popupTimeout = setTimeout(() => {
+                            starPopup.classList.add('visible');
+
+                            // Hide popup after 4 seconds
+                            hidePopupTimeout = setTimeout(() => {
+                                starPopup.classList.remove('visible');
+                            }, 4000);
+                        }, 3000);
+                    } else if (!isNowFlipped) {
+                        // Flipped back to front - clear popup
+                        clearTimeout(popupTimeout);
+                        clearTimeout(hidePopupTimeout);
+                        starPopup.classList.remove('visible');
+                    }
+                }, 100);
             });
 
             cardWrapper.appendChild(cardElement);
