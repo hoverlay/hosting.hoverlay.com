@@ -154,11 +154,29 @@
             justify-content: center;
         }
 
+        .partners-title-img-wrap {
+            display: inline-block;
+            position: relative;
+            max-width: 450px;
+            width: 100%;
+        }
+
         .partners-title-img {
             max-width: 450px;
+            width: 100%;
             height: auto;
             display: block;
             margin: 0 auto;
+        }
+
+        .partners-underline {
+            position: absolute;
+            left: 29.4%;
+            width: 38.7%;
+            top: 78%;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 1px;
         }
 
         .partners-logo {
@@ -297,7 +315,10 @@
 
     <!-- Partners Section -->
     <div class="partners-title">
-        <img src="./assets/images/our-partners-title.png" alt="Our Partners" class="partners-title-img">
+        <div class="partners-title-img-wrap">
+            <img src="./assets/images/our-partners-title.png" alt="Our Partners" class="partners-title-img">
+            <div class="partners-underline"></div>
+        </div>
     </div>
     <div class="partners-section">
         <img src="./assets/images/partners-logo.png" alt="Our Partners" class="partners-logo">
