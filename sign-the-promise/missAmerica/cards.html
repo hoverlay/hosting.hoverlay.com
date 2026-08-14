@@ -23,6 +23,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            position: relative;
             background:
                 radial-gradient(ellipse at 80% 0%, rgba(229, 200, 143, 0.6) 0%, transparent 50%),
                 radial-gradient(ellipse at 20% 0%, rgba(251, 236, 209, 0.6) 0%, transparent 50%),
@@ -39,6 +40,24 @@
                     #565c65 60%,
                     #25344e 75%,
                     #021432 90%);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('./assets/images/background.jpeg') center/cover;
+            opacity: 1; /* Adjust 0-1: controls how much the bokeh shows */
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container > * {
+            position: relative;
+            z-index: 1;
         }
 
         .header {
@@ -161,7 +180,7 @@
             bottom: 1.5rem;
             left: calc(0% - 10px);
             transform: rotateY(180deg);
-            z-index: 10;
+            z-index: 100;
             display: none;
             flex-direction: column;
             align-items: flex-end;
@@ -171,14 +190,16 @@
         .star-popup {
             background: rgba(0, 0, 0, 0.95);
             color: #B49B57;
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1.2rem;
             border-radius: 15px;
-            font-size: 0.595rem;
+            font-size: 0.75rem;
             white-space: nowrap;
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            z-index: 101;
+            position: relative;
         }
 
         .star-popup.visible {
@@ -482,60 +503,61 @@
                 cardElement.classList.add('found');
             }
 
-            // Add "Star" toggle button on back with popup
-            const starContainer = document.createElement('div');
-            starContainer.className = 'star-button-container';
+            // Add "Star" toggle button on back with popup (skip for first card - Miss America)
+            let starPopup = null;
+            if (index !== 0) {
+                const starContainer = document.createElement('div');
+                starContainer.className = 'star-button-container';
 
-            const starPopup = document.createElement('div');
-            starPopup.className = 'star-popup';
-            starPopup.textContent = 'Star this delegate';
+                starPopup = document.createElement('div');
+                starPopup.className = 'star-popup';
+                starPopup.textContent = 'Star this delegate';
 
-            const foundToggle = document.createElement('button');
-            foundToggle.className = 'found-toggle';
-            if (isCardFound(card.name)) {
-                foundToggle.classList.add('starred');
-            }
-
-            const starImg = document.createElement('img');
-            starImg.src = './assets/images/miss-america-star.png';
-            starImg.alt = 'Star';
-            foundToggle.appendChild(starImg);
-
-            const checkmark = document.createElement('div');
-            checkmark.className = 'star-checkmark';
-            checkmark.innerHTML = '✓';
-            foundToggle.appendChild(checkmark);
-
-            foundToggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const isFound = cardElement.classList.toggle('found');
-                setCardFound(card.name, isFound);
-
-                // Hide popup when clicked
-                starPopup.classList.remove('visible');
-
-                // Toggle checkmark
-                if (isFound) {
+                const foundToggle = document.createElement('button');
+                foundToggle.className = 'found-toggle';
+                if (isCardFound(card.name)) {
                     foundToggle.classList.add('starred');
-                    // Trigger celebration effect
-                    showCelebration();
-
-                    // Flip card back to front after celebration
-                    setTimeout(() => {
-                        cardElement.classList.remove('flipped');
-                    }, 1500);
-                } else {
-                    foundToggle.classList.remove('starred');
                 }
-            });
 
-            starContainer.appendChild(starPopup);
-            starContainer.appendChild(foundToggle);
-            cardElement.appendChild(starContainer);
+                const starImg = document.createElement('img');
+                starImg.src = './assets/images/miss-america-star.png';
+                starImg.alt = 'Star';
+                foundToggle.appendChild(starImg);
 
-            // Show popup after a few seconds when card is flipped
-            let popupTimeout;
-            let hidePopupTimeout;
+                const checkmark = document.createElement('div');
+                checkmark.className = 'star-checkmark';
+                checkmark.innerHTML = '✓';
+                foundToggle.appendChild(checkmark);
+
+                foundToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isFound = cardElement.classList.toggle('found');
+                    setCardFound(card.name, isFound);
+
+                    // Hide popup when clicked
+                    if (starPopup) {
+                        starPopup.classList.remove('visible');
+                    }
+
+                    // Toggle checkmark
+                    if (isFound) {
+                        foundToggle.classList.add('starred');
+                        // Trigger celebration effect
+                        showCelebration();
+
+                        // Flip card back to front after celebration
+                        setTimeout(() => {
+                            cardElement.classList.remove('flipped');
+                        }, 1500);
+                    } else {
+                        foundToggle.classList.remove('starred');
+                    }
+                });
+
+                starContainer.appendChild(starPopup);
+                starContainer.appendChild(foundToggle);
+                cardElement.appendChild(starContainer);
+            }
 
             // Add click handler to flip card
             cardElement.addEventListener('click', function(e) {
@@ -550,30 +572,26 @@
 
                 this.classList.toggle('flipped');
 
-                // After flipping, check if we're now showing the back
-                setTimeout(() => {
-                    const isNowFlipped = this.classList.contains('flipped');
+                // Show popup after a few seconds when card is flipped (only for delegate cards, not Miss America)
+                if (index !== 0 && starPopup) {
+                    // After flipping, check if we're now showing the back
+                    setTimeout(() => {
+                        const isNowFlipped = this.classList.contains('flipped');
 
-                    if (isNowFlipped && !wasFlipped) {
-                        // Just flipped to back - show popup after delay
-                        clearTimeout(popupTimeout);
-                        clearTimeout(hidePopupTimeout);
-
-                        popupTimeout = setTimeout(() => {
+                        if (isNowFlipped && !wasFlipped) {
+                            // Just flipped to back - show popup immediately
                             starPopup.classList.add('visible');
 
-                            // Hide popup after 4 seconds
-                            hidePopupTimeout = setTimeout(() => {
+                            // Hide popup after 3 seconds
+                            setTimeout(() => {
                                 starPopup.classList.remove('visible');
-                            }, 4000);
-                        }, 3000);
-                    } else if (!isNowFlipped) {
-                        // Flipped back to front - clear popup
-                        clearTimeout(popupTimeout);
-                        clearTimeout(hidePopupTimeout);
-                        starPopup.classList.remove('visible');
-                    }
-                }, 100);
+                            }, 3000);
+                        } else if (!isNowFlipped) {
+                            // Flipped back to front - clear popup
+                            starPopup.classList.remove('visible');
+                        }
+                    }, 700);
+                }
             });
 
             cardWrapper.appendChild(cardElement);
