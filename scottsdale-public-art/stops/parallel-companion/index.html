@@ -193,6 +193,7 @@
 
         let currentQuestionIndex = 0;
         let userAnswers = Array(questions.length).fill(null);
+        let isTransitioning = false;
 
         // Start the quiz
         function startQuiz() {
@@ -203,6 +204,7 @@
 
         // Load a question from the questions array
         function loadQuestion() {
+            isTransitioning = false;
             const currentQuestion = questions[currentQuestionIndex];
             const questionElement = document.getElementById("question");
             const choicesElement = document.getElementById("choices");
@@ -216,8 +218,8 @@
             document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
 
             // Clear all existing choices and their highlights
-            choicesElement.innerHTML = "";            
-            
+            choicesElement.innerHTML = "";
+
             // Apply layout based on question configuration
             if (currentQuestion.layout === "list") {
                 choicesElement.style.gridTemplateColumns = "1fr";
@@ -230,6 +232,7 @@
                 button.textContent = choice;
                 button.classList.add("choice");
                 button.addEventListener("click", function() {
+                    if (isTransitioning) return;
                     document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
                     button.classList.add('highlighted');
                     selectAnswer(index);
@@ -252,6 +255,7 @@
             }
 
             if (currentQuestion.exitAfterAttempt || currentQuestion.correct.includes(choiceIndex)) {
+                isTransitioning = true;
                 setTimeout(() => {
                     currentQuestionIndex++;
                     if (currentQuestionIndex < questions.length) {
