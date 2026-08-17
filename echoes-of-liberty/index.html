@@ -115,8 +115,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 16px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 20px 16px;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4) 30%, rgba(0, 0, 0, 0.9));
             color: white;
         }
 
@@ -127,8 +127,33 @@
         }
 
         .card-subtitle {
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             opacity: 0.9;
+        }
+
+        .card.coming-soon::after {
+            content: 'Coming Soon';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            z-index: 3;
+        }
+
+        .card.coming-soon {
+            opacity: 0.7;
+            cursor: default;
+        }
+
+        .card.coming-soon:hover {
+            transform: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .logo-container {
@@ -179,16 +204,23 @@
             //     fullWidth: true
             // },
             {
+                id: 'crispus-attucks',
+                title: 'Crispus Attucks',
+                subtitle: 'First to fall in the Boston Massacre. Memory debated and reclaimed.',
+                image: './assets/images/cripus-attuck.jpg',
+                comingSoon: true
+            },
+            {
                 id: 'elizabeth-freeman',
-                title: 'Elizabeth Freeman',
-                subtitle: 'Mum Bett',
+                title: 'Elizabeth "Mum Bett" Freeman',
+                subtitle: 'Sued for freedom in 1781 and Won! Helped end slavery in Massachusetts.',
                 image: './assets/images/elizabeth-freeman.jpg',
                 spacePid: '93742'
             },
             {
                 id: 'prince-hall',
                 title: 'Prince Hall',
-                subtitle: '',
+                subtitle: 'Boston leader who built schools and mutual aid through the Mason Grand African Lodge.',
                 image: './assets/images/prince-hall.jpg',
                 spacePid: '9in'
             },
@@ -202,9 +234,27 @@
         ];
 
         const gallery = document.querySelector('.gallery');
+
+        // Track visited spaces in localStorage
+        const getVisitedSpaces = () => {
+            const visited = localStorage.getItem('echoes-visited');
+            return visited ? JSON.parse(visited) : [];
+        };
+
+        const markSpaceVisited = (spaceId) => {
+            const visited = getVisitedSpaces();
+            if (!visited.includes(spaceId)) {
+                visited.push(spaceId);
+                localStorage.setItem('echoes-visited', JSON.stringify(visited));
+            }
+        };
+
+        const visitedSpaces = getVisitedSpaces();
+
         cardData.forEach(data => {
             const card = document.createElement('div');
-            card.className = `card unlocked ${data.fullWidth ? 'full-width' : ''}`;
+            const isVisited = data.spacePid && visitedSpaces.includes(data.spacePid);
+            card.className = `card ${isVisited ? 'unlocked' : ''} ${data.fullWidth ? 'full-width' : ''} ${data.comingSoon ? 'coming-soon' : ''}`;
             card.innerHTML = `
 				<img src="${data.image}" alt="${data.title}" style="${data.imageClass != null ? `transform: scale(${data.imageClass}); object-fit: contain;` : ''}">
                 <div class="card-content">
@@ -213,6 +263,10 @@
                 </div>
             `;
             card.onclick = () => {
+                if (data.comingSoon) return;
+                if (data.spacePid) {
+                    markSpaceVisited(data.spacePid);
+                }
                 if (data.url) {
                     window.open(data.url, '_blank');
                 } else {
