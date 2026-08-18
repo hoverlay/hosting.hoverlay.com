@@ -72,7 +72,8 @@
             background: transparent;
             border: none;
             color: rgba(0, 0, 0, 0.6);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -97,7 +98,7 @@
         }
 
         .header h1 {
-            font-size: 1.8rem;
+            font-size: 1.9rem;
             font-weight: regular;
             margin-bottom: 0.3rem;
         }
@@ -212,17 +213,17 @@
             transform: rotateY(180deg);
             z-index: 100;
             display: none;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 0.5rem;
+            flex-direction: row;
+            align-items: center;
+            gap: 0rem;
         }
 
         .star-popup {
             background: rgba(0, 0, 0, 0.95);
             color: #B49B57;
-            padding: 0.6rem 1.2rem;
+            padding: 0.6rem 1.1rem;
             border-radius: 15px;
-            font-size: 0.75rem;
+            font-size: 1.1rem;
             white-space: nowrap;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -544,7 +545,7 @@
 
                 starPopup = document.createElement('div');
                 starPopup.className = 'star-popup';
-                starPopup.textContent = 'Star this delegate';
+                starPopup.textContent = 'Star this delegate →';
 
                 const foundToggle = document.createElement('button');
                 foundToggle.className = 'found-toggle';
@@ -612,13 +613,15 @@
                         const isNowFlipped = this.classList.contains('flipped');
 
                         if (isNowFlipped && !wasFlipped) {
-                            // Just flipped to back - show popup immediately
-                            starPopup.classList.add('visible');
+                            // Just flipped to back - show popup only if not already starred
+                            if (!isCardFound(card.name)) {
+                                starPopup.classList.add('visible');
 
-                            // Hide popup after 3 seconds
-                            setTimeout(() => {
-                                starPopup.classList.remove('visible');
-                            }, 3000);
+                                // Hide popup after 3 seconds
+                                setTimeout(() => {
+                                    starPopup.classList.remove('visible');
+                                }, 3000);
+                            }
                         } else if (!isNowFlipped) {
                             // Flipped back to front - clear popup
                             starPopup.classList.remove('visible');
