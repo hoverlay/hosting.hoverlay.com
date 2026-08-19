@@ -142,18 +142,34 @@
 
         .question-text {
             flex: 0 0 auto;
-            font-size: 1rem;
+            font-size: 1.2rem;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            text-align: center;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .question-subtext {
+            flex: 0 0 auto;
+            font-size: 0.85rem;
             font-family: 'Nunito Sans', sans-serif;
             font-weight: 600;
             color: var(--color-text-primary);
             text-align: center;
-            margin-bottom: var(--spacing-md);
+            margin-bottom: 8px;
+            transition: opacity 0.3s ease;
+        }
+
+        .question-subtext.hidden {
+            display: none;
         }
 
         .disclaimer {
             display: none;
             position: absolute;
-            top: 88%;
+            top: 70%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 0.65rem;
@@ -198,7 +214,7 @@
         .card-container {
             position: relative;
             width: 100%;
-            height: 200px;
+            height: 150px;
             transition: transform 0.6s, width 0.3s;
             transform-style: preserve-3d;
             border-radius: var(--border-radius-card);
@@ -208,7 +224,7 @@
             transform: rotateY(180deg);
         }
 
-        .front, .back {
+        .front {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -220,9 +236,6 @@
             justify-content: center;
             padding: var(--spacing-md);
             box-sizing: border-box;
-        }
-
-        .front {
             background-color: var(--color-background);
         }
 
@@ -235,6 +248,17 @@
         }
 
         .back {
+            position: absolute;
+            width: 100%;
+            height: 250px;
+            backface-visibility: hidden;
+            border-radius: var(--border-radius-card);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: var(--spacing-xs);
+            box-sizing: border-box;
             transform: rotateY(180deg);
             background-color: var(--color-background);
             color: var(--color-text-primary);
@@ -244,7 +268,7 @@
             font-size: 1.45rem;
             font-family: 'Nunito', sans-serif;
             font-weight: 600;
-            margin-bottom: var(--spacing-md);
+            margin: var(--spacing-sm);
             text-align: center;
         }
 
@@ -254,6 +278,34 @@
             font-weight: 400;
             margin: var(--spacing-sm);
             text-align: center;
+            max-height: 80px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            color: var(--color-icon-primary);
+            animation: bounce 2s infinite;
+            pointer-events: none;
+            display: none;
+            z-index: 10;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translate(-50%, 0);
+            }
+            40% {
+                transform: translate(-50%, -5px);
+            }
+            60% {
+                transform: translate(-50%, -3px);
+            }
         }
 
         .tree-button {
@@ -270,6 +322,8 @@
             border: none;
             overflow: hidden;
             text-transform: uppercase;
+            max-width: 280px;
+            line-height: 1.2;
         }
 
         .tree-button::after {
@@ -332,20 +386,21 @@
 
         .checkmark {
             display: none;
-            position: absolute;
-            top: 50%;
+            position: fixed;
+            top: 30%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 6rem;
             color: var(--color-icon-primary);
             opacity: 0;
             transition: opacity 0.5s ease;
+            z-index: 1000;
         }
 
         .checkmark-message {
             display: none;
-            position: absolute;
-            top: 75%;
+            position: fixed;
+            top: 55%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 1.1rem;
@@ -357,6 +412,7 @@
             border-radius: 7px;
             opacity: 0;
             transition: opacity 0.5s ease;
+            z-index: 1000;
         }
 
         .nav-arrow {
@@ -409,7 +465,8 @@
             </button>
         </div>
         <div class="carousel-container">
-            <div class="question-text">What Tree Do You Want to See?</div>
+            <div class="question-text">Plant a Native Arizona tree!</div>
+            <div class="question-subtext">Select a Tree</div>
 
             <div class="carousel">
                 <button class="nav-arrow" id="prevBtn" onclick="navigateCarousel(-1)">
@@ -457,7 +514,7 @@
             },
             {
                 id: "thornless-hybrid-palo-verde",
-                name: "Thornless Hybrid Palo Verde",
+                name: "Thornless Palo Verde",
                 description: "Fast-growing. Green trunk, thornless, abundant yellow flowers that attract pollinators, fixes nitrogen in soil."
             },
             {
@@ -506,11 +563,12 @@
                         <div class="back">
                             <h2 onclick="flipBackToFront()" style="cursor: pointer;">${tree.name.toUpperCase()}</h2>
                             <div class="year-buttons">
-                                <button onclick="handleButtonClick(event, '${tree.id}', 3)" class="year-button">3 years</button>
-                                <button onclick="handleButtonClick(event, '${tree.id}', 5)" class="year-button">5 years</button>
-                                <button onclick="handleButtonClick(event, '${tree.id}', 10)" class="year-button">10 years</button>
+                                <button onclick="handleButtonClick(event, '${tree.id}', 3)" class="year-button">3yrs</button>
+                                <button onclick="handleButtonClick(event, '${tree.id}', 5)" class="year-button">5yrs</button>
+                                <button onclick="handleButtonClick(event, '${tree.id}', 10)" class="year-button">10yrs</button>
                             </div>
-                            <p onclick="flipBackToFront()" style="cursor: pointer;">${tree.description}</p>
+                            <p onclick="flipBackToFront()" style="cursor: pointer;" class="description-text">${tree.description}</p>
+                            <i class="fas fa-chevron-down scroll-indicator"></i>
                             <i class="fas fa-check-circle checkmark"></i>
                             <div class="checkmark-message">Tree planted!</div>
                             <div class="disclaimer">Sizes vary with maintenance & water</div>
@@ -563,6 +621,7 @@
             const poster = posters[index];
             const card = poster.querySelector('.card-container');
             const isFlipped = card.classList.contains('flipped');
+            const questionSubtext = document.querySelector('.question-subtext');
 
             card.classList.toggle('flipped');
             poster.classList.toggle('showing-back');
@@ -575,16 +634,33 @@
                 // Card is being flipped to back
                 navArrows.forEach(arrow => arrow.classList.add('hidden'));
                 backButton.classList.add('visible');
+                if (questionSubtext) questionSubtext.classList.add('hidden');
+
+                // Check if description is scrollable
+                setTimeout(() => {
+                    const descriptionText = poster.querySelector('.description-text');
+                    const scrollIndicator = poster.querySelector('.scroll-indicator');
+                    if (descriptionText && scrollIndicator) {
+                        if (descriptionText.scrollHeight > descriptionText.clientHeight) {
+                            scrollIndicator.style.display = 'block';
+                        } else {
+                            scrollIndicator.style.display = 'none';
+                        }
+                    }
+                }, 100);
             } else {
                 // Card is being flipped to front
                 navArrows.forEach(arrow => arrow.classList.remove('hidden'));
                 backButton.classList.remove('visible');
+                if (questionSubtext) questionSubtext.classList.remove('hidden');
             }
         }
 
         function flipBackToFront() {
             const poster = posters[currentIndex];
             const activeCard = poster.querySelector('.card-container');
+            const questionSubtext = document.querySelector('.question-subtext');
+
             activeCard.classList.remove('flipped');
             poster.classList.remove('showing-back');
 
@@ -593,6 +669,7 @@
             const backButton = document.getElementById('backButton');
             navArrows.forEach(arrow => arrow.classList.remove('hidden'));
             backButton.classList.remove('visible');
+            if (questionSubtext) questionSubtext.classList.remove('hidden');
         }
 
         function handleButtonClick(event, treeId, years) {
