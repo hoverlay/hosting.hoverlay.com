@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DC Airport Collectible</title>
+  <title>Sign the Declaration Collectible</title>
   <style>
     :root {
       --bg: #f0f8f4;
@@ -305,9 +305,9 @@
   </style>
 </head>
 <body>
-  <div class="app-shell" id="appShell" aria-label="DC Airport Collectible">
+  <div class="app-shell" id="appShell" aria-label="Sign the Declaration Collectible">
     <header class="header">
-      <div class="title">DC Airport Collectible</div>
+      <div class="title">Sign the Declaration Collectible</div>
       <div class="subtitle">Tap to collect</div>
     </header>
 
@@ -334,7 +334,7 @@
       function showCelebration() {
         // Track collectible collection
         const img = new Image();
-        img.src = 'https://tour.51stepstofreedom.org/track/DCA_AIRPORT_COLLECTIBLE';
+        img.src = 'https://tour.51stepstofreedom.org/track/SIGN_DEC_COLLECTIBLE';
 
         // Create overlay
         const overlay = document.createElement('div');
@@ -388,8 +388,8 @@
 
       function showBadge() {
         // Track badge display
-        const img = new Image();
-        img.src = 'https://tour.51stepstofreedom.org/track/DCA_AIRPORT_BADGE';
+        // const img = new Image();
+        // img.src = 'https://tour.51stepstofreedom.org/track/SIGN_DEC_BADGE';
 
         // Create badge overlay
         const badgeOverlay = document.createElement('div');
@@ -412,8 +412,8 @@
         // Badge image
         const badgeImg = document.createElement('img');
         badgeImg.className = 'badge-image';
-        badgeImg.src = './images/dca-airport-collectible-1.png';
-        badgeImg.alt = 'DC Airport Collectible';
+        badgeImg.src = './images/Badge-SIGN_DEC.png';
+        badgeImg.alt = 'Sign the Declaration Collectible';
         imageWrapper.appendChild(badgeImg);
 
         // Save instruction
@@ -427,7 +427,7 @@
         // Description text
         const text = document.createElement('div');
         text.className = 'badge-text';
-        text.innerHTML = '<strong>Congratulations!</strong><br>You\'ve collected the DC Airport collectible!';
+        text.innerHTML = '<strong>Congratulations!</strong><br>You\'ve collected the Sign the Declaration collectible!';
         badgeContainer.appendChild(text);
 
         // Buttons
