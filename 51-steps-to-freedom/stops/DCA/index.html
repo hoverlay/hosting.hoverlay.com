@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DC Airport Collectible</title>
+  <style>
+    :root {
+      --bg: #f0f8f4;
+      --bg-alt: #e3f2ec;
+      --accent: #2c8558;
+      --accent-soft: #7bc99d;
+      --text-main: #1a4d2e;
+      --text-muted: #5a7a6b;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.12);
+      --radius-lg: 24px;
+      --radius-pill: 999px;
+      --transition-fast: 180ms ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
+      background: radial-gradient(circle at top, #f7fdf9 0, #e8f5ee 50%, #d9ede3 100%);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(227, 242, 236, 0.96));
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 20px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border: 1px solid rgba(44, 133, 88, 0.22);
+      position: relative;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-main);
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 4px;
+      align-items: center;
+    }
+
+    .btn {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-collect {
+      background: #2c8558;
+      color: #ffffff;
+      padding-inline: 24px;
+      box-shadow: 0 8px 18px rgba(44, 133, 88, 0.28);
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .btn-collect:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(44, 133, 88, 0.32);
+    }
+
+    /* Celebration overlay */
+    .celebration-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(44, 133, 88, 0.15), rgba(123, 201, 157, 0.08));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 400ms ease-out;
+      border-radius: var(--radius-lg);
+    }
+
+    .celebration-overlay.show {
+      opacity: 1;
+    }
+
+    .awesome-text {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--accent);
+      text-shadow: 0 4px 20px rgba(44, 133, 88, 0.4);
+      letter-spacing: 0.1em;
+      animation: popIn 700ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.15);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Confetti particles */
+    .confetti {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .confetti.animate {
+      animation: confettiFall 1200ms ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translate(0, 0) scale(0);
+        opacity: 1;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* Badge display */
+    .badge-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 500ms ease-out;
+      padding: 20px;
+    }
+
+    .badge-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .badge-container {
+      background: white;
+      border-radius: 24px;
+      padding: 30px 20px;
+      max-width: 400px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transform: scale(0.5) rotateY(180deg);
+      transition: transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .badge-overlay.show .badge-container {
+      transform: scale(1) rotateY(0deg);
+    }
+
+    .badge-title {
+      font-size: 1.8rem;
+      color: var(--accent);
+      text-align: center;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-image {
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      filter: drop-shadow(0 8px 24px rgba(44, 133, 88, 0.3));
+      animation: badgeSpin 800ms ease-out;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .badge-image-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .save-instruction {
+      font-size: 1rem;
+      color: var(--accent);
+      text-align: center;
+      font-weight: bold;
+      max-width: 280px;
+      background: rgba(44, 133, 88, 0.1);
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 2px dashed var(--accent-soft);
+    }
+
+    @keyframes badgeSpin {
+      0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.1) rotate(10deg);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .badge-text {
+      text-align: center;
+      color: var(--text-main);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .badge-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .btn-download {
+      background: var(--accent);
+      color: white;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      box-shadow: 0 8px 18px rgba(44, 133, 88, 0.28);
+    }
+
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(44, 133, 88, 0.35);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="appShell" aria-label="DC Airport Collectible">
+    <header class="header">
+      <div class="title">DC Airport Collectible</div>
+      <div class="subtitle">Tap to collect</div>
+    </header>
+
+    <main class="content">
+      <button id="collectButton" class="btn btn-collect" type="button">
+        Collect
+      </button>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const collectButton = document.getElementById('collectButton');
+      const appShell = document.getElementById('appShell');
+
+      collectButton.addEventListener('click', function () {
+        // Disable button to prevent double-click
+        collectButton.disabled = true;
+
+        // Show celebration effect
+        showCelebration();
+      });
+
+      function showCelebration() {
+        // Track collectible collection
+        const img = new Image();
+        img.src = 'https://tour.51stepstofreedom.org/track/DCA_AIRPORT_COLLECTIBLE';
+
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'celebration-overlay';
+
+        // Create AWESOME text
+        const awesomeText = document.createElement('div');
+        awesomeText.className = 'awesome-text';
+        awesomeText.textContent = 'AWESOME!';
+        overlay.appendChild(awesomeText);
+
+        // Create confetti particles that pop all around
+        const colors = ['#2c8558', '#7bc99d', '#f0f8f4', '#e3f2ec', '#5a7a6b'];
+        for (let i = 0; i < 30; i++) {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.left = '50%';
+          confetti.style.top = '50%';
+
+          // Random direction from center
+          const angle = Math.random() * Math.PI * 2;
+          const distance = 150 + Math.random() * 250;
+          const tx = Math.cos(angle) * distance;
+          const ty = Math.sin(angle) * distance;
+
+          confetti.style.setProperty('--tx', tx + 'px');
+          confetti.style.setProperty('--ty', ty + 'px');
+          confetti.style.animationDelay = Math.random() * 100 + 'ms';
+          confetti.style.animationDuration = 800 + Math.random() * 400 + 'ms';
+          overlay.appendChild(confetti);
+        }
+
+        appShell.appendChild(overlay);
+
+        // Trigger animations
+        setTimeout(() => {
+          overlay.classList.add('show');
+          overlay.querySelectorAll('.confetti').forEach(c => c.classList.add('animate'));
+        }, 10);
+
+        // Remove overlay after animation and show badge
+        setTimeout(() => {
+          overlay.classList.remove('show');
+          setTimeout(() => {
+            overlay.remove();
+            showBadge();
+          }, 400);
+        }, 1800);
+      }
+
+      function showBadge() {
+        // Track badge display
+        const img = new Image();
+        img.src = 'https://tour.51stepstofreedom.org/track/DCA_AIRPORT_BADGE';
+
+        // Create badge overlay
+        const badgeOverlay = document.createElement('div');
+        badgeOverlay.className = 'badge-overlay';
+
+        // Create badge container
+        const badgeContainer = document.createElement('div');
+        badgeContainer.className = 'badge-container';
+
+        // Title
+        const title = document.createElement('div');
+        title.className = 'badge-title';
+        title.textContent = 'You Found a Collectible!';
+        badgeContainer.appendChild(title);
+
+        // Badge image wrapper
+        const imageWrapper = document.createElement('div');
+        imageWrapper.className = 'badge-image-wrapper';
+
+        // Badge image
+        const badgeImg = document.createElement('img');
+        badgeImg.className = 'badge-image';
+        badgeImg.src = './images/dca-airport-collectible-1.png';
+        badgeImg.alt = 'DC Airport Collectible';
+        imageWrapper.appendChild(badgeImg);
+
+        // Save instruction
+        const instruction = document.createElement('div');
+        instruction.className = 'save-instruction';
+        instruction.textContent = 'Tap and hold the collectible to save to your photos';
+        imageWrapper.appendChild(instruction);
+
+        badgeContainer.appendChild(imageWrapper);
+
+        // Description text
+        const text = document.createElement('div');
+        text.className = 'badge-text';
+        text.innerHTML = '<strong>Congratulations!</strong><br>You\'ve collected the DC Airport treasure.';
+        badgeContainer.appendChild(text);
+
+        // Buttons
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'badge-buttons';
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'btn btn-download';
+        closeBtn.textContent = 'Done';
+        closeBtn.onclick = () => {
+          badgeOverlay.classList.remove('show');
+          setTimeout(() => {
+            badgeOverlay.remove();
+            // Send event to Unity to close the browser
+            location.href = `space://do?action=send_event&event_message=sent&when_done=hide`;
+          }, 500);
+        };
+        buttonContainer.appendChild(closeBtn);
+
+        badgeContainer.appendChild(buttonContainer);
+        badgeOverlay.appendChild(badgeContainer);
+        document.body.appendChild(badgeOverlay);
+
+        // Trigger animation
+        setTimeout(() => {
+          badgeOverlay.classList.add('show');
+        }, 10);
+      }
+
+    })();
+  </script>
+</body>
+</html>
