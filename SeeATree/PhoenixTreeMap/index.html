@@ -95,11 +95,13 @@
 
         .front img {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 75%;
+            height: 75%;
             object-fit: cover;
+            object-position: center;
             z-index: 1;
         }
 
@@ -342,7 +344,7 @@
         // Set the size of the font based on the width of the webview
         document.addEventListener("DOMContentLoaded", function() {
             var webviewHeight = window.innerHeight; // Gets the height of the webview
-            var baseFontSize = webviewHeight / 70;
+            var baseFontSize = Math.max(webviewHeight / 50, 12); // Increased from /70, with minimum of 12px
             document.documentElement.style.fontSize = baseFontSize + 'px';
 
             // Start carousel offset to the right and animate back to show users they can swipe
