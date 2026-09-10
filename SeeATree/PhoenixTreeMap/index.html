@@ -235,7 +235,7 @@
 </head>
 <body>
     <div class="title">
-        Storry Launcher
+        Story Launcher
     </div>
     <div class="subtitle">
         Swipe right and Tap to unveil a hidden story
@@ -424,7 +424,7 @@
 
             function launchStory() {
                 // Send event to launch story immediately
-                location.href = `space://do?action=send_event&event_message=${storyName}`;
+                location.href = `space://do?action=send_event&event_message=${storyName}&when_done=hide`;
 
                 // Start cooldown immediately
                 startCooldown();
