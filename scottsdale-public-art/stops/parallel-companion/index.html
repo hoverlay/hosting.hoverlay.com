@@ -204,7 +204,6 @@
 
         // Load a question from the questions array
         function loadQuestion() {
-            isTransitioning = false;
             const currentQuestion = questions[currentQuestionIndex];
             const questionElement = document.getElementById("question");
             const choicesElement = document.getElementById("choices");
@@ -215,7 +214,10 @@
             questionElement.textContent = currentQuestion.question;
 
             // Remove highlighted class from all existing choices before clearing
-            document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
+            document.querySelectorAll('.choice').forEach(choice => {
+                choice.classList.remove('highlighted');
+                choice.style.pointerEvents = 'none';
+            });
 
             // Clear all existing choices and their highlights
             choicesElement.innerHTML = "";
@@ -231,14 +233,50 @@
                 const button = document.createElement("button");
                 button.textContent = choice;
                 button.classList.add("choice");
-                button.addEventListener("click", function() {
-                    if (isTransitioning) return;
-                    document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
-                    button.classList.add('highlighted');
-                    selectAnswer(index);
+
+                // Use touchstart for better mobile responsiveness
+                button.addEventListener("touchstart", function(e) {
+                    e.preventDefault(); // Prevent double-firing with click
+                    handleAnswerSelection(button, index);
+                }, { passive: false });
+
+                // Keep click for desktop/fallback
+                button.addEventListener("click", function(e) {
+                    handleAnswerSelection(button, index);
                 });
+
                 choicesElement.appendChild(button);
             });
+
+            // Re-enable interactions after a brief delay to prevent accidental taps
+            setTimeout(() => {
+                isTransitioning = false;
+                document.querySelectorAll('.choice').forEach(choice => {
+                    choice.style.pointerEvents = 'auto';
+                });
+            }, 100);
+        }
+
+        // Handle answer selection with proper debouncing
+        function handleAnswerSelection(button, index) {
+            if (isTransitioning) return;
+
+            // Immediately disable all choices to prevent multiple taps
+            isTransitioning = true;
+            document.querySelectorAll('.choice').forEach(choice => {
+                choice.style.pointerEvents = 'none';
+            });
+
+            // Clear all highlights
+            document.querySelectorAll('.choice').forEach(choice => {
+                choice.classList.remove('highlighted');
+            });
+
+            // Highlight selected choice
+            button.classList.add('highlighted');
+
+            // Process the answer
+            selectAnswer(index);
         }
 
         // Select an answer and proceed accordingly
@@ -250,12 +288,8 @@
 
             if (currentQuestion.correct.includes(choiceIndex)) {
                 messageElement.innerHTML = `<div id='correct-message' style='display: flex; justify-content: center; align-items: center; color: green;'><i class='fas fa-check-circle'></i> ${currentQuestion.successMessage}</div>`;
-            } else {
-                messageElement.innerHTML = `<div style='color: crimson;'>Oops, try again.</div>`;
-            }
 
-            if (currentQuestion.exitAfterAttempt || currentQuestion.correct.includes(choiceIndex)) {
-                isTransitioning = true;
+                // Keep transition locked and move to next question
                 setTimeout(() => {
                     currentQuestionIndex++;
                     if (currentQuestionIndex < questions.length) {
@@ -264,6 +298,17 @@
                         displayCongratulations();
                     }
                 }, successMessageDuration || 3500);
+            } else {
+                messageElement.innerHTML = `<div style='color: crimson;'>Oops, try again.</div>`;
+
+                // Re-enable choices for incorrect answer (allow retry)
+                setTimeout(() => {
+                    isTransitioning = false;
+                    document.querySelectorAll('.choice').forEach(choice => {
+                        choice.style.pointerEvents = 'auto';
+                        choice.classList.remove('highlighted');
+                    });
+                }, 800);
             }
         }
 
