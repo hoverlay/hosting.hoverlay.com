@@ -117,6 +117,173 @@
             background-color: #31092f;
             color: #ffd024;
         }
+
+        .choice:disabled {
+            cursor: default;
+        }
+
+        .choice:disabled:not(.highlighted):hover {
+            background-color: #ffd024;
+            color: #31092f;
+        }
+
+        /* Cooldown timer shown between questions */
+        .cooldown {
+            display: none;
+            margin: -10px auto 20px;
+            max-width: 320px;
+            text-align: center;
+        }
+
+        .cooldown-label {
+            font-size: 0.9em;
+            margin-bottom: 6px;
+            color: #7a5f7c;
+        }
+
+        .cooldown-track {
+            height: 8px;
+            background-color: rgba(49, 9, 47, 0.12);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .cooldown-bar {
+            height: 100%;
+            width: 100%;
+            background-color: #ffd024;
+            border-radius: 999px;
+        }
+
+        /* Collectible display */
+        .badge-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            background: rgba(53, 14, 54, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 500ms ease-out;
+            padding: 20px;
+        }
+
+        .badge-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .badge-container {
+            background: white;
+            border-radius: 16px;
+            padding: 15px 20px;
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.5) rotateY(180deg);
+            transition: transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .badge-overlay.show .badge-container {
+            transform: scale(1) rotateY(0deg);
+        }
+
+        .badge-title {
+            font-size: 1rem;
+            color: #350E36;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-image {
+            width: auto;
+            max-width: 340px;
+            max-height: 220px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 24px rgba(255, 208, 36, 0.45));
+            animation: badgeSpin 800ms ease-out;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .badge-image-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .save-instruction {
+            font-size: 0.85rem;
+            color: #350E36;
+            text-align: center;
+            font-weight: bold;
+            max-width: 280px;
+            background: rgba(255, 208, 36, 0.18);
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 2px dashed #FFD024;
+        }
+
+        @keyframes badgeSpin {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.1) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .badge-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn-download {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-family: inherit;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 180ms ease-out, box-shadow 180ms ease-out;
+            white-space: nowrap;
+            background: #FFD024;
+            color: #350E36;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            box-shadow: 0 8px 18px rgba(255, 208, 36, 0.4);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(255, 208, 36, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -127,6 +294,10 @@
         <h1>How Well Do You Know Ben's Chili?</h1>
         <div class="intro" id="intro">How well do you know Ben's Chili? Tap to start the quiz and earn a prize!<br><button id="start-button" class="start-button" onclick="startQuiz()">GO</button></div>
         <div id="message"></div>
+        <div id="cooldown" class="cooldown">
+            <div class="cooldown-label" id="cooldown-label"></div>
+            <div class="cooldown-track"><div class="cooldown-bar" id="cooldown-bar"></div></div>
+        </div>
         <div id="question-container" style="display: none;">
             <div class="question" id="question">Question will appear here</div>
             <div class="choices" id="choices"></div>
@@ -142,13 +313,12 @@
                 choices: ["A. The Pelican Brief (1993)", "B. State of Play (2009)", "C. House of Cards (2010)", "D. Cross (2024)"],
                 correct: [0,1,2,3],
                 successMessage: "Correct! In fact, Ben's Chili Bowl was featured in all of these movies.",
-                successMessageDuration: 4000,
                 exitAfterAttempt: false
             },
             {
                 layout: "grid",
                 question: "Which celebrities/political figures have been to Ben's Chili Bowl?",
-                choices: ["A. Bono", "B. Barack Obama", "C. Ella Fitzgerald", "D. Kevin Hart", "E. Rosa Parks", "D. Kevin Durant"],
+                choices: ["A. Bono", "B. Barack Obama", "C. Ella Fitzgerald", "D. Kevin Hart", "E. Rosa Parks", "F. Kevin Durant"],
                 correct: [0, 1, 2, 3, 4, 5],
                 successMessage: "Correct! In fact, all of these celebrities and political figures have visited Ben's Chili Bowl.",
                 exitAfterAttempt: false
@@ -211,7 +381,7 @@
             const currentQuestion = questions[currentQuestionIndex];
             const messageElement = document.getElementById("message");
             // If a duration is set for displaying success message, use it, otherwise use a default
-            const successMessageDuration = currentQuestion.successMessageDuration || 3500;
+            const successMessageDuration = currentQuestion.successMessageDuration || 6000;
 
             if (currentQuestion.correct.includes(choiceIndex)) {
                 messageElement.innerHTML = `<div id='correct-message' style='display: flex; justify-content: center; align-items: center; color: green;'><i class='fas fa-check-circle'></i> ${currentQuestion.successMessage}</div>`;
@@ -220,24 +390,118 @@
             }
 
             if (currentQuestion.exitAfterAttempt || currentQuestion.correct.includes(choiceIndex)) {
-                setTimeout(() => {
+                // Lock the answers so extra taps can't skip ahead during the cooldown
+                document.querySelectorAll('.choice').forEach(choice => choice.disabled = true);
+                const isLastQuestion = currentQuestionIndex === questions.length - 1;
+
+                startCooldown(successMessageDuration, isLastQuestion, () => {
                     document.querySelectorAll('.choice').forEach(choice => choice.classList.remove('highlighted'));
                     currentQuestionIndex++;
                     if (currentQuestionIndex < questions.length) {
                         loadQuestion();
                     } else {
-                        displayCongratulations();
+                        showCollectible();
                     }
-                }, successMessageDuration || 3500);
+                });
             }
         }
 
-        // Display the congratulations message at the end of the quiz
-        function displayCongratulations() {
-            const messageElement = document.getElementById("message");
-            messageElement.textContent = "Great job! You've completed the Ben's Chili quiz!";
-            document.getElementById("question-container").style.display = "none";
-            location.href = `space://do?action=send_event&event_message=quiz-completed`;
+        // Show a countdown and draining bar so viewers know when the next question appears
+        function startCooldown(duration, isLastQuestion, onDone) {
+            const cooldownElement = document.getElementById("cooldown");
+            const labelElement = document.getElementById("cooldown-label");
+            const barElement = document.getElementById("cooldown-bar");
+            const labelText = isLastQuestion ? "Your collectible arrives in" : "Next question in";
+            const endTime = Date.now() + duration;
+
+            const updateLabel = () => {
+                const secondsLeft = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
+                labelElement.textContent = `${labelText} ${secondsLeft}s`;
+            };
+
+            cooldownElement.style.display = "block";
+            barElement.style.transition = "none";
+            barElement.style.width = "100%";
+            void barElement.offsetWidth; // Force reflow so the bar restarts full
+            barElement.style.transition = `width ${duration}ms linear`;
+            barElement.style.width = "0%";
+
+            updateLabel();
+            const interval = setInterval(updateLabel, 250);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                cooldownElement.style.display = "none";
+                onDone();
+            }, duration);
+        }
+
+        // Show the collectible at the end of the quiz
+        function showCollectible() {
+            document.getElementById("quiz-container").style.display = "none";
+
+            // Track badge display
+            const img = new Image();
+            img.src = 'https://tour.51stepstofreedom.org/track/BENS_COLLECTIBLE';
+
+            // Create badge overlay
+            const badgeOverlay = document.createElement('div');
+            badgeOverlay.className = 'badge-overlay';
+
+            // Create badge container
+            const badgeContainer = document.createElement('div');
+            badgeContainer.className = 'badge-container';
+
+            // Title
+            const title = document.createElement('div');
+            title.className = 'badge-title';
+            title.textContent = 'You Earned a Collectible!';
+            badgeContainer.appendChild(title);
+
+            // Badge image wrapper
+            const imageWrapper = document.createElement('div');
+            imageWrapper.className = 'badge-image-wrapper';
+
+            // Badge image
+            const badgeImg = document.createElement('img');
+            badgeImg.className = 'badge-image';
+            badgeImg.src = './images/Collectible-Bens.png';
+            badgeImg.alt = "Ben's Chili Bowl Collectible";
+            imageWrapper.appendChild(badgeImg);
+
+            // Save instruction
+            const instruction = document.createElement('div');
+            instruction.className = 'save-instruction';
+            instruction.textContent = 'Tap and hold the collectible to save to your photos';
+            imageWrapper.appendChild(instruction);
+
+            badgeContainer.appendChild(imageWrapper);
+
+            // Buttons
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'badge-buttons';
+
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'btn-download';
+            closeBtn.textContent = 'Done';
+            closeBtn.onclick = () => {
+                badgeOverlay.classList.remove('show');
+                setTimeout(() => {
+                    badgeOverlay.remove();
+                    // Send quiz completion event to Unity and close the browser
+                    location.href = `space://do?action=send_event&event_message=quiz-completed&when_done=hide`;
+                }, 500);
+            };
+            buttonContainer.appendChild(closeBtn);
+
+            badgeContainer.appendChild(buttonContainer);
+            badgeOverlay.appendChild(badgeContainer);
+            document.body.appendChild(badgeOverlay);
+
+            // Trigger animation
+            setTimeout(() => {
+                badgeOverlay.classList.add('show');
+            }, 10);
         }
     </script>
 </body>
