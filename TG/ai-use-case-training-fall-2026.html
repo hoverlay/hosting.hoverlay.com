@@ -3,6 +3,18 @@
 <head>
   <meta charset="utf-8">
   <title>Supply Chain AI Training Series — Timex Group</title>
+  <script>
+    // Use-case list source. After publishing the Google Sheet (File > Share > Publish to web,
+    // tab "Use cases", format "Comma-separated values (.csv)"), paste the link between the quotes.
+    // Leave it empty to read the sheet by ID instead (needs "Anyone with the link: Viewer").
+    // Sign-up service: after deploying signup-service.gs as a web app (see the comments in that file),
+    // paste its URL (ending in /exec) into flowUrl. Choices are then saved in the Google Sheet and
+    // shared with everyone. Leave it empty to keep choices in each person's browser only.
+    window.SC_CONFIG_OVERRIDES = {
+      flowUrl: 'https://script.google.com/macros/s/AKfycbz3YAdkt6FUwccLak9s8P2k5QaqwqgWbWiGNZPVK9Ujhz6o0Gu11dVxJHvjw7pDZczTwQ/exec',
+      useCasesCsvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-BjERAZvUMyWrXtvAiQ7WxFB-bOSi0mbEM8mcXDv4wf5ZNzqXG_7Y19UAqLsmgaTeZDJ9iDLrP8Lb/pub?output=csv'
+    };
+  </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #faf9f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
