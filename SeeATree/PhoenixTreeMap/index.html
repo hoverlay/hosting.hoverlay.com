@@ -16,7 +16,10 @@
         margin: 0;
         }
         body {
+        height: var(--webview-height, 100%);
         overflow: hidden; /* nothing can go outside the visible rectangle */
+        display: flex;
+        flex-direction: column;
         background: #414141;
         color: #ffffff;
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -26,6 +29,11 @@
         font-size: clamp(14px, 1.1vw + 10px, 18px);
         }
         /* Center the title */
+        .title,
+        .subtitle {
+            flex-shrink: 0;
+        }
+
         .title {
             text-align: center;
             font-size: clamp(2rem, 4vmin, 4rem);
@@ -57,7 +65,9 @@
         /* Carousel container */
         .carousel {
             display: flex;
-            height: 70%;
+            height: auto;
+            flex: 1 1 0;
+            min-height: 0;
             overflow-x: scroll;
             scroll-snap-type: x mandatory;
             overflow-y: hidden;
@@ -108,7 +118,7 @@
         .front h2 {
             z-index: 2;
             position: absolute;
-            font-size: clamp(1.5rem, 3vmin, 3rem);
+            font-size: clamp(1.45rem, 3vmin, 3rem);
             bottom: 0;
             width: 90%;
             padding: clamp(0.3rem, 1vmin, 0.5rem);
@@ -248,7 +258,7 @@
         <div class="poster" onclick="handleCardClick(event, 'story-1')">
             <div class="front">
                 <img src="./assets/img/button-1.png">
-                <h2>Story 1</h2>
+                <h2>Trees Will Bring the Children Home</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
@@ -257,7 +267,7 @@
         <div class="poster" onclick="handleCardClick(event, 'story-2')">
             <div class="front">
                 <img src="./assets/img/button-2.png">
-                <h2>Story 2</h2>
+                <h2>Ironwood & Palo Verde cyanotypes</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
@@ -266,7 +276,7 @@
         <div class="poster" onclick="handleCardClick(event, 'story-3')">
             <div class="front">
                 <img src="./assets/img/button-3.png">
-                <h2>Story 3</h2>
+                <h2>Phoenix Tree</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
@@ -275,7 +285,7 @@
         <div class="poster" onclick="handleCardClick(event, 'story-4')">
             <div class="front">
                 <img src="./assets/img/button-4.png">
-                <h2>Story 4</h2>
+                <h2>Mulberries on Missouri</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
@@ -284,7 +294,7 @@
         <div class="poster" onclick="handleCardClick(event, 'story-5')">
             <div class="front">
                 <img src="./assets/img/button-5.png">
-                <h2>Story 5</h2>
+                <h2>Resilient Mesquite</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
@@ -293,7 +303,7 @@
         <div class="poster" onclick="handleCardClick(event, 'story-6')">
             <div class="front">
                 <img src="./assets/img/button-6.png">
-                <h2>Story 6</h2>
+                <h2>Eucalyptus Playground</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
@@ -302,7 +312,7 @@
         <div class="poster" onclick="handleCardClick(event, 'story-7')">
             <div class="front">
                 <img src="./assets/img/button-7.png">
-                <h2>Story 7</h2>
+                <h2>Tree Exchange</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
@@ -311,7 +321,7 @@
         <div class="poster" onclick="handleCardClick(event, 'story-8')">
             <div class="front">
                 <img src="./assets/img/button-8.png">
-                <h2>Story 8</h2>
+                <h2>The Neighborhood Tree</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
@@ -320,7 +330,7 @@
         <div class="poster" onclick="handleCardClick(event, 'story-9')">
             <div class="front">
                 <img src="./assets/img/button-9.png">
-                <h2>Story 9</h2>
+                <h2>Two Trees in One</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
@@ -329,7 +339,7 @@
         <div class="poster" onclick="handleCardClick(event, 'story-10')">
             <div class="front">
                 <img src="./assets/img/button-10.png">
-                <h2>Story 10</h2>
+                <h2>Lemon Memories</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <i class="fas fa-rocket launch-effect"></i>
                 <div class="launch-message">Launching!</div>
@@ -340,6 +350,16 @@
         </div>
     </div>
     <script>
+        // Match the visible WebView height, including native frame changes.
+        function updateViewportHeight() {
+            const height = window.visualViewport?.height || window.innerHeight;
+            document.documentElement.style.setProperty('--webview-height', `${height}px`);
+        }
+
+        updateViewportHeight();
+        window.addEventListener('resize', updateViewportHeight);
+        window.visualViewport?.addEventListener('resize', updateViewportHeight);
+
         // Configuration
         const COOLDOWN_SECONDS = 4; // Cooldown period after launching story
 
