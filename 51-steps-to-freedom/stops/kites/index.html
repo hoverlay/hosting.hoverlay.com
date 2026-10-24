@@ -247,7 +247,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-size: 3rem;
+            font-size: 9rem;
             font-weight: bold;
             text-shadow: 0 0 10px rgba(255, 107, 53, 0.8);
         }
@@ -274,48 +274,29 @@
         Swipe right and Tap a kite to fly it
     </div>
     <div class="carousel">
-        <div class="poster" onclick="handleCardClick(event, 'dc-flag')">
-            <div class="front">
-                <img src="./assets/dc-flag.png">
-                <h2>DC Flag</h2>
-                <i class="fas fa-hand-point-up tap-icon"></i>
-                <div class="countdown"></div>
-                <i class="fas fa-wind launch-effect"></i>
-                <div class="launch-message">Launching!</div>
-                <div class="cooldown-overlay">
-                    <div class="progress-ring-container">
-                        <svg class="progress-ring" width="120" height="120">
-                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
-                        </svg>
-                        <div class="cooldown-text"></div>
-                    </div>
-                    <div class="cooldown-message">Kite in flight...</div>
-                </div>
-            </div>
-        </div>
-        <div class="poster" onclick="handleCardClick(event, 'usa-flag')">
-            <div class="front">
-                <img src="./assets/usa-flag.png">
-                <h2>USA Flag</h2>
-                <i class="fas fa-hand-point-up tap-icon"></i>
-                <div class="countdown"></div>
-                <i class="fas fa-wind launch-effect"></i>
-                <div class="launch-message">Launching!</div>
-                <div class="cooldown-overlay">
-                    <div class="progress-ring-container">
-                        <svg class="progress-ring" width="120" height="120">
-                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
-                        </svg>
-                        <div class="cooldown-text"></div>
-                    </div>
-                    <div class="cooldown-message">Kite in flight...</div>
-                </div>
-            </div>
-        </div>
         <div class="poster" onclick="handleCardClick(event, 'cherry-blossoms')">
             <div class="front">
                 <img src="./assets/cherry-blossoms.png">
                 <h2>Cherry Blossoms</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
+                <i class="fas fa-wind launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Kite in flight...</div>
+                </div>
+            </div>
+        </div>
+        <div class="poster" onclick="handleCardClick(event, 'washington-monument')">
+            <div class="front">
+                <img src="./assets/washington-monument.png">
+                <h2>Washington Monument</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <div class="countdown"></div>
                 <i class="fas fa-wind launch-effect"></i>
@@ -388,6 +369,44 @@
                 </div>
             </div>
         </div>
+        <div class="poster" onclick="handleCardClick(event, 'usa-flag')">
+            <div class="front">
+                <img src="./assets/usa-flag.png">
+                <h2>USA Flag</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
+                <i class="fas fa-wind launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Kite in flight...</div>
+                </div>
+            </div>
+        </div>
+        <div class="poster" onclick="handleCardClick(event, 'dc-flag')">
+            <div class="front">
+                <img src="./assets/dc-flag.png">
+                <h2>DC Flag</h2>
+                <i class="fas fa-hand-point-up tap-icon"></i>
+                <div class="countdown"></div>
+                <i class="fas fa-wind launch-effect"></i>
+                <div class="launch-message">Launching!</div>
+                <div class="cooldown-overlay">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-dasharray="314.159 314.159" stroke-dashoffset="0" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="cooldown-text"></div>
+                    </div>
+                    <div class="cooldown-message">Kite in flight...</div>
+                </div>
+            </div>
+        </div>
         <div class="scroll-arrow">
             <i class="fas fa-arrow-right"></i>
         </div>
@@ -395,7 +414,7 @@
     <script>
         // Configuration
         const COUNTDOWN_SECONDS = 0; // Set to 0 to disable countdown, or any number of seconds
-        const COOLDOWN_SECONDS = 4; // Cooldown period after launching kite
+        const COOLDOWN_SECONDS = 3; // Cooldown period after launching kite
 
         // Set the size of the font based on the width of the webview
         document.addEventListener("DOMContentLoaded", function() {
