@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kite Launcher</title>
+    <title>Fly A Kite</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <style>
@@ -30,12 +30,14 @@
         /* Center the title */
         .title {
             text-align: center;
-            font-size: 4rem;
+            font-size: 7rem;
+            line-height: 1.1;
             font-family: 'Belinda-W00-Regular', sans-serif;
         }
         .subtitle {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 4.5rem;
+            line-height: 1.1;
             font-weight: 200;
             font-family: 'Georgia', serif;
         }
@@ -106,7 +108,9 @@
         .front h2 {
             z-index: 2;
             position: absolute;
-            font-size: 3rem;
+            font-size: 5.5rem;
+            line-height: 1.1;
+            margin: 0;
             bottom: 0;
             width: 90%;
             padding: .5rem;
@@ -188,7 +192,7 @@
             bottom:  30%;
             left: 50%;
             transform: translateX(-50%);
-            font-size:  1.5rem;
+            font-size: 4.5rem;
             color: #ffffff;
             z-index: 3;
         }
@@ -268,10 +272,10 @@
 </head>
 <body>
     <div class="title">
-        Kite Launcher
+        Fly A Kite
     </div>
     <div class="subtitle">
-        Swipe right and Tap a kite to fly it
+        Swipe Right and Tap A Kite to fly it
     </div>
     <div class="carousel">
         <div class="poster" onclick="handleCardClick(event, 'cherry-blossoms')">
@@ -295,7 +299,7 @@
         </div>
         <div class="poster" onclick="handleCardClick(event, 'washington-monument')">
             <div class="front">
-                <img src="./assets/washington-monument.png">
+                <img src="./assets/washington-monument-2.png">
                 <h2>Washington Monument</h2>
                 <i class="fas fa-hand-point-up tap-icon"></i>
                 <div class="countdown"></div>
