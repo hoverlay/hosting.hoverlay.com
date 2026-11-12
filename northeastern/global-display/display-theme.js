@@ -32,7 +32,7 @@
   txt('SIGNAL LEVEL · 25% / 50% / 75% / 100%',16,445);
   [.25,.5,.75,1].forEach((a,i)=>{c.fillStyle=rgba(a);c.fillRect(22+i*202,464,178,45)});
   txt('SOLID vs GLOW · Do the soft edges help or disappear?',16,555);
-  c.strokeStyle=hex;c.lineWidth=3;for(let i=0;i<2;i++){c.save();c.shadowBlur=i?16:0;c.shadowColor=hex;c.strokeRect(25+i*405,575,360,65);c.restore();txt(i?'GLOW':'SOLID',44+i*405,616,22)}
+  c.strokeStyle=hex;c.lineWidth=3;for(let i=0;i<2;i++){c.save();c.shadowBlur=i?32:0;c.shadowColor=hex;for(let k=0;k<(i?3:1);k++)c.strokeRect(25+i*405,575,360,65);c.restore();txt(i?'GLOW':'SOLID',44+i*405,616,22)}
   txt('BLACK / CHARCOAL / GRAY / WHITE · Check the real background',16,685);
   ['#000000','#1A1A1A','#2A2A2A','#808080','#FFFFFF'].forEach((color,i)=>{c.fillStyle=color;c.fillRect(22+i*162,710,145,65);txt(color,22+i*162,802,16)});
   txt('GRADIENT · Look for lost dark tones or visible steps',16,850);const gradient=c.createLinearGradient(22,0,815,0);gradient.addColorStop(0,'#000');gradient.addColorStop(1,hex);c.fillStyle=gradient;c.fillRect(22,870,793,45);
